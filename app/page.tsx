@@ -1,9 +1,12 @@
+'use client';
+import SignUp from '../components/SignUp';
+import { useAuth } from '../context/AuthContext';
+
 function page() {
-	return (
-		<div>
-			<h1 className="text-center text-red-600">Welcome to Redeen</h1>
-		</div>
-	);
+	const { user } = useAuth();
+
+	console.log(user);
+	return <>{user ? 'Registrar' : <SignUp />}</>;
 }
 
 export default page;
