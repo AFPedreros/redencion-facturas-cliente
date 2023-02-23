@@ -3,10 +3,9 @@ import { ReceiptPercentIcon } from '@heroicons/react/24/outline';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import { TicketIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
 
-export default function SignUp() {
-	const { user, signup } = useAuth();
+export default function Login() {
+	// const { user, signup } = useAuth();
 
 	const [form, setForm] = useState({
 		email: '',
@@ -26,19 +25,19 @@ export default function SignUp() {
 	async function handleOnSubmit(e: React.MouseEvent<HTMLButtonElement>) {
 		e.preventDefault();
 
-		if (!form.email) {
-			alert('Please enter your email.');
-			return false;
-		} else if (!form.password) {
-			alert('Please enter your password.');
-			return false;
-		}
+		// if (!form.email) {
+		// 	alert('Please enter your email.');
+		// 	return false;
+		// } else if (!form.password) {
+		// 	alert('Please enter your password.');
+		// 	return false;
+		// }
 
-		try {
-			await signup(form.email, form.password);
-		} catch (err) {
-			console.log(err);
-		}
+		// try {
+		// 	await signup(form.email, form.password);
+		// } catch (err) {
+		// 	console.log(err);
+		// }
 
 		console.log(form);
 
@@ -51,7 +50,7 @@ export default function SignUp() {
 	return (
 		<div className="bg-white md:flex">
 			<div className="flex flex-col items-center justify-center h-screen p-8 md:border-r md:border-black md:w-1/3">
-				<h1 className="mb-12 text-4xl">Crear tu cuenta</h1>
+				<h1 className="mb-12 text-4xl">¡Redime tus facturas y participa en increíbles sorteos!</h1>
 				<div className="flex flex-col gap-4">
 					<div className="flex w-full gap-2 md:max-w-3xl">
 						<div className="w-12 h-12 p-2 bg-yellow-400 rounded">
@@ -60,16 +59,16 @@ export default function SignUp() {
 						<p className="w-4/5">Registra tus datos personales</p>
 					</div>
 					<div className="flex w-full gap-2 md:max-w-3xl">
-						<div className="w-12 h-12 p-2 rounded bg-slate-200">
+						<div className="w-12 h-12 p-2 bg-yellow-400 rounded">
 							<ReceiptPercentIcon className="text-white" />
 						</div>
-						<p className="w-4/5 text-slate-200">Agrega tus facturas y espera su aprobación</p>
+						<p className="w-4/5">Agrega tus facturas y espera su aprobación</p>
 					</div>
 					<div className="flex w-full gap-2 md:max-w-3xl">
-						<div className="w-12 h-12 p-2 rounded bg-slate-200">
+						<div className="w-12 h-12 p-2 bg-yellow-400 rounded">
 							<TicketIcon className="text-white" />
 						</div>
-						<p className="w-4/5 text-slate-200">Obtén un código y participa en los sorteos</p>
+						<p className="w-4/5">Obtén un código y participa en los sorteos</p>
 					</div>
 				</div>
 			</div>
