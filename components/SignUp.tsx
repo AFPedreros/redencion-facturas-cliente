@@ -21,6 +21,7 @@ export default function SignUp() {
 		name: '',
 		id: '',
 		cellphone: '',
+		check: false,
 	});
 
 	useEffect(() => {
@@ -98,6 +99,9 @@ export default function SignUp() {
 		} else if (!form2.cellphone) {
 			alert('Por favor ingresa tu número de celular.');
 			return false;
+		} else if (form2.check === false) {
+			alert('Por favor acepta los términos y condiciones.');
+			return false;
 		}
 
 		try {
@@ -117,6 +121,7 @@ export default function SignUp() {
 			name: '',
 			id: '',
 			cellphone: '',
+			check: false,
 		});
 	}
 
@@ -212,6 +217,27 @@ export default function SignUp() {
 						required
 						name="cellphone"
 					/>
+					<div className="flex items-start mb-6">
+						<div className="flex items-center h-5">
+							<input
+								id="remember"
+								type="checkbox"
+								checked={form2.check}
+								value={form2.check.toString()}
+								onClick={() => {
+									setForm2((prevState) => {
+										return {
+											...prevState,
+											check: !form2.check,
+										};
+									});
+								}}
+								className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
+								required
+							/>
+						</div>
+						<label className="ml-2 text-sm text-gray-900 dark:text-gray-300">Acepto términos y condiciones de la actividad</label>
+					</div>
 					<button
 						type="button"
 						onClick={handleOnSubmit2}
