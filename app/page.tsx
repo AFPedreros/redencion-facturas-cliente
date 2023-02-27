@@ -1,12 +1,11 @@
 'use client';
-import SignUp from '../components/SignUp';
+import Login from '../components/Login';
 import { useAuth } from '../context/AuthContext';
 
 function page() {
 	const { user } = useAuth();
 
-	console.log(user);
-	return <>{user ? 'Registrar' : <SignUp />}</>;
+	return user ? <Login /> : 'ya iniciaste sesión';
 }
 
 export default page;

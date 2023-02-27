@@ -12,9 +12,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 			<body className="bg-white">
 				<AuthContextProvider>
-					{/* {children} */}
+					{children}
 
-					<SignUp />
+					{/* <SignUp /> */}
 				</AuthContextProvider>
 			</body>
 		</html>

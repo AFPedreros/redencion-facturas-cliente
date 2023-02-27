@@ -2,15 +2,33 @@
 import { ReceiptPercentIcon } from '@heroicons/react/24/outline';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import { TicketIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
-	// const { user, signup } = useAuth();
+	const { user, login, logout } = useAuth();
+	const router = useRouter();
 
 	const [form, setForm] = useState({
 		email: '',
 		password: '',
 	});
+
+	useEffect(() => {
+		const fetchData = async () => {
+			await logout();
+		};
+
+		try {
+			fetchData();
+		} catch (err) {
+			console.log(err);
+		}
+	}, []);
+
+	console.log(user);
 
 	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const { value, name } = e.target;
@@ -25,19 +43,22 @@ export default function Login() {
 	async function handleOnSubmit(e: React.MouseEvent<HTMLButtonElement>) {
 		e.preventDefault();
 
-		// if (!form.email) {
-		// 	alert('Please enter your email.');
-		// 	return false;
-		// } else if (!form.password) {
-		// 	alert('Please enter your password.');
-		// 	return false;
-		// }
+		if (!form.email) {
+			alert('Por favor ingresa un email.');
+			return false;
+		} else if (!form.password) {
+			alert('Por favor ingresa una contraseña.');
+			return false;
+		}
 
-		// try {
-		// 	await signup(form.email, form.password);
-		// } catch (err) {
-		// 	console.log(err);
-		// }
+		try {
+			await login(form.email, form.password);
+
+			router.push('/registro-facturas'); // Redirect to the new page
+		} catch (e) {
+			console.log(e);
+			alert('Usuario o contraseña incorrecta.');
+		}
 
 		console.log(form);
 
@@ -72,13 +93,13 @@ export default function Login() {
 					</div>
 				</div>
 			</div>
-			<form className="flex flex-col justify-center h-screen p-8 mx-auto md:w-2/3">
+			<form className="flex flex-col justify-center h-screen p-8 mx-auto md:w-1/2 xl:w-1/3">
 				<h2 className="mb-12 text-2xl font-light text-center">Iniciar sesión</h2>
 				<input
 					value={form.email}
 					onChange={handleChange}
 					type="email"
-					className="bg-gray-50 md:max-w-md md:mx-auto border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+					className="bg-gray-50 md:w-full border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 					placeholder="Correo Electrónico"
 					required
 					name="email"
@@ -87,22 +108,22 @@ export default function Login() {
 					value={form.password}
 					onChange={handleChange}
 					type="password"
-					className="bg-gray-50 mb-12 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full md:max-w-md md:mx-auto p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+					className="bg-gray-50 mb-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full md:w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 					placeholder="•••••••••"
 					required
 					name="password"
 				/>
 				<p className="mx-auto mb-2 text-[#707070] text-sm">Olvidé mi contraseña</p>
-				<div className="flex gap-2 mx-auto text-sm h-fit">
+				<div className="flex gap-2 mx-auto mb-4 text-sm h-fit">
 					<p>¿Aún no estas registrado?</p>
-					<a className="font-bold border-b-2 border-black" href="https://heroicons.com/">
+					<Link className="font-bold border-b-2 border-black" href="/signup">
 						Regístrate aquí
-					</a>
+					</Link>
 				</div>
 				<button
 					type="button"
 					onClick={handleOnSubmit}
-					className="mt-8 md:w-fit focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-12 md:mx-auto py-2.5 mr-2 mb-2 dark:focus:ring-yellow-900"
+					className="md:w-full focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-12 py-2.5 dark:focus:ring-yellow-900"
 				>
 					Ingresar
 				</button>

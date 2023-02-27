@@ -4,12 +4,13 @@ import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import { TicketIcon } from '@heroicons/react/24/outline';
 import { collection, addDoc } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 
 export default function SignUp() {
 	const { user, signup, logout } = useAuth();
-	const [cacheUser, setCacheUser] = useState('');
+	const router = useRouter();
 
 	const [form, setForm] = useState({
 		email: '',
@@ -111,6 +112,7 @@ export default function SignUp() {
 				celular: form2.cellphone,
 			});
 			console.log('Document written with ID: ', docRef.id);
+			router.push('/registro-facturas');
 		} catch (e) {
 			console.error(e);
 		}
