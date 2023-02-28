@@ -1,17 +1,16 @@
 'use client';
 import '../styles/globals.css';
-import SignUp from '../components/SignUp';
-
 import { AuthContextProvider } from '../context/AuthContext';
-import Login from '../components/Login';
+import Header from '../components/Header';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<html>
 			<head />
 
-			<body className="bg-white">
+			<body className="relative bg-white">
 				<AuthContextProvider>
+					<Header />
 					{children}
 
 					{/* <SignUp /> */}
