@@ -25,17 +25,17 @@ export default function SignUp() {
 		check: false,
 	});
 
-	useEffect(() => {
-		const fetchData = async () => {
-			await logout();
-		};
+	// useEffect(() => {
+	// 	const fetchData = async () => {
+	// 		await logout();
+	// 	};
 
-		try {
-			fetchData();
-		} catch (err) {
-			console.log(err);
-		}
-	}, []);
+	// 	try {
+	// 		fetchData();
+	// 	} catch (err) {
+	// 		console.log(err);
+	// 	}
+	// }, []);
 
 	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const { value, name } = e.target;
@@ -112,7 +112,7 @@ export default function SignUp() {
 				celular: form2.cellphone,
 			});
 			console.log('Document written with ID: ', docRef.id);
-			router.push('/registro-facturas');
+			router.push('/facturas');
 		} catch (e) {
 			console.error(e);
 		}

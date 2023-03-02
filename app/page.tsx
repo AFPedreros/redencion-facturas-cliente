@@ -9,7 +9,7 @@ function page() {
 
 	console.log(user);
 
-	return !user ? <Login /> : router.push('/registro-facturas');
+	return !user ? <Login /> : router.push('/facturas');
 }
 
 export default page;

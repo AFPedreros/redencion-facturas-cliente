@@ -54,7 +54,7 @@ export default function Login() {
 		try {
 			await login(form.email, form.password);
 
-			router.push('/registro-facturas'); // Redirect to the new page
+			router.push('/facturas'); // Redirect to the new page
 		} catch (e) {
 			console.log(e);
 			alert('Usuario o contraseña incorrecta.');
