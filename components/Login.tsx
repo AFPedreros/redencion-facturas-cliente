@@ -116,7 +116,7 @@ export default function Login() {
 				<p className="mx-auto mb-2 text-[#707070] text-sm">Olvidé mi contraseña</p>
 				<div className="flex gap-2 mx-auto mb-4 text-sm h-fit">
 					<p>¿Aún no estas registrado?</p>
-					<Link className="font-bold border-b-2 border-black" href="/signup">
+					<Link className="font-bold border-b-2 border-black" href="/registro">
 						Regístrate aquí
 					</Link>
 				</div>

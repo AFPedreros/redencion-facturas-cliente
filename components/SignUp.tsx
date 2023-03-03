@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
+import Link from 'next/link';
 
 export default function SignUp() {
 	const { user, signup, logout } = useAuth();
@@ -181,6 +182,12 @@ export default function SignUp() {
 						required
 						name="confirmPassword"
 					/>
+					<div className="flex gap-2 mx-auto mb-4 text-sm h-fit">
+						<p>¿Ya estás registrado?</p>
+						<Link className="font-bold border-b-2 border-black" href="/">
+							Inicia sesión aquí
+						</Link>
+					</div>
 					<button
 						type="button"
 						onClick={handleOnSubmit}

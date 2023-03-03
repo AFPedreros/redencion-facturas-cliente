@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 export default function page() {
+	const router = useRouter();
+
 	return (
 		<div className="bg-white md:flex">
 			<div className="flex flex-col items-center justify-center h-screen p-8 md:border-r md:border-black md:w-1/3">
@@ -37,7 +39,7 @@ export default function page() {
 				<p className="mx-auto mb-12 text-[#707070] text-sm">Una vez sean aprobadas se te notificará el código de participación generado.</p>
 				<button
 					type="button"
-					onClick={() => console.log('hello')}
+					onClick={() => router.push('/facturas')}
 					className="md:w-full focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-12 py-2.5 dark:focus:ring-yellow-900"
 				>
 					Finalizar
