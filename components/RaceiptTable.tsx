@@ -36,7 +36,9 @@ export default function RaceiptTable() {
 						<td className="px-6 py-4">$101.120</td>
 						<td className="px-6 py-4">
 							<label className="text-white bg-yellow-400 focus:ring-4 font-medium rounded-lg text-sm px-12 py-2.5">Aprobado</label>
-							<label className="ml-4 font-medium hover:underline">Ver factura</label>
+							<a href="#" className="ml-4 font-medium hover:underline">
+								Ver factura
+							</a>
 						</td>
 						<td className="flex items-center px-6 py-4 space-x-3">
 							<a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
@@ -56,7 +58,9 @@ export default function RaceiptTable() {
 						<td className="px-6 py-4">$58.740</td>
 						<td className="px-6 py-4">
 							<label className="bg-slate-300 text-black w-[2rem] focus:ring-4 font-medium rounded-lg text-sm px-12 py-2.5">Por revisión</label>
-							<label className="ml-4 font-medium hover:underline">Ver factura</label>
+							<a href="#" className="ml-4 font-medium hover:underline">
+								Ver factura
+							</a>
 						</td>
 						<td className="flex items-center px-6 py-4 space-x-3">
 							<a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
@@ -76,7 +80,9 @@ export default function RaceiptTable() {
 						<td className="px-6 py-4">$251.059</td>
 						<td className="px-6 py-4">
 							<label className="text-white bg-black focus:ring-4 font-medium rounded-lg text-sm px-12 py-2.5">Rechazada</label>
-							<label className="ml-4 font-medium hover:underline">Ver factura</label>
+							<a href="#" className="ml-4 font-medium hover:underline">
+								Ver factura
+							</a>
 						</td>
 						<td className="flex items-center px-6 py-4 space-x-3">
 							<a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">

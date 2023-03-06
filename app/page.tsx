@@ -7,8 +7,6 @@ function page() {
 	const { user } = useAuth();
 	const router = useRouter();
 
-	console.log(user);
-
 	return !user ? <Login /> : router.push('/facturas');
 }
 
