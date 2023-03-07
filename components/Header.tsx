@@ -8,10 +8,6 @@ export default function Header() {
 
 	console.log(user);
 
-	function handleClickLogin() {
-		console.log('login');
-	}
-
 	async function handleClickOut() {
 		try {
 			await logout();

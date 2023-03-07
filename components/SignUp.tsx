@@ -26,18 +26,6 @@ export default function SignUp() {
 		check: false,
 	});
 
-	// useEffect(() => {
-	// 	const fetchData = async () => {
-	// 		await logout();
-	// 	};
-
-	// 	try {
-	// 		fetchData();
-	// 	} catch (err) {
-	// 		console.log(err);
-	// 	}
-	// }, []);
-
 	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const { value, name } = e.target;
 		setForm((prevState) => {
@@ -198,7 +186,6 @@ export default function SignUp() {
 				</form>
 			) : (
 				<form className="flex flex-col justify-center h-screen p-8 mx-auto md:w-1/2 xl:w-1/3">
-					<h1>{user.email}</h1>
 					<input
 						className="bg-gray-50 md:w-full border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 						value={form2.name}

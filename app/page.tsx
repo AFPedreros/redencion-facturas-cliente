@@ -7,7 +7,11 @@ function page() {
 	const { user } = useAuth();
 	const router = useRouter();
 
-	return !user ? <Login /> : router.push('/facturas');
+	if (user !== null) {
+		router.push('/facturas');
+	}
+
+	return <Login />;
 }
 
 export default page;
