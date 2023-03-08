@@ -2,9 +2,15 @@
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 import RaceiptTable from '../../components/RaceiptTable';
+import { useAuth } from '../../context/AuthContext';
 
 export default function page() {
+	const { user } = useAuth();
 	const router = useRouter();
+
+	if (user === null) {
+		router.push('/');
+	}
 
 	return (
 		<div className="pt-10 bg-white">

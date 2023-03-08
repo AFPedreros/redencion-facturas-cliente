@@ -2,15 +2,15 @@
 import { ReceiptPercentIcon } from '@heroicons/react/24/outline';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import { TicketIcon } from '@heroicons/react/24/outline';
-import { collection, addDoc } from 'firebase/firestore';
-import { useState, useEffect } from 'react';
+import { collection, addDoc, doc, setDoc } from 'firebase/firestore';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import Link from 'next/link';
 
 export default function SignUp() {
-	const { user, signup, logout } = useAuth();
+	const { user, signup } = useAuth();
 	const router = useRouter();
 
 	const [form, setForm] = useState({
@@ -95,12 +95,18 @@ export default function SignUp() {
 		}
 
 		try {
-			const docRef = await addDoc(collection(db, 'users', user.email, 'data'), {
+			// const docRef = await addDoc(collection(db, 'users', user.email, 'data'), {
+			// 	nombre: form2.name,
+			// 	cedula: form2.id,
+			// 	celular: form2.cellphone,
+			// });
+
+			const docRef = await setDoc(doc(db, 'users', user.email), {
 				nombre: form2.name,
 				cedula: form2.id,
 				celular: form2.cellphone,
 			});
-			console.log('Document written with ID: ', docRef.id);
+			// console.log('Document written with ID: ', docRef.id);
 			router.push('/facturas');
 		} catch (e) {
 			console.error(e);

@@ -5,9 +5,15 @@ import { TicketIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { useAuth } from '../../../context/AuthContext';
 
 export default function page() {
+	const { user } = useAuth();
 	const router = useRouter();
+
+	if (user === null) {
+		router.push('/');
+	}
 
 	return (
 		<div className="bg-white md:flex">
