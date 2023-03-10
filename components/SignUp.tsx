@@ -101,7 +101,7 @@ export default function SignUp() {
 			// 	celular: form2.cellphone,
 			// });
 
-			const docRef = await setDoc(doc(db, 'users', user.email), {
+			const docRef = await setDoc(doc(db, 'users', user?.email), {
 				nombre: form2.name,
 				cedula: form2.id,
 				celular: form2.cellphone,
