@@ -28,7 +28,7 @@ export default function page() {
 						</button>
 					</div>
 				</div>
-				<div className="flex w-full h-24 mb-6 rounded-lg bg-slate-200">
+				<div className="flex w-full mb-6 rounded-lg md:h-24 bg-slate-200">
 					<div className="flex items-center justify-center w-20 h-full p-2 bg-yellow-400 rounded-l-lg">
 						<ExclamationCircleIcon className="h-10 text-white" />
 					</div>
