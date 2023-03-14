@@ -1,8 +1,33 @@
 'use client';
 import { useRouter } from 'next/navigation';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../../firebase';
+import { useAuth } from '../../context/AuthContext';
+import { useState, useEffect } from 'react';
 
 export default function page() {
+	const [userData, setUserData] = useState<any>();
+
 	const router = useRouter();
+	const { user } = useAuth();
+	const docRef = doc(db, 'users', user.email);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const docSnap = await getDoc(docRef);
+			setUserData(docSnap?.data());
+		};
+
+		try {
+			fetchData();
+		} catch (err) {
+			console.log(err);
+		}
+	}, []);
+
+	async function handleClick() {
+		console.log('Próximamente');
+	}
 
 	return (
 		<div className="pt-10 bg-white">
@@ -28,7 +53,7 @@ export default function page() {
 								// value={form2.name}
 								// onChange={handleChange2}
 								type="text"
-								placeholder="Felipe Pedreros"
+								placeholder={userData?.nombre}
 								required
 								name="name"
 								disabled={true}
@@ -41,7 +66,7 @@ export default function page() {
 								// value={form2.name}
 								// onChange={handleChange2}
 								type="text"
-								placeholder="1144074466"
+								placeholder={userData?.cedula}
 								required
 								name="id"
 								disabled={true}
@@ -56,7 +81,7 @@ export default function page() {
 								// value={form2.name}
 								// onChange={handleChange2}
 								type="phone"
-								placeholder="317 894 5388"
+								placeholder={userData?.celular}
 								required
 								name="cel"
 								disabled={true}
@@ -69,16 +94,16 @@ export default function page() {
 								// value={form2.name}
 								// onChange={handleChange2}
 								type="email"
-								placeholder="felipe.pedreros94@gmail.com"
+								placeholder={user.email}
 								required
-								name="emal"
+								name="email"
 								disabled={true}
 							/>
 						</div>
 					</div>
 					<button
 						type="button"
-						onClick={() => router.push('/facturas')}
+						onClick={handleClick}
 						className="focus:outline-none mb-6 text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-12 py-2.5 dark:focus:ring-yellow-900"
 					>
 						Editar datos

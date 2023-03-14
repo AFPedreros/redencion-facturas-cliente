@@ -8,6 +8,8 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 
 export default function page() {
+	const [fileUpload, setFileUpload] = useState(false);
+
 	const { user } = useAuth();
 	const router = useRouter();
 
@@ -40,17 +42,52 @@ export default function page() {
 					</div>
 				</div>
 			</div>
-			<form className="flex flex-col justify-center h-screen p-8 mx-auto md:w-1/2 xl:w-1/3">
-				<h2 className="mb-12 text-2xl font-light text-center">¡Tus facturas han sido registradas!</h2>
-				<p className="mx-auto mb-12 text-[#707070] text-sm">Una vez sean aprobadas se te notificará el código de participación generado.</p>
-				<button
-					type="button"
-					onClick={() => router.push('/facturas')}
-					className="md:w-full focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-12 py-2.5 dark:focus:ring-yellow-900"
-				>
-					Finalizar
-				</button>
-			</form>
+			{fileUpload ? (
+				<div className="flex flex-col justify-center h-screen p-8 mx-auto md:w-1/2 xl:w-1/3">
+					<h2 className="mb-12 text-2xl font-light text-center">¡Tus facturas han sido registradas!</h2>
+					<p className="mx-auto mb-12 text-[#707070] text-sm">Una vez sean aprobadas se te notificará el código de participación generado.</p>
+					<button
+						type="button"
+						onClick={() => router.push('/facturas')}
+						className="md:w-full focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-12 py-2.5 dark:focus:ring-yellow-900"
+					>
+						Finalizar
+					</button>
+				</div>
+			) : (
+				<div className="flex flex-col justify-center h-screen p-8 mx-auto md:w-1/2 xl:w-1/3">
+					<div className="flex items-center justify-center w-full mb-4">
+						<label
+							htmlFor="dropzone-file"
+							className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+						>
+							<div className="flex flex-col items-center justify-center pt-5 pb-6">
+								<svg aria-hidden="true" className="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+									></path>
+								</svg>
+								<p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+									<span className="font-semibold">Subir facturas</span>
+								</p>
+								<p className="text-xs text-gray-500 dark:text-gray-400">PNG or JPG (MAX. 2MB)</p>
+							</div>
+							<input id="dropzone-file" type="file" className="hidden" />
+						</label>
+					</div>
+					<p className="mx-auto mb-12 text-[#707070] text-sm">Conoce más información aquí.</p>
+					<button
+						type="button"
+						onClick={() => router.push('/facturas')}
+						className="md:w-full focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-12 py-2.5 dark:focus:ring-yellow-900"
+					>
+						Finalizar
+					</button>
+				</div>
+			)}
 		</div>
 	);
 }
