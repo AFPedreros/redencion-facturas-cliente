@@ -7,9 +7,6 @@ export default function RaceiptTable() {
 				<thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
 					<tr>
 						<th scope="col" className="px-6 py-3">
-							Nº
-						</th>
-						<th scope="col" className="px-6 py-3">
 							ID Factura
 						</th>
 						<th scope="col" className="px-6 py-3">
@@ -28,14 +25,11 @@ export default function RaceiptTable() {
 				</thead>
 				<tbody>
 					<tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-						<th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-wrap dark:text-white">
-							01
-						</th>
 						<td className="px-6 py-4">ASC-20211502</td>
 						<td className="px-6 py-4">04-02-2023</td>
 						<td className="px-6 py-4">$101.120</td>
 						<td className="px-6 py-4">
-							<label className="text-white bg-yellow-400 focus:ring-4 font-medium rounded-lg text-sm px-12 py-2.5">Aprobado</label>
+							<label className="text-white bg-yellow-400 focus:ring-4 font-medium rounded-lg text-sm px-12 py-2.5">Aprobada</label>
 							<a href="#" className="ml-4 font-medium hover:underline">
 								Ver factura
 							</a>
@@ -50,9 +44,6 @@ export default function RaceiptTable() {
 						</td>
 					</tr>
 					<tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-						<th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-wrap dark:text-white">
-							02
-						</th>
 						<td className="px-6 py-4">ASC-20211502</td>
 						<td className="px-6 py-4">04-02-2023</td>
 						<td className="px-6 py-4">$58.740</td>
@@ -72,9 +63,6 @@ export default function RaceiptTable() {
 						</td>
 					</tr>
 					<tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-						<th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-wrap dark:text-white">
-							03
-						</th>
 						<td className="px-6 py-4">ASC-20211502</td>
 						<td className="px-6 py-4">04-02-2023</td>
 						<td className="px-6 py-4">$251.059</td>
