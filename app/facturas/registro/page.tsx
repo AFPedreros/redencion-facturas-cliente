@@ -6,7 +6,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, ChangeEvent } from 'react';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { doc, setDoc } from 'firebase/firestore';
 import { v4 } from 'uuid';
+import { db } from '../../../firebase';
 import { useAuth } from '../../../context/AuthContext';
 
 export default function page() {
@@ -35,12 +37,22 @@ export default function page() {
 			return;
 		}
 		try {
+			const id = v4();
+
 			const storage = getStorage();
-			const storageRef = ref(storage, `facturas/${user.email}/${v4()}`);
+			const storageRef = ref(storage, `facturas/${user.email}/${id}`);
 
 			const snapshot = await uploadBytes(storageRef, file);
 			const url = await getDownloadURL(storageRef);
 			console.log('Uploaded a blob or file!', snapshot, url);
+
+			const docRef = await setDoc(doc(db, 'users', user?.email, 'facturas', id), {
+				id: id,
+				fechaRegistro: snapshot.metadata.timeCreated,
+				valorTotal: '$0',
+				estado: 'Por revisión',
+				url: url,
+			});
 
 			// router.push('/facturas'); // Redirect to the new page
 		} catch (e) {
@@ -62,7 +74,7 @@ export default function page() {
 						<p className="w-4/5">Registra tus datos personales</p>
 					</div>
 					<div className="flex w-full gap-2 md:max-w-3xl">
-						<div className="w-12 h-12 p-2 bg-yellow-400 rounded">
+						<div className="w-12 h-12 p-2 bg-blue-700 rounded">
 							<ReceiptPercentIcon className="text-white" />
 						</div>
 						<p className="w-4/5">Agrega tus facturas y espera su aprobación</p>
@@ -85,14 +97,14 @@ export default function page() {
 							setFileUpload(false);
 							setFile(undefined);
 						}}
-						className="md:w-full focus:outline-none mb-6 text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-12 py-2.5 dark:focus:ring-yellow-900"
+						className="md:w-full focus:outline-none mb-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-600 font-medium rounded-lg text-sm px-12 py-2.5"
 					>
 						Agregar nueva factura
 					</button>
 					<button
 						type="button"
 						onClick={() => router.push('/facturas')}
-						className="md:w-full focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-12 py-2.5 dark:focus:ring-yellow-900"
+						className="md:w-full focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-600 font-medium rounded-lg text-sm px-12 py-2.5"
 					>
 						Ver todas mis facturas
 					</button>
@@ -133,14 +145,14 @@ export default function page() {
 					<button
 						type="button"
 						onClick={handleClick}
-						className="md:w-full focus:outline-none mb-6 text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-12 py-2.5 dark:focus:ring-yellow-900"
+						className="md:w-full focus:outline-none mb-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-600 font-medium rounded-lg text-sm px-12 py-2.5"
 					>
 						Subir factura
 					</button>
 					<button
 						type="button"
 						onClick={() => router.push('/facturas')}
-						className="md:w-full focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-12 py-2.5 dark:focus:ring-yellow-900"
+						className="md:w-full focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-600 font-medium rounded-lg text-sm px-12 py-2.5"
 					>
 						Ver todas mis facturas
 					</button>

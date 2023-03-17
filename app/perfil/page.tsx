@@ -38,7 +38,7 @@ export default function page() {
 						<button
 							type="button"
 							onClick={() => router.push('/facturas')}
-							className="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-12 py-2.5 dark:focus:ring-yellow-900"
+							className="focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-600 font-medium rounded-lg text-sm px-12 py-2.5"
 						>
 							Revisa tus facturas
 						</button>
@@ -104,7 +104,7 @@ export default function page() {
 					<button
 						type="button"
 						onClick={handleClick}
-						className="focus:outline-none mb-6 text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-12 py-2.5 dark:focus:ring-yellow-900"
+						className="focus:outline-none mb-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-700 font-medium rounded-lg text-sm px-12 py-2.5"
 					>
 						Editar datos
 					</button>

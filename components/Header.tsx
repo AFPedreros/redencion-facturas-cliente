@@ -6,8 +6,6 @@ export default function Header() {
 	const router = useRouter();
 	const { user, logout } = useAuth();
 
-	console.log(user);
-
 	async function handleClickOut() {
 		try {
 			await logout();

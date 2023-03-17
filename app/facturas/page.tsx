@@ -1,16 +1,38 @@
 'use client';
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
-import RaceiptTable from '../../components/RaceiptTable';
+import { getDoc, collection, getDocs } from 'firebase/firestore';
+import ReceiptTable from '../../components/ReceiptTable';
+import { db } from '../../firebase';
 import { useAuth } from '../../context/AuthContext';
+import { useEffect, useState } from 'react';
+import { AnyNsRecord } from 'dns';
 
 export default function page() {
+	const [receipts, setReceipts] = useState<any>();
+
 	const { user } = useAuth();
 	const router = useRouter();
 
 	if (user === null) {
 		router.push('/');
 	}
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const querySnapshot = await getDocs(collection(db, 'users', user?.email, 'facturas'));
+			setReceipts(querySnapshot);
+			// querySnapshot.forEach((doc) => {
+			// 	console.log(doc.id, ' => ', doc.data());
+			// });
+		};
+
+		try {
+			fetchData();
+		} catch (err) {
+			console.log(err);
+		}
+	}, []);
 
 	return (
 		<div className="pt-10 bg-white">
@@ -22,14 +44,14 @@ export default function page() {
 						<button
 							type="button"
 							onClick={() => router.push('/facturas/registro')}
-							className="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-12 py-2.5 dark:focus:ring-yellow-900"
+							className="focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-600 font-medium rounded-lg text-sm px-12 py-2.5"
 						>
 							Agregar factura
 						</button>
 					</div>
 				</div>
 				<div className="flex w-full mb-6 rounded-lg md:h-24 bg-slate-200">
-					<div className="flex items-center justify-center w-20 h-full p-2 bg-yellow-400 rounded-l-lg">
+					<div className="flex items-center justify-center w-20 h-full p-2 bg-blue-700 rounded-l-lg">
 						<ExclamationCircleIcon className="h-10 text-white" />
 					</div>
 					<div className="text-[#707070] p-6">
@@ -37,7 +59,7 @@ export default function page() {
 						<span className="font-bold text-black ">Criterios de aprobación de facturas</span> de la actividad.
 					</div>
 				</div>
-				<RaceiptTable />
+				<ReceiptTable receipts={receipts} />
 			</main>
 		</div>
 	);
