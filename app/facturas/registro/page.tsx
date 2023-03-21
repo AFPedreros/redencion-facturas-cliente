@@ -64,7 +64,7 @@ export default function page() {
 
 	return (
 		<div className="bg-white md:flex">
-			<div className="flex flex-col items-center justify-center h-screen p-8 md:border-r md:border-black md:w-1/3">
+			<div className="flex flex-col items-center justify-center p-8 pt-20 md:pt-0 md:h-screen md:border-r md:border-black md:w-1/3">
 				<h1 className="mb-12 text-4xl">Agrega tus facturas</h1>
 				<div className="flex flex-col gap-4">
 					<div className="flex w-full gap-2 md:max-w-3xl">
@@ -88,7 +88,7 @@ export default function page() {
 				</div>
 			</div>
 			{fileUpload ? (
-				<div className="flex flex-col justify-center h-screen p-8 mx-auto md:w-1/2 xl:w-1/3">
+				<div className="flex flex-col justify-center p-8 mx-auto md:h-screen md:w-1/2 xl:w-1/3">
 					<h2 className="mb-12 text-2xl font-light text-center">¡Tus facturas han sido registradas!</h2>
 					<p className="mx-auto mb-12 text-[#707070] text-sm">Una vez sean aprobadas se te notificará el código de participación generado.</p>
 					<button
@@ -110,7 +110,7 @@ export default function page() {
 					</button>
 				</div>
 			) : (
-				<div className="flex flex-col justify-center h-screen p-8 mx-auto md:w-1/2 xl:w-1/3">
+				<div className="flex flex-col justify-center p-8 mx-auto md:h-screen md:w-1/2 xl:w-1/3">
 					<div className="flex items-center justify-center w-full mb-4">
 						<label
 							htmlFor="dropzone-file"

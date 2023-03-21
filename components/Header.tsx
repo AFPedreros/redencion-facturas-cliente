@@ -8,8 +8,8 @@ export default function Header() {
 
 	async function handleClickOut() {
 		try {
-			await logout();
 			router.push('/');
+			await logout();
 		} catch (err) {
 			console.log(err);
 		}

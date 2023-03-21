@@ -70,7 +70,7 @@ export default function Login() {
 
 	return (
 		<div className="bg-white md:flex">
-			<div className="flex flex-col items-center justify-center h-screen p-8 md:border-r md:border-black md:w-1/3">
+			<div className="flex flex-col items-center justify-center p-8 md:h-screen md:border-r md:border-black md:w-1/3">
 				<h1 className="mb-12 text-4xl">¡Redime tus facturas y participa en increíbles sorteos!</h1>
 				<div className="flex flex-col gap-4">
 					<div className="flex w-full gap-2 md:max-w-3xl">
@@ -93,7 +93,7 @@ export default function Login() {
 					</div>
 				</div>
 			</div>
-			<form className="flex flex-col justify-center h-screen p-8 mx-auto md:w-1/2 xl:w-1/3">
+			<form className="flex flex-col justify-center p-8 mx-auto md:h-screen md:w-1/2 xl:w-1/3">
 				<h2 className="mb-12 text-2xl font-light text-center">Iniciar sesión</h2>
 				<input
 					value={form.email}

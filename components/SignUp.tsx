@@ -95,18 +95,11 @@ export default function SignUp() {
 		}
 
 		try {
-			// const docRef = await addDoc(collection(db, 'users', user.email, 'data'), {
-			// 	nombre: form2.name,
-			// 	cedula: form2.id,
-			// 	celular: form2.cellphone,
-			// });
-
 			const docRef = await setDoc(doc(db, 'users', user?.email), {
 				nombre: form2.name,
 				cedula: form2.id,
 				celular: form2.cellphone,
 			});
-			// console.log('Document written with ID: ', docRef.id);
 			router.push('/facturas');
 		} catch (e) {
 			console.error(e);
@@ -124,7 +117,7 @@ export default function SignUp() {
 
 	return (
 		<div className="bg-white md:flex">
-			<div className="flex flex-col items-center justify-center h-screen p-8 md:border-r md:border-black md:w-1/3">
+			<div className="flex flex-col items-center justify-center p-8 md:h-screen md:border-r md:border-black md:w-1/3">
 				<h1 className="mb-12 text-4xl">Crea tu cuenta</h1>
 				<div className="flex flex-col gap-4">
 					<div className="flex w-full gap-2 md:max-w-3xl">
@@ -148,7 +141,7 @@ export default function SignUp() {
 				</div>
 			</div>
 			{!user ? (
-				<form className="flex flex-col justify-center h-screen p-8 mx-auto md:w-1/2 xl:w-1/3">
+				<form className="flex flex-col justify-center p-8 mx-auto md:h-screen md:w-1/2 xl:w-1/3">
 					<input
 						className="bg-gray-50 md:w-full border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 						value={form.email}
@@ -191,7 +184,7 @@ export default function SignUp() {
 					</button>
 				</form>
 			) : (
-				<form className="flex flex-col justify-center h-screen p-8 mx-auto md:w-1/2 xl:w-1/3">
+				<form className="flex flex-col justify-center p-8 mx-auto md:h-screen md:w-1/2 xl:w-1/3">
 					<input
 						className="bg-gray-50 md:w-full border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 						value={form2.name}
