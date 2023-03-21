@@ -7,8 +7,8 @@ export default function Header() {
 	const { user, logout } = useAuth();
 
 	async function handleClickOut() {
+		router.push('/');
 		try {
-			router.push('/');
 			await logout();
 		} catch (err) {
 			console.log(err);
