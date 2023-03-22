@@ -8,11 +8,9 @@ function page() {
 	const { user } = useAuth();
 	const router = useRouter();
 
-	useEffect(() => {
-		if (user !== null) {
-			router.push('/facturas');
-		}
-	}, []);
+	if (user === null) {
+		router.push('/');
+	}
 
 	return <SignUp />;
 }

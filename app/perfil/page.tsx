@@ -12,6 +12,10 @@ export default function page() {
 	const { user } = useAuth();
 	const docRef = doc(db, 'users', user.email);
 
+	if (user === null) {
+		router.push('/');
+	}
+
 	useEffect(() => {
 		const fetchData = async () => {
 			const docSnap = await getDoc(docRef);
