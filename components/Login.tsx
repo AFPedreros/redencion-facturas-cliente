@@ -4,13 +4,14 @@ import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import { TicketIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
 	const { user, login, logout } = useAuth();
 	const router = useRouter();
 
+	const passwordRef = useRef<HTMLInputElement>(null);
 	const [form, setForm] = useState({
 		email: '',
 		password: '',
@@ -68,6 +69,13 @@ export default function Login() {
 		});
 	}
 
+	function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+		if (e.key === 'Enter') {
+			passwordRef.current?.blur();
+			handleOnSubmit(e as any);
+		}
+	}
+
 	return (
 		<div className="bg-white md:flex">
 			<div className="flex flex-col items-center justify-center p-8 md:h-screen md:border-r md:border-black md:w-1/3">
@@ -112,6 +120,8 @@ export default function Login() {
 					placeholder="•••••••••"
 					required
 					name="password"
+					ref={passwordRef}
+					onKeyDown={handleKeyDown}
 				/>
 				<p className="mx-auto mb-2 text-[#707070] text-sm">Olvidé mi contraseña</p>
 				<div className="flex gap-2 mx-auto mb-4 text-sm h-fit">
