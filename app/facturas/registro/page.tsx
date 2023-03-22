@@ -111,12 +111,12 @@ export default function page() {
 				</div>
 			) : (
 				<div className="flex flex-col justify-center p-8 mx-auto md:h-screen md:w-1/2 xl:w-1/3">
-					<div className="flex items-center justify-center w-full mb-4">
-						<label
-							htmlFor="dropzone-file"
-							className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-						>
-							{!file ? (
+					{!file ? (
+						<div className="flex items-center justify-center w-full mb-4">
+							<label
+								htmlFor="dropzone-file"
+								className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+							>
 								<div className="flex flex-col items-center justify-center pt-5 pb-6">
 									<svg aria-hidden="true" className="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 										<path
@@ -131,24 +131,25 @@ export default function page() {
 									</p>
 									<p className="text-xs text-gray-500 dark:text-gray-400">PNG or JPG (MAX. 2MB)</p>
 								</div>
-							) : (
-								<div className="flex flex-col items-center justify-center pt-5 pb-6">
-									<p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-										<span className="font-semibold">{file.name}</span>
-									</p>
-									<button
-										onClick={() => {
-											setFile(undefined);
-										}}
-										className="font-medium underline hover:underline"
-									>
-										Cancelar
-									</button>
-								</div>
-							)}
+							</label>
 							<input onChange={handleFileChange} id="dropzone-file" type="file" className="hidden" />
-						</label>
-					</div>
+						</div>
+					) : (
+						<div className="flex flex-col items-center justify-center pt-5 pb-6">
+							<p className="mb-2 text-sm text-gray-500">
+								<span className="font-semibold">{file.name}</span>
+							</p>
+							<button
+								onClick={() => {
+									setFile(undefined);
+								}}
+								className="font-medium underline hover:underline"
+							>
+								Cancelar
+							</button>
+						</div>
+					)}
+
 					<p className="mx-auto mb-12 text-[#707070] text-sm">Conoce más información aquí.</p>
 					{!file ? (
 						<button type="button" className="text-white mb-6 bg-gray-200 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center" disabled>
