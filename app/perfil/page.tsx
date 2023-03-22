@@ -11,24 +11,23 @@ export default function page() {
 	const router = useRouter();
 	const { user } = useAuth();
 
-	if (user === null) {
-		router.push('/');
-	}
-
-	const docRef = doc(db, 'users', user.email);
-
 	useEffect(() => {
-		const fetchData = async () => {
-			const docSnap = await getDoc(docRef);
-			setUserData(docSnap?.data());
-		};
+		if (user === null) {
+			router.push('/');
+		} else {
+			const docRef = doc(db, 'users', user?.email);
+			const fetchData = async () => {
+				const docSnap = await getDoc(docRef);
+				setUserData(docSnap?.data());
+			};
 
-		try {
-			fetchData();
-		} catch (err) {
-			console.log(err);
+			try {
+				fetchData();
+			} catch (err) {
+				console.log(err);
+			}
 		}
-	}, []);
+	}, [user, router]);
 
 	async function handleClick() {
 		console.log('Próximamente');
@@ -193,7 +192,7 @@ export default function page() {
 										// value={form2.name}
 										// onChange={handleChange2}
 										type="email"
-										placeholder={user.email}
+										placeholder={user?.email}
 										required
 										name="email"
 										disabled={true}

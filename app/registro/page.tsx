@@ -2,7 +2,6 @@
 import SignUp from '../../components/SignUp';
 import { useAuth } from '../../context/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 
 function page() {
 	const { user } = useAuth();
