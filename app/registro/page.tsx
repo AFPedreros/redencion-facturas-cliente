@@ -7,8 +7,8 @@ function page() {
 	const { user } = useAuth();
 	const router = useRouter();
 
-	if (user === null) {
-		router.push('/');
+	if (user !== null) {
+		router.push('/facturas');
 	}
 
 	return <SignUp />;

@@ -14,25 +14,43 @@ export default function page() {
 	const { user } = useAuth();
 	const router = useRouter();
 
-	if (user === null) {
-		router.push('/');
-	}
+	// if (user === null) {
+	// 	router.push('/');
+	// }
+
+	// useEffect(() => {
+	// 	const fetchData = async () => {
+	// 		const querySnapshot = await getDocs(collection(db, 'users', user?.email, 'facturas'));
+	// 		setReceipts(querySnapshot);
+	// 		// querySnapshot.forEach((doc) => {
+	// 		// 	console.log(doc.id, ' => ', doc.data());
+	// 		// });
+	// 	};
+
+	// 	try {
+	// 		fetchData();
+	// 	} catch (err) {
+	// 		console.log(err);
+	// 	}
+	// }, []);
 
 	useEffect(() => {
-		const fetchData = async () => {
-			const querySnapshot = await getDocs(collection(db, 'users', user?.email, 'facturas'));
-			setReceipts(querySnapshot);
-			// querySnapshot.forEach((doc) => {
-			// 	console.log(doc.id, ' => ', doc.data());
-			// });
-		};
+		if (user === null) {
+			router.push('/');
+		} else {
+			const fetchData = async () => {
+				const querySnapshot = await getDocs(collection(db, 'users', user?.email, 'facturas'));
+				setReceipts(querySnapshot);
+				// querySnapshot.forEach((doc) => {
+				// 	console.log(doc.id, ' => ', doc.data());
+				// });
+			};
 
-		try {
-			fetchData();
-		} catch (err) {
-			console.log(err);
+			try {
+				fetchData();
+			} catch (err) {}
 		}
-	}, []);
+	}, [user, router]);
 
 	return (
 		<div className="pt-10 bg-white">

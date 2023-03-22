@@ -17,19 +17,17 @@ export default function Login() {
 		password: '',
 	});
 
-	useEffect(() => {
-		const fetchData = async () => {
-			await logout();
-		};
+	// useEffect(() => {
+	// 	const fetchData = async () => {
+	// 		await logout();
+	// 	};
 
-		try {
-			fetchData();
-		} catch (err) {
-			console.log(err);
-		}
-	}, []);
-
-	console.log(user);
+	// 	try {
+	// 		fetchData();
+	// 	} catch (err) {
+	// 		console.log(err);
+	// 	}
+	// }, []);
 
 	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const { value, name } = e.target;
