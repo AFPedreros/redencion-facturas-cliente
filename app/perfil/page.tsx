@@ -10,11 +10,12 @@ export default function page() {
 
 	const router = useRouter();
 	const { user } = useAuth();
-	const docRef = doc(db, 'users', user.email);
 
 	if (user === null) {
 		router.push('/');
 	}
+
+	const docRef = doc(db, 'users', user.email);
 
 	useEffect(() => {
 		const fetchData = async () => {
