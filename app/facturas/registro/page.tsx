@@ -136,19 +136,33 @@ export default function page() {
 									<p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
 										<span className="font-semibold">{file.name}</span>
 									</p>
+									<button
+										onClick={() => {
+											setFile(undefined);
+										}}
+										className="font-medium underline hover:underline"
+									>
+										Cancelar
+									</button>
 								</div>
 							)}
 							<input onChange={handleFileChange} id="dropzone-file" type="file" className="hidden" />
 						</label>
 					</div>
 					<p className="mx-auto mb-12 text-[#707070] text-sm">Conoce más información aquí.</p>
-					<button
-						type="button"
-						onClick={handleClick}
-						className="md:w-full focus:outline-none mb-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-600 font-medium rounded-lg text-sm px-12 py-2.5"
-					>
-						Subir factura
-					</button>
+					{!file ? (
+						<button type="button" className="text-white mb-6 bg-gray-200 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center" disabled>
+							Subir factura
+						</button>
+					) : (
+						<button
+							type="button"
+							onClick={handleClick}
+							className="md:w-full focus:outline-none mb-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-600 font-medium rounded-lg text-sm px-12 py-2.5"
+						>
+							Subir factura
+						</button>
+					)}
 					<button
 						type="button"
 						onClick={() => router.push('/facturas')}
