@@ -1,17 +1,28 @@
 'use client';
-import { useRouter } from 'next/navigation';
+// Importa las funciones doc y getDoc de Firebase Firestore
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../../firebase';
-import { useAuth } from '../../context/AuthContext';
+// Importa el hook useState y useEffect de React para usar el estado local y verificar siel usuario está logueado cuando se carga la página
 import { useState, useEffect } from 'react';
+// Importa el hook useRouter de Next.js
+import { useRouter } from 'next/navigation';
+// Importa la instancia de la base de datos de Firebase
+import { db } from '../../firebase';
+// Importa el hook personalizado useAuth
+import { useAuth } from '../../context/AuthContext';
 
 export default function page() {
+	// Usa el hook useAuth para obtener el usuario
+	const { user } = useAuth();
+	// Usa el hook useRouter para obtener acceso al router de Next.js
+	const router = useRouter();
+
+	// Estado inicial de la información del usuario
 	const [userData, setUserData] = useState<any>();
 
-	const router = useRouter();
-	const { user } = useAuth();
-
+	// Este hook vuelve y renderiza la pantalla cada vez que cambia el valor de 'user' o 'router'.
 	useEffect(() => {
+		// Si 'user' es nulo, redirige al usuario a la página de inicio.
+		// Si 'user' tiene un valor, obtiene los datos del usuario en Firestore y los almacena en el estado local 'userData'.
 		if (user === null) {
 			router.push('/');
 		} else {
@@ -29,6 +40,7 @@ export default function page() {
 		}
 	}, [user, router]);
 
+	// ToDo: Función para sobreescribir los datos del usuario en la base de datos
 	async function handleClick() {
 		console.log('Próximamente');
 	}

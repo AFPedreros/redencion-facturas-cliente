@@ -1,24 +1,40 @@
 'use client';
+// Importa los íconos de ReceiptPercentIcon, DocumentTextIcon y TicketIcon desde la biblioteca Heroicons
 import { ReceiptPercentIcon } from '@heroicons/react/24/outline';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import { TicketIcon } from '@heroicons/react/24/outline';
+// Importa el hook useRouter y el componente Link de Next.js
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect, useRef } from 'react';
+// Importa los hooks useState y useRef Link de React.js
+import { useState, useRef } from 'react';
+// Importa el hook personalizado useAuth
 import { useAuth } from '../context/AuthContext';
 
+// Define el objeto de rutas como una constante
+const routes = {
+	receipts: '/facturas',
+};
+
 export default function Login() {
-	const { user, login, logout } = useAuth();
+	// Usa el hook useAuth para obtener la función login
+	const { login } = useAuth();
+	// Usa el hook useRouter para obtener acceso al router de Next.js
 	const router = useRouter();
 
+	// Referencia para el campo de contraseña
 	const passwordRef = useRef<HTMLInputElement>(null);
+
+	// Estado inicial del formulario
 	const [form, setForm] = useState({
 		email: '',
 		password: '',
 	});
 
+	// Función para controlar los cambios de estado de los inputs
 	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const { value, name } = e.target;
+		// Actualiza el estado del formulario cuando se cambia algún campo
 		setForm((prevState) => {
 			return {
 				...prevState,
@@ -27,9 +43,11 @@ export default function Login() {
 		});
 	}
 
+	// Función para enviar el formulario de inicio de sesión utilizando Firebase
 	async function handleOnSubmit(e: React.MouseEvent<HTMLButtonElement>) {
 		e.preventDefault();
 
+		// Valida que se hayan ingresado valores en ambos campos
 		if (!form.email) {
 			alert('Por favor ingresa un email.');
 			return false;
@@ -39,25 +57,29 @@ export default function Login() {
 		}
 
 		try {
+			// Intenta iniciar sesión con el email y la contraseña ingresados
 			await login(form.email, form.password);
-
-			router.push('/facturas'); // Redirect to the new page
+			// Redirecciona al usuario a la página de facturas
+			router.push(routes.receipts);
 		} catch (e) {
 			console.log(e);
+			// Muestra una alerta en caso de que las credenciales sean incorrectas
 			alert('Usuario o contraseña incorrecta.');
 		}
 
-		console.log(form);
-
+		// Restablece el estado del formulario
 		setForm({
 			email: '',
 			password: '',
 		});
 	}
 
+	// Función para manejar el evento de presionar la tecla Enter en el campo de contraseña
 	function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
 		if (e.key === 'Enter') {
+			// Hace que el campo de contraseña deje de estar seleccionado
 			passwordRef.current?.blur();
+			// Envía el formulario
 			handleOnSubmit(e as any);
 		}
 	}

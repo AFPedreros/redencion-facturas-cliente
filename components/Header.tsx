@@ -1,11 +1,16 @@
 'use client';
+// Importa el hook useRouter de Next.js
 import { useRouter } from 'next/navigation';
+// Importa el hook personalizado useAuth
 import { useAuth } from '../context/AuthContext';
 
 export default function Header() {
-	const router = useRouter();
+	// Usa el hook useAuth para obtener el usuario y la función logout
 	const { user, logout } = useAuth();
+	// Usa el hook useRouter para obtener acceso al router de Next.js
+	const router = useRouter();
 
+	// Función para cerrar sesión y redirigir al usuario a la página de inicio.
 	async function handleClickOut() {
 		router.push('/');
 		try {
@@ -15,6 +20,7 @@ export default function Header() {
 		}
 	}
 
+	// Función para redirigir al usuario a la página de perfil.
 	function handleUserProfile() {
 		router.push('/perfil');
 	}

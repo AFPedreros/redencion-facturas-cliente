@@ -1,32 +1,32 @@
 'use client';
-import { disconnect } from 'process';
-import { SetStateAction, useEffect, useState } from 'react';
-type Props = { receipts: any };
 
-export default function ReceiptTable({ receipts }: Props) {
-	let facArr: { id: any; fecha: any; estado: any; valor: any; url: any }[] = [];
+// Crea un tipo Receipt para los objetos de factura.
+type Props = { receiptsData: any };
 
-	if (receipts) {
-		const arr: { id: any; fecha: any; estado: any; valor: any; url: any }[] = [];
-		receipts.forEach((doc: any) => {
-			// console.log(doc.id, ' => ', doc.data());
-			const factura = {
+export default function ReceiptTable({ receiptsData }: Props) {
+	// Array para almacenar las facturas que tenga el usuario
+	let receipts: { id: any; fecha: any; estado: any; valor: any; url: any }[] = [];
+
+	// Si hay facturas, crear un array de objetos factura a partir de los datos obtenidos de Firebase.
+	if (receiptsData) {
+		const receiptsArray: { id: any; fecha: any; estado: any; valor: any; url: any }[] = [];
+		receiptsData.forEach((doc: any) => {
+			const receipt = {
 				id: doc.data().id,
 				fecha: doc.data().fechaRegistro,
 				estado: doc.data().estado,
 				valor: doc.data().valorTotal,
 				url: doc.data().url,
 			};
-			arr.push(factura);
+			receiptsArray.push(receipt);
 		});
 
-		const sortedReceipts = sortByFechaRegistro(arr);
-		facArr = sortedReceipts;
-
-		// console.log(facArr);
-		// facArr.map((fac) => console.log(`Esta es la id ${fac.id}`));
+		// Ordena el array de facturas por fecha de registro y asigna el array ordenado a la variable facturas.
+		const sortedReceipt = sortByRegistrationDate(receiptsArray);
+		receipts = sortedReceipt;
 	}
 
+	// Función para convertir una fecha en formato de cadena a una fecha con formato 'dd-mm-yyyy' y devolver la cadena resultante.
 	function getDateFromString(dateString: string) {
 		const date = new Date(dateString);
 		const year = date.getUTCFullYear();
@@ -35,13 +35,15 @@ export default function ReceiptTable({ receipts }: Props) {
 		return `${day}-${month}-${year}`;
 	}
 
+	// Función para acortar una cadena a los primeros 6 caracteres y los últimos 4 caracteres, y devolver la cadena resultante con "..." en el medio.
 	function shortenString(str: string) {
 		const firstChars = str.substring(0, 6);
 		const lastChars = str.substring(str.length - 4);
 		return `${firstChars}...${lastChars}`;
 	}
 
-	function sortByFechaRegistro(objects: any) {
+	// Función para ordenar un array de objetos por fecha de registro.
+	function sortByRegistrationDate(objects: any) {
 		objects.sort(function (a: any, b: any) {
 			const aDate = a.fecha.split('T')[0];
 			const bDate = b.fecha.split('T')[0];
@@ -66,7 +68,7 @@ export default function ReceiptTable({ receipts }: Props) {
 
 	return (
 		<>
-			{receipts?.docs.length > 0 ? (
+			{receiptsData?.docs.length > 0 ? (
 				<div className="relative overflow-x-auto shadow-md sm:rounded-lg">
 					<table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
 						<thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -89,15 +91,15 @@ export default function ReceiptTable({ receipts }: Props) {
 							</tr>
 						</thead>
 						<tbody>
-							{facArr.map((fac) => {
+							{receipts.map((rec) => {
 								return (
-									<tr key={fac.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-										<td className="px-6 py-4">{shortenString(fac.id)}</td>
-										<td className="px-6 py-4">{getDateFromString(fac.fecha)}</td>
-										<td className="px-6 py-4">{fac.valor}</td>
+									<tr key={rec.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+										<td className="px-6 py-4">{shortenString(rec.id)}</td>
+										<td className="px-6 py-4">{getDateFromString(rec.fecha)}</td>
+										<td className="px-6 py-4">{rec.valor}</td>
 										<td className="px-6 py-4">
-											<label className="text-sm font-bold">{fac.estado}</label>
-											<a href={fac.url} className="ml-4 font-medium underline hover:underline">
+											<label className="text-sm font-bold">{rec.estado}</label>
+											<a href={rec.url} className="ml-4 font-medium underline hover:underline">
 												Ver
 											</a>
 										</td>

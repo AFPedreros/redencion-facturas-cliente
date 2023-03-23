@@ -2,9 +2,10 @@
 
 // Importa el componente Login desde el directorio ../components
 import Login from '../components/Login';
-// Importa los hooks useAuth y useRouter de Next.js
-import { useAuth } from '../context/AuthContext';
+// Importa el hook useRouter de Next.js
 import { useRouter } from 'next/navigation';
+// Importa el hook personalizado useAuth
+import { useAuth } from '../context/AuthContext';
 
 // Define el objeto de rutas como una constante
 const routes = {
@@ -12,7 +13,7 @@ const routes = {
 };
 
 function page() {
-	// Usa el hook useAuth para obtener el objeto de usuario del contexto
+	// Usa el hook useAuth para obtener el objeto de usuario
 	const { user } = useAuth();
 	// Usa el hook useRouter para obtener acceso al router de Next.js
 	const router = useRouter();

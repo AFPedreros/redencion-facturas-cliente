@@ -1,24 +1,34 @@
 'use client';
+// Importa los íconos de ReceiptPercentIcon, DocumentTextIcon y TicketIcon desde la biblioteca Heroicons
 import { ReceiptPercentIcon } from '@heroicons/react/24/outline';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import { TicketIcon } from '@heroicons/react/24/outline';
-import { collection, addDoc, doc, setDoc } from 'firebase/firestore';
+// Importa las funciones doc y setDoc de Firebase Firestore
+import { doc, setDoc } from 'firebase/firestore';
+// Importa el hook useState de React para usar el estado local
 import { useState } from 'react';
+// Importa el hook useRouter y el componente Link de Next.js
 import { useRouter } from 'next/navigation';
-import { db } from '../firebase';
-import { useAuth } from '../context/AuthContext';
 import Link from 'next/link';
+// Importa la instancia de la base de datos de Firebase
+import { db } from '../firebase';
+// Importa el hook personalizado useAuth
+import { useAuth } from '../context/AuthContext';
 
 export default function SignUp() {
+	// Usa el hook useAuth para obtener el usuario y la función signup
 	const { user, signup } = useAuth();
+	// Usa el hook useRouter para obtener acceso al router de Next.js
 	const router = useRouter();
 
+	// Estado inicial del formulario para crear la cuenta
 	const [form, setForm] = useState({
 		email: '',
 		password: '',
 		confirmPassword: '',
 	});
 
+	// Estado inicial del formulario para agregar los datos personales
 	const [form2, setForm2] = useState({
 		name: '',
 		id: '',
@@ -26,6 +36,7 @@ export default function SignUp() {
 		check: false,
 	});
 
+	// Función para controlar los cambios de estado de los inputs del formulario para crear la cuenta
 	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const { value, name } = e.target;
 		setForm((prevState) => {
@@ -36,6 +47,7 @@ export default function SignUp() {
 		});
 	}
 
+	// Función para controlar los cambios de estado de los inputs del formulario para agregar los datos personales
 	function handleChange2(e: React.ChangeEvent<HTMLInputElement>) {
 		const { value, name } = e.target;
 		setForm2((prevState) => {
@@ -46,6 +58,7 @@ export default function SignUp() {
 		});
 	}
 
+	// Función para manejar el envío de formulario de registro de usuario, validando los campos y llamando a la función de registro de usuario.
 	async function handleOnSubmit(e: React.MouseEvent<HTMLButtonElement>) {
 		e.preventDefault();
 
@@ -78,6 +91,7 @@ export default function SignUp() {
 		});
 	}
 
+	// Función para manejar el envío de formulario de registro de datos del usuario, validando los campos y creando una colección de datos en la tabla de Firebase.
 	async function handleOnSubmit2(e: React.MouseEvent<HTMLButtonElement>) {
 		e.preventDefault();
 		if (!form2.name) {

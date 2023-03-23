@@ -1,49 +1,38 @@
 'use client';
-import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
-import { useRouter } from 'next/navigation';
-import { getDoc, collection, getDocs } from 'firebase/firestore';
+// Importa el componente ReceiptTable desde el directorio /components
 import ReceiptTable from '../../components/ReceiptTable';
-import { db } from '../../firebase';
-import { useAuth } from '../../context/AuthContext';
+// Importa los íconos de ExclamationCircleIcon desde la biblioteca Heroicons
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
+// Importa el hook useState y useEffect de React para usar el estado local y verificar siel usuario está logueado cuando se carga la página
 import { useEffect, useState } from 'react';
-import { AnyNsRecord } from 'dns';
+// Importa las funciones collection y getDoc de Firebase Firestore
+import { collection, getDocs } from 'firebase/firestore';
+// Importa el hook useRouter de Next.js
+import { useRouter } from 'next/navigation';
+// Importa la instancia de la base de datos de Firebase
+import { db } from '../../firebase';
+// Importa el hook personalizado useAuth
+import { useAuth } from '../../context/AuthContext';
 
 export default function page() {
-	const [receipts, setReceipts] = useState<any>();
-
+	// Usa el hook useAuth para obtener el usuario
 	const { user } = useAuth();
+	// Usa el hook useRouter para obtener acceso al router de Next.js
 	const router = useRouter();
 
-	// if (user === null) {
-	// 	router.push('/');
-	// }
+	// Estado inicial de las facturas del usuario
+	const [receipts, setReceipts] = useState<any>();
 
-	// useEffect(() => {
-	// 	const fetchData = async () => {
-	// 		const querySnapshot = await getDocs(collection(db, 'users', user?.email, 'facturas'));
-	// 		setReceipts(querySnapshot);
-	// 		// querySnapshot.forEach((doc) => {
-	// 		// 	console.log(doc.id, ' => ', doc.data());
-	// 		// });
-	// 	};
-
-	// 	try {
-	// 		fetchData();
-	// 	} catch (err) {
-	// 		console.log(err);
-	// 	}
-	// }, []);
-
+	// Este hook vuelve y renderiza la pantalla cada vez que cambia el valor de 'user' o 'router'.
 	useEffect(() => {
+		// Si 'user' es nulo, redirige al usuario a la página de inicio.
+		// Si 'user' tiene un valor, obtiene los datos de las facturas en Firestore y los almacena en el estado local 'receipts'.
 		if (user === null) {
 			router.push('/');
 		} else {
 			const fetchData = async () => {
 				const querySnapshot = await getDocs(collection(db, 'users', user?.email, 'facturas'));
 				setReceipts(querySnapshot);
-				// querySnapshot.forEach((doc) => {
-				// 	console.log(doc.id, ' => ', doc.data());
-				// });
 			};
 
 			try {
@@ -77,7 +66,7 @@ export default function page() {
 						<span className="font-bold text-black ">Criterios de aprobación de facturas</span> de la actividad.
 					</div>
 				</div>
-				<ReceiptTable receipts={receipts} />
+				<ReceiptTable receiptsData={receipts} />
 			</main>
 		</div>
 	);
