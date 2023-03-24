@@ -22,14 +22,14 @@ export default function SignUp() {
 	const router = useRouter();
 
 	// Estado inicial del formulario para crear la cuenta
-	const [form, setForm] = useState({
+	const [registrationForm, setRegistrationForm] = useState({
 		email: '',
 		password: '',
 		confirmPassword: '',
 	});
 
 	// Estado inicial del formulario para agregar los datos personales
-	const [form2, setForm2] = useState({
+	const [personalInfoForm, setPersonalInfoForm] = useState({
 		name: '',
 		id: '',
 		cellphone: '',
@@ -37,9 +37,9 @@ export default function SignUp() {
 	});
 
 	// Función para controlar los cambios de estado de los inputs del formulario para crear la cuenta
-	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+	function handleChangeRegistration(e: React.ChangeEvent<HTMLInputElement>) {
 		const { value, name } = e.target;
-		setForm((prevState) => {
+		setRegistrationForm((prevState) => {
 			return {
 				...prevState,
 				[name]: value,
@@ -48,9 +48,9 @@ export default function SignUp() {
 	}
 
 	// Función para controlar los cambios de estado de los inputs del formulario para agregar los datos personales
-	function handleChange2(e: React.ChangeEvent<HTMLInputElement>) {
+	function handleChangePersonalInfo(e: React.ChangeEvent<HTMLInputElement>) {
 		const { value, name } = e.target;
-		setForm2((prevState) => {
+		setPersonalInfoForm((prevState) => {
 			return {
 				...prevState,
 				[name]: value,
@@ -59,32 +59,30 @@ export default function SignUp() {
 	}
 
 	// Función para manejar el envío de formulario de registro de usuario, validando los campos y llamando a la función de registro de usuario.
-	async function handleOnSubmit(e: React.MouseEvent<HTMLButtonElement>) {
+	async function handleOnSubmitRegistration(e: React.MouseEvent<HTMLButtonElement>) {
 		e.preventDefault();
 
-		if (!form.email) {
+		if (!registrationForm.email) {
 			alert('Por favor ingresa un email.');
 			return false;
-		} else if (!form.password || !form.confirmPassword) {
+		} else if (!registrationForm.password || !registrationForm.confirmPassword) {
 			alert('Por favor ingresa una contraseña.');
 			return false;
-		} else if (form.password.length < 6) {
+		} else if (registrationForm.password.length < 6) {
 			alert('La contraseña debe tener al menos 6 caracteres.');
 			return false;
-		} else if (form.password !== form.confirmPassword) {
+		} else if (registrationForm.password !== registrationForm.confirmPassword) {
 			alert('Las contraseñas no coinciden.');
 			return false;
 		}
 
 		try {
-			await signup(form.email, form.password);
+			await signup(registrationForm.email, registrationForm.password);
 		} catch (e) {
 			console.log(e);
 		}
 
-		console.log(form);
-
-		setForm({
+		setRegistrationForm({
 			email: '',
 			password: '',
 			confirmPassword: '',
@@ -92,36 +90,34 @@ export default function SignUp() {
 	}
 
 	// Función para manejar el envío de formulario de registro de datos del usuario, validando los campos y creando una colección de datos en la tabla de Firebase.
-	async function handleOnSubmit2(e: React.MouseEvent<HTMLButtonElement>) {
+	async function handleOnSubmitPersonalInfo(e: React.MouseEvent<HTMLButtonElement>) {
 		e.preventDefault();
-		if (!form2.name) {
+		if (!personalInfoForm.name) {
 			alert('Por favor ingresa tu nombre.');
 			return false;
-		} else if (!form2.id) {
+		} else if (!personalInfoForm.id) {
 			alert('Por favor ingresa tu número de identidad.');
 			return false;
-		} else if (!form2.cellphone) {
+		} else if (!personalInfoForm.cellphone) {
 			alert('Por favor ingresa tu número de celular.');
 			return false;
-		} else if (form2.check === false) {
+		} else if (personalInfoForm.check === false) {
 			alert('Por favor acepta los términos y condiciones.');
 			return false;
 		}
 
 		try {
 			const docRef = await setDoc(doc(db, 'users', user?.email), {
-				nombre: form2.name,
-				cedula: form2.id,
-				celular: form2.cellphone,
+				nombre: personalInfoForm.name,
+				cedula: personalInfoForm.id,
+				celular: personalInfoForm.cellphone,
 			});
 			router.push('/facturas');
 		} catch (e) {
 			console.error(e);
 		}
 
-		console.log(form2);
-
-		setForm2({
+		setPersonalInfoForm({
 			name: '',
 			id: '',
 			cellphone: '',
@@ -158,16 +154,16 @@ export default function SignUp() {
 				<form className="flex flex-col justify-center p-8 mx-auto md:h-screen md:w-1/2 xl:w-1/3">
 					<input
 						className="bg-gray-50 md:w-full border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-						value={form.email}
-						onChange={handleChange}
+						value={registrationForm.email}
+						onChange={handleChangeRegistration}
 						type="email"
 						placeholder="Correo Electrónico"
 						required
 						name="email"
 					/>
 					<input
-						value={form.password}
-						onChange={handleChange}
+						value={registrationForm.password}
+						onChange={handleChangeRegistration}
 						type="password"
 						className="bg-gray-50 mb-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full md:w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 						placeholder="Contraseña"
@@ -175,8 +171,8 @@ export default function SignUp() {
 						name="password"
 					/>
 					<input
-						value={form.confirmPassword}
-						onChange={handleChange}
+						value={registrationForm.confirmPassword}
+						onChange={handleChangeRegistration}
 						type="password"
 						className="bg-gray-50 mb-6 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full md:w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 						placeholder="Repetir contraseña"
@@ -191,7 +187,7 @@ export default function SignUp() {
 					</div>
 					<button
 						type="button"
-						onClick={handleOnSubmit}
+						onClick={handleOnSubmitRegistration}
 						className="md:w-full focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-600 font-medium rounded-lg text-sm px-12 py-2.5"
 					>
 						Continuar
@@ -201,16 +197,16 @@ export default function SignUp() {
 				<form className="flex flex-col justify-center p-8 mx-auto md:h-screen md:w-1/2 xl:w-1/3">
 					<input
 						className="bg-gray-50 md:w-full border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-						value={form2.name}
-						onChange={handleChange2}
+						value={personalInfoForm.name}
+						onChange={handleChangePersonalInfo}
 						type="text"
 						placeholder="Nombre completo"
 						required
 						name="name"
 					/>
 					<input
-						value={form2.id}
-						onChange={handleChange2}
+						value={personalInfoForm.id}
+						onChange={handleChangePersonalInfo}
 						type="text"
 						className="bg-gray-50 mb-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full md:w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 						placeholder="Número de documento"
@@ -218,8 +214,8 @@ export default function SignUp() {
 						name="id"
 					/>
 					<input
-						value={form2.cellphone}
-						onChange={handleChange2}
+						value={personalInfoForm.cellphone}
+						onChange={handleChangePersonalInfo}
 						type="tel"
 						className="bg-gray-50 mb-6 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full md:w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 						placeholder="Número de celular"
@@ -231,13 +227,13 @@ export default function SignUp() {
 							<input
 								id="remember"
 								type="checkbox"
-								checked={form2.check}
-								value={form2.check.toString()}
+								checked={personalInfoForm.check}
+								value={personalInfoForm.check.toString()}
 								onClick={() => {
-									setForm2((prevState) => {
+									setPersonalInfoForm((prevState) => {
 										return {
 											...prevState,
-											check: !form2.check,
+											check: !personalInfoForm.check,
 										};
 									});
 								}}
@@ -249,7 +245,7 @@ export default function SignUp() {
 					</div>
 					<button
 						type="button"
-						onClick={handleOnSubmit2}
+						onClick={handleOnSubmitPersonalInfo}
 						className="md:w-full focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-600 font-medium rounded-lg text-sm px-12 py-2.5"
 					>
 						Continuar

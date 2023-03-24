@@ -1,6 +1,6 @@
 'use client';
-// Importa las funciones doc y getDoc de Firebase Firestore
-import { doc, getDoc } from 'firebase/firestore';
+// Importa las funciones doc, setDoc y getDoc de Firebase Firestore
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 // Importa el hook useState y useEffect de React para usar el estado local y verificar siel usuario está logueado cuando se carga la página
 import { useState, useEffect } from 'react';
 // Importa el hook useRouter de Next.js
@@ -18,6 +18,8 @@ export default function page() {
 
 	// Estado inicial de la información del usuario
 	const [userData, setUserData] = useState<any>();
+
+	const [isChangingData, setIsChangingData] = useState(false);
 
 	// Este hook vuelve y renderiza la pantalla cada vez que cambia el valor de 'user' o 'router'.
 	useEffect(() => {
@@ -38,11 +40,26 @@ export default function page() {
 				console.log(err);
 			}
 		}
-	}, [user, router]);
+	}, [user, router, isChangingData]);
+
+	console.log(userData);
+
+	async function handleClick1() {
+		setIsChangingData((prev) => !prev);
+	}
 
 	// ToDo: Función para sobreescribir los datos del usuario en la base de datos
 	async function handleClick() {
-		console.log('Próximamente');
+		try {
+			await setDoc(doc(db, 'users', user?.email), {
+				nombre: 'hello again!',
+				cedula: userData.cedula,
+				celular: userData.celular,
+			});
+		} catch (e) {
+			console.error(e);
+		}
+		setIsChangingData((prev) => !prev);
 	}
 
 	return (
@@ -163,10 +180,10 @@ export default function page() {
 										// value={form2.name}
 										// onChange={handleChange2}
 										type="text"
-										placeholder={userData?.nombre}
+										placeholder={isChangingData ? 'Nuevo número de nombre de usuario' : userData?.nombre}
 										required
 										name="name"
-										disabled={true}
+										disabled={!isChangingData}
 									/>
 								</div>
 								<div className="w-full px-6 mb-6 md:px-0 md:w-2/5">
@@ -176,10 +193,10 @@ export default function page() {
 										// value={form2.name}
 										// onChange={handleChange2}
 										type="text"
-										placeholder={userData?.cedula}
+										placeholder={isChangingData ? 'Nuevo número de cédula' : userData?.cedula}
 										required
 										name="id"
-										disabled={true}
+										disabled={!isChangingData}
 									/>
 								</div>
 							</div>
@@ -191,16 +208,16 @@ export default function page() {
 										// value={form2.name}
 										// onChange={handleChange2}
 										type="phone"
-										placeholder={userData?.celular}
+										placeholder={isChangingData ? 'Nuevo número de celular' : userData?.celular}
 										required
 										name="cel"
-										disabled={true}
+										disabled={!isChangingData}
 									/>
 								</div>
 								<div className="w-full px-6 mb-6 md:px-0 md:w-2/5">
 									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo electrónico</label>
 									<input
-										className="bg-gray-50 w-full border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+										className="bg-gray-50 w-full border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
 										// value={form2.name}
 										// onChange={handleChange2}
 										type="email"
@@ -211,13 +228,23 @@ export default function page() {
 									/>
 								</div>
 							</div>
-							<button
-								type="button"
-								onClick={handleClick}
-								className="focus:outline-none mb-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-700 font-medium rounded-lg text-sm px-12 py-2.5"
-							>
-								Editar datos
-							</button>
+							{!isChangingData ? (
+								<button
+									type="button"
+									onClick={handleClick}
+									className="focus:outline-none mb-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-700 font-medium rounded-lg text-sm px-12 py-2.5"
+								>
+									Editar datos
+								</button>
+							) : (
+								<button
+									type="button"
+									onClick={handleClick1}
+									className="focus:outline-none mb-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-700 font-medium rounded-lg text-sm px-12 py-2.5"
+								>
+									Guardar cambios
+								</button>
+							)}
 						</div>
 					</main>
 				</div>

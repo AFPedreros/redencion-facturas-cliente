@@ -12,8 +12,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 				<AuthContextProvider>
 					<Header />
 					{children}
-
-					{/* <SignUp /> */}
 				</AuthContextProvider>
 			</body>
 		</html>
