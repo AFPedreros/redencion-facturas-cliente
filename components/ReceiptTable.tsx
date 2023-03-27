@@ -68,7 +68,7 @@ export default function ReceiptTable({ receiptsData }: Props) {
 
 	return (
 		<>
-			{receiptsData?.docs.length > 0 ? (
+			{!receiptsData?.empty ? (
 				<div className="relative overflow-x-auto shadow-md sm:rounded-lg">
 					<table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
 						<thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -92,13 +92,15 @@ export default function ReceiptTable({ receiptsData }: Props) {
 						</thead>
 						<tbody>
 							{receipts.map((rec) => {
+								const bg = rec.estado === 'Rechazada' ? 'text-black' : rec.estado === 'Aprobada' ? 'text-blue-700' : 'text-gray-500';
+
 								return (
 									<tr key={rec.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
 										<td className="px-6 py-4">{shortenString(rec.id)}</td>
 										<td className="px-6 py-4">{getDateFromString(rec.fecha)}</td>
 										<td className="px-6 py-4">{rec.valor}</td>
 										<td className="px-6 py-4">
-											<label className="text-sm font-bold">{rec.estado}</label>
+											<label className={`text-sm ${bg} font-bold`}>{rec.estado}</label>
 											<a href={rec.url} className="ml-4 font-medium underline hover:underline">
 												Ver
 											</a>

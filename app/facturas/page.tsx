@@ -1,4 +1,6 @@
 'use client';
+// Importa el hook useRouter y el componente Link de Next.js
+import Link from 'next/link';
 // Importa el componente ReceiptTable desde el directorio /components
 import ReceiptTable from '../../components/ReceiptTable';
 // Importa los íconos de ExclamationCircleIcon desde la biblioteca Heroicons
@@ -32,6 +34,7 @@ export default function page() {
 		} else {
 			const fetchData = async () => {
 				const querySnapshot = await getDocs(collection(db, 'users', user?.email, 'facturas'));
+
 				setReceipts(querySnapshot);
 			};
 
@@ -66,7 +69,13 @@ export default function page() {
 						<span className="font-bold text-black ">Criterios de aprobación de facturas</span> de la actividad.
 					</div>
 				</div>
-				<ReceiptTable receiptsData={receipts} />
+				{receipts?.empty ? (
+					<Link className="font-bold border-b-2 border-black w-fit" href="/facturas/registro">
+						Registra tu primer factura
+					</Link>
+				) : (
+					<ReceiptTable receiptsData={receipts} />
+				)}
 			</main>
 		</div>
 	);

@@ -112,7 +112,6 @@ export default function SignUp() {
 				cedula: personalInfoForm.id,
 				celular: personalInfoForm.cellphone,
 			});
-			router.push('/facturas');
 		} catch (e) {
 			console.error(e);
 		}
@@ -123,6 +122,7 @@ export default function SignUp() {
 			cellphone: '',
 			check: false,
 		});
+		router.push('/facturas');
 	}
 
 	return (

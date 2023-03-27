@@ -16,6 +16,12 @@ export default function page() {
 	// Usa el hook useRouter para obtener acceso al router de Next.js
 	const router = useRouter();
 
+	const [form, setForm] = useState({
+		name: '',
+		id: '',
+		tel: '',
+	});
+
 	// Estado inicial de la información del usuario
 	const [userData, setUserData] = useState<any>();
 
@@ -42,24 +48,39 @@ export default function page() {
 		}
 	}, [user, router, isChangingData]);
 
-	console.log(userData);
-
-	async function handleClick1() {
-		setIsChangingData((prev) => !prev);
+	// Función para controlar los cambios de estado de los inputs del formulario para crear la cuenta
+	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+		const { value, name } = e.target;
+		setForm((prevState) => {
+			return {
+				...prevState,
+				[name]: value,
+			};
+		});
 	}
 
 	// ToDo: Función para sobreescribir los datos del usuario en la base de datos
 	async function handleClick() {
+		const name = form.name !== '' ? form.name : userData?.nombre;
+		const id = form.id !== '' ? form.id : userData?.cedula;
+		const tel = form.tel !== '' ? form.tel : userData?.celular;
+
 		try {
 			await setDoc(doc(db, 'users', user?.email), {
-				nombre: 'hello again!',
-				cedula: userData.cedula,
-				celular: userData.celular,
+				nombre: name,
+				cedula: id,
+				celular: tel,
 			});
 		} catch (e) {
 			console.error(e);
 		}
 		setIsChangingData((prev) => !prev);
+
+		setForm({
+			name: '',
+			id: '',
+			tel: '',
+		});
 	}
 
 	return (
@@ -85,8 +106,8 @@ export default function page() {
 									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre completo</label>
 									<input
 										className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										// value={form2.name}
-										// onChange={handleChange2}
+										value={form.name}
+										onChange={handleChange}
 										type="text"
 										placeholder="Cargando..."
 										required
@@ -98,8 +119,8 @@ export default function page() {
 									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cédula</label>
 									<input
 										className="bg-gray-50 w-full border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										// value={form2.name}
-										// onChange={handleChange2}
+										value={form.id}
+										onChange={handleChange}
 										type="text"
 										placeholder="Cargando..."
 										required
@@ -113,8 +134,8 @@ export default function page() {
 									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Celular</label>
 									<input
 										className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										// value={form2.name}
-										// onChange={handleChange2}
+										value={form.tel}
+										onChange={handleChange}
 										type="phone"
 										placeholder="Cargando..."
 										required
@@ -126,8 +147,6 @@ export default function page() {
 									<label className="block mb-2 text-sm font-medium text-gray-900">Correo electrónico</label>
 									<input
 										className="bg-gray-50 w-full border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										// value={form2.name}
-										// onChange={handleChange2}
 										type="email"
 										placeholder="Cargando..."
 										required
@@ -177,8 +196,8 @@ export default function page() {
 									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre completo</label>
 									<input
 										className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										// value={form2.name}
-										// onChange={handleChange2}
+										value={form.name}
+										onChange={handleChange}
 										type="text"
 										placeholder={isChangingData ? 'Nuevo número de nombre de usuario' : userData?.nombre}
 										required
@@ -190,8 +209,8 @@ export default function page() {
 									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cédula</label>
 									<input
 										className="bg-gray-50 w-full border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										// value={form2.name}
-										// onChange={handleChange2}
+										value={form.id}
+										onChange={handleChange}
 										type="text"
 										placeholder={isChangingData ? 'Nuevo número de cédula' : userData?.cedula}
 										required
@@ -204,13 +223,13 @@ export default function page() {
 								<div className="w-full px-6 mb-6 md:px-0 md:w-2/5">
 									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Celular</label>
 									<input
-										className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										// value={form2.name}
-										// onChange={handleChange2}
-										type="phone"
+										className="bg-gray-50 w-full border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+										value={form.tel}
+										onChange={handleChange}
+										type="tel"
 										placeholder={isChangingData ? 'Nuevo número de celular' : userData?.celular}
 										required
-										name="cel"
+										name="tel"
 										disabled={!isChangingData}
 									/>
 								</div>
@@ -218,8 +237,6 @@ export default function page() {
 									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo electrónico</label>
 									<input
 										className="bg-gray-50 w-full border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
-										// value={form2.name}
-										// onChange={handleChange2}
 										type="email"
 										placeholder={user?.email}
 										required
@@ -231,7 +248,7 @@ export default function page() {
 							{!isChangingData ? (
 								<button
 									type="button"
-									onClick={handleClick}
+									onClick={() => setIsChangingData((prev) => !prev)}
 									className="focus:outline-none mb-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-700 font-medium rounded-lg text-sm px-12 py-2.5"
 								>
 									Editar datos
@@ -239,7 +256,7 @@ export default function page() {
 							) : (
 								<button
 									type="button"
-									onClick={handleClick1}
+									onClick={handleClick}
 									className="focus:outline-none mb-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-700 font-medium rounded-lg text-sm px-12 py-2.5"
 								>
 									Guardar cambios
