@@ -1,30 +1,41 @@
 'use client';
+import { getStorage, ref, deleteObject } from 'firebase/storage';
+import { doc, deleteDoc } from 'firebase/firestore';
+import { db } from '../firebase';
+// Importa el hook personalizado useAuth
+import { useAuth } from '../context/AuthContext';
+import { useEffect, useState } from 'react';
 
 // Crea un tipo Receipt para los objetos de factura.
 type Props = { receiptsData: any };
 
 export default function ReceiptTable({ receiptsData }: Props) {
 	// Array para almacenar las facturas que tenga el usuario
-	let receipts: { id: any; fecha: any; estado: any; valor: any; url: any }[] = [];
+	const [receipts, setReceipts] = useState<any[]>([]);
+	// Usa el hook useAuth para obtener el usuario
+	const { user } = useAuth();
 
-	// Si hay facturas, crear un array de objetos factura a partir de los datos obtenidos de Firebase.
-	if (receiptsData) {
-		const receiptsArray: { id: any; fecha: any; estado: any; valor: any; url: any }[] = [];
-		receiptsData.forEach((doc: any) => {
-			const receipt = {
-				id: doc.data().id,
-				fecha: doc.data().fechaRegistro,
-				estado: doc.data().estado,
-				valor: doc.data().valorTotal,
-				url: doc.data().url,
-			};
-			receiptsArray.push(receipt);
-		});
+	useEffect(() => {
+		// Si hay facturas, crear un array de objetos factura a partir de los datos obtenidos de Firebase.
+		if (receiptsData) {
+			const receiptsArray: { id: any; fecha: any; estado: any; valor: any; url: any }[] = [];
+			receiptsData.forEach((doc: any) => {
+				const receipt = {
+					id: doc.data().id,
+					fecha: doc.data().fechaRegistro,
+					estado: doc.data().estado,
+					valor: doc.data().valorTotal,
+					url: doc.data().url,
+				};
+				receiptsArray.push(receipt);
+			});
 
-		// Ordena el array de facturas por fecha de registro y asigna el array ordenado a la variable facturas.
-		const sortedReceipt = sortByRegistrationDate(receiptsArray);
-		receipts = sortedReceipt;
-	}
+			// Ordena el array de facturas por fecha de registro y asigna el array ordenado a la variable facturas.
+			const sortedReceipt = sortByRegistrationDate(receiptsArray);
+			console.log(sortedReceipt);
+			setReceipts(sortedReceipt);
+		}
+	}, [receiptsData]);
 
 	// Función para convertir una fecha en formato de cadena a una fecha con formato 'dd-mm-yyyy' y devolver la cadena resultante.
 	function getDateFromString(dateString: string) {
@@ -64,6 +75,12 @@ export default function ReceiptTable({ receiptsData }: Props) {
 			}
 		});
 		return objects;
+	}
+
+	function handleDelete(id: string) {
+		// delete the document from Firebase...
+		const updatedReceipts = receipts.filter((rec) => rec.id !== id);
+		setReceipts(updatedReceipts);
 	}
 
 	return (
@@ -109,9 +126,23 @@ export default function ReceiptTable({ receiptsData }: Props) {
 											<a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
 												Editar
 											</a>
-											<a href="#" className="font-medium text-red-600 dark:text-red-500 hover:underline">
+											<button
+												onClick={async () => {
+													// Se accede al almacenamiento de Firebase y se establece la referencia donde se almacenará el archivo.
+													const storage = getStorage();
+													const storageRef = ref(storage, `facturas/${user.email}/${rec.id}`);
+													try {
+														await deleteObject(storageRef);
+														await deleteDoc(doc(db, 'users', user?.email, 'facturas', rec.id));
+														handleDelete(rec.id);
+													} catch (e) {
+														console.log(e);
+													}
+												}}
+												className="font-medium text-red-600 hover:underline"
+											>
 												Borrar
-											</a>
+											</button>
 										</td>
 									</tr>
 								);
