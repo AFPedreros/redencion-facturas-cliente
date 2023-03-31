@@ -19,7 +19,9 @@ import { db } from '../firebase';
 // Importa el hook personalizado useAuth
 import { useAuth } from '../context/AuthContext';
 
-export default function AddReceipt() {
+type Props = { id: string; toggleModal: (receiptId: any) => void };
+
+export default function AddReceipt({ id, toggleModal }: Props) {
 	// Usa el hook useAuth para obtener el usuario
 	const { user } = useAuth();
 	// Usa el hook useRouter para obtener acceso al router de Next.js
@@ -52,16 +54,13 @@ export default function AddReceipt() {
 	}
 
 	// Función para subir el archivo a la base de datos
-	async function handleClick() {
+	async function uploadFile() {
 		setIsLoading((prev) => !prev);
 		// Se verifica que exista un archivo seleccionado, de lo contrario la función no hace nada.
 		if (!file) {
 			return;
 		}
 		try {
-			// Se genera un ID único para la factura que se está subiendo.
-			const id = v4();
-
 			// Se accede al almacenamiento de Firebase y se establece la referencia donde se almacenará el archivo.
 			const storage = getStorage();
 			const storageRef = ref(storage, `facturas/${user.email}/${id}`);
@@ -86,22 +85,20 @@ export default function AddReceipt() {
 		setFileUpload(true);
 		setIsLoading((prev) => !prev);
 	}
+
 	return (
 		<div className="bg-white md:flex">
 			{fileUpload ? (
 				<div className="flex flex-col justify-center p-8 mx-auto md:h-fit">
 					<h2 className="mb-12 text-2xl font-light text-center">¡Tu factura ha sido editada correctamente!</h2>
 					<p className="mx-auto mb-12 text-[#707070] text-sm">Una vez sea aprobada se te notificará el código de participación generado.</p>
-					{/* <button
+					<button
 						type="button"
-						onClick={() => {
-							setFileUpload(false);
-							setFile(undefined);
-						}}
+						onClick={toggleModal}
 						className="focus:outline-none w-fit mx-auto mb-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-700 font-medium rounded-lg text-sm px-12 py-2.5"
 					>
 						Aceptar
-					</button> */}
+					</button>{' '}
 				</div>
 			) : (
 				<div className="flex flex-col justify-center p-8 mx-auto md:h-fit">
@@ -154,7 +151,7 @@ export default function AddReceipt() {
 					) : isLoading ? (
 						<button
 							type="button"
-							onClick={handleClick}
+							onClick={() => console.log('hello')}
 							className="focus:outline-none mb-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-700 font-medium rounded-lg text-sm px-12 py-2.5"
 						>
 							<svg aria-hidden="true" role="status" className="inline w-4 h-4 mr-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -172,7 +169,7 @@ export default function AddReceipt() {
 					) : (
 						<button
 							type="button"
-							onClick={handleClick}
+							onClick={uploadFile}
 							className="md:w-full focus:outline-none mb-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-600 font-medium rounded-lg text-sm px-12 py-2.5"
 						>
 							Subir factura
