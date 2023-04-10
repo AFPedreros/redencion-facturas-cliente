@@ -19,6 +19,25 @@ import { db } from '../../../firebase';
 // Importa el hook personalizado useAuth
 import { useAuth } from '../../../context/AuthContext';
 
+interface InvoiceForm {
+	totalValue: string;
+	mallName: string;
+	city: string;
+	invoiceNumber: string;
+}
+
+interface Mall {
+	[key: string]: string[];
+}
+
+const cities = ['Cali', 'Medellín', 'Bogotá'];
+
+const malls: Mall = {
+	Cali: ['Chipichape', 'Unicentro'],
+	Medellín: ['Centro Comercial Santafé', 'El Tesoro Parque Comercial'],
+	Bogotá: ['Centro Comercial Andino', 'Centro Comercial Gran Estación'],
+};
+
 export default function page() {
 	// Usa el hook useAuth para obtener el usuario
 	const { user } = useAuth();
@@ -29,6 +48,14 @@ export default function page() {
 	const [fileUpload, setFileUpload] = useState(false);
 	// Estado inicial del archivo que se va a subir
 	const [file, setFile] = useState<File>();
+
+	// Estado inicial del formulario para subir los datos de la factura
+	const [invoiceForm, setInvoiceForm] = useState<InvoiceForm>({
+		totalValue: '',
+		mallName: '',
+		city: '',
+		invoiceNumber: '',
+	});
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [showModal, setShowModal] = useState(false);
@@ -50,6 +77,17 @@ export default function page() {
 		if (e.target.files) {
 			setFile(e.target.files[0]);
 		}
+	}
+
+	// Función para controlar los cambios de estado de los inputs del formulario para crear la cuenta
+	function handleChangeForm(e: React.ChangeEvent<HTMLInputElement>) {
+		const { value, name } = e.target;
+		setInvoiceForm((prevState) => {
+			return {
+				...prevState,
+				[name]: value,
+			};
+		});
 	}
 
 	// Función para subir el archivo a la base de datos
@@ -88,99 +126,15 @@ export default function page() {
 		setIsLoading((prev) => !prev);
 	}
 
-	async function manualUpload() {
-		console.log('hello');
-	}
-
 	function toggleModal() {
 		setShowModal(!showModal);
 		console.log(showModal);
 	}
 
+	console.log(invoiceForm);
+
 	return (
 		<div className="bg-white md:flex">
-			<div id="authentication-modal" className="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full">
-				<div className="relative w-full h-full max-w-md md:h-auto">
-					<div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-						<button
-							type="button"
-							className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-							data-modal-hide="authentication-modal"
-						>
-							<svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-								<path
-									fillRule="evenodd"
-									d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-									clipRule="evenodd"
-								></path>
-							</svg>
-							<span className="sr-only">Close modal</span>
-						</button>
-						<div className="px-6 py-6 lg:px-8">
-							<h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Sign in to our platform</h3>
-							<form className="space-y-6" action="#">
-								<div>
-									<label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-										Your email
-									</label>
-									<input
-										type="email"
-										name="email"
-										id="email"
-										className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-										placeholder="name@company.com"
-										required
-									/>
-								</div>
-								<div>
-									<label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-										Your password
-									</label>
-									<input
-										type="password"
-										name="password"
-										id="password"
-										placeholder="••••••••"
-										className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-										required
-									/>
-								</div>
-								<div className="flex justify-between">
-									<div className="flex items-start">
-										<div className="flex items-center h-5">
-											<input
-												id="remember"
-												type="checkbox"
-												value=""
-												className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-												required
-											/>
-										</div>
-										<label htmlFor="remember" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-											Remember me
-										</label>
-									</div>
-									<a href="#" className="text-sm text-blue-700 hover:underline dark:text-blue-500">
-										Lost Password?
-									</a>
-								</div>
-								<button
-									type="submit"
-									className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-								>
-									Login to your account
-								</button>
-								<div className="text-sm font-medium text-gray-500 dark:text-gray-300">
-									Not registered?{' '}
-									<a href="#" className="text-blue-700 hover:underline dark:text-blue-500">
-										Create account
-									</a>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
 			<div className="flex flex-col items-center justify-center p-8 pt-20 md:pt-0 md:h-screen md:border-r md:border-black md:w-1/3">
 				<h1 className="mb-12 text-4xl">Agrega tus facturas</h1>
 				<div className="flex flex-col gap-4">
@@ -268,7 +222,7 @@ export default function page() {
 					)}
 
 					<p className="mx-auto mb-12 text-[#707070] text-sm">
-						Conoce más información{' '}
+						Agrega los datos de forma manual{' '}
 						<label onClick={toggleModal} className="font-bold text-black border-b-2 border-black cursor-pointer w-fit">
 							aquí
 						</label>
@@ -276,89 +230,105 @@ export default function page() {
 					</p>
 					{showModal && (
 						<div
-							id="authentication-modal"
+							data-modal-backdrop="static"
 							tabIndex={-1}
 							aria-hidden="true"
-							className="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full"
+							className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center w-full h-full p-4 m-0 overflow-hidden"
 						>
-							<div className="relative w-full h-full max-w-md md:h-auto">
-								<div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-									<button
-										type="button"
-										className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-										data-modal-hide="authentication-modal"
-									>
-										<svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+							<div className="w-full max-w-2xl bg-white rounded-lg shadow-md">
+								<div className="flex items-start justify-between p-4 border-b">
+									<h3 className="text-lg font-semibold text-gray-900">Agrega los datos de tu factura</h3>
+									<button type="button" className="text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700" onClick={toggleModal}>
+										<span className="sr-only">Close</span>
+										<svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 											<path
 												fillRule="evenodd"
-												d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+												d="M4.293 4.293a1 1 0 011.414 0L12 10.586l6.293-6.293a1 1 0 111.414 1.414L13.414 12l6.293 6.293a1 1 0 01-1.414 1.414L12 13.414l-6.293 6.293a1 1 0 01-1.414-1.414L10.586 12 4.293 5.707a1 1 0 010-1.414z"
 												clipRule="evenodd"
-											></path>
+											/>
 										</svg>
-										<span className="sr-only">Close modal</span>
 									</button>
-									<div className="px-6 py-6 lg:px-8">
-										<h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Sign in to our platform</h3>
-										<form className="space-y-6" action="#">
-											<div>
-												<label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-													Your email
-												</label>
-												<input
-													type="email"
-													name="email"
-													id="email"
-													className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-													placeholder="name@company.com"
-													required
-												/>
-											</div>
-											<div>
-												<label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-													Your password
-												</label>
-												<input
-													type="password"
-													name="password"
-													id="password"
-													placeholder="••••••••"
-													className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-													required
-												/>
-											</div>
-											<div className="flex justify-between">
-												<div className="flex items-start">
-													<div className="flex items-center h-5">
-														<input
-															id="remember"
-															type="checkbox"
-															value=""
-															className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-															required
-														/>
-													</div>
-													<label htmlFor="remember" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-														Remember me
-													</label>
-												</div>
-												<a href="#" className="text-sm text-blue-700 hover:underline dark:text-blue-500">
-													Lost Password?
-												</a>
-											</div>
-											<button
-												type="submit"
-												className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+								</div>
+								<div className="p-4">
+									<form className="space-y-6">
+										<div>
+											<label htmlFor="totalValue" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+												Valor total de la factura
+											</label>
+											<input
+												type="number"
+												name="totalValue"
+												id="totalValue"
+												className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+												placeholder="Valor total de la factura"
+												onChange={handleChangeForm}
+												value={invoiceForm.totalValue}
+												required
+											/>
+										</div>
+										<div>
+											<label htmlFor="invoiceNumber" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+												Número de la factura
+											</label>
+											<input
+												type="text"
+												name="invoiceNumber"
+												id="invoiceNumber"
+												className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+												placeholder="Número de la factura"
+												onChange={handleChangeForm}
+												value={invoiceForm.invoiceNumber}
+												required
+											/>
+										</div>
+										<div>
+											<label htmlFor="city" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+												Ciudad
+											</label>
+											<select
+												name="city"
+												id="city"
+												className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+												required
+												onChange={(e) => setInvoiceForm({ ...invoiceForm, city: e.target.value })}
+												value={invoiceForm.city}
 											>
-												Login to your account
-											</button>
-											<div className="text-sm font-medium text-gray-500 dark:text-gray-300">
-												Not registered?{' '}
-												<a href="#" className="text-blue-700 hover:underline dark:text-blue-500">
-													Create account
-												</a>
-											</div>
-										</form>
-									</div>
+												<option value="">Selecciona una ciudad</option>
+												{cities.map((city) => (
+													<option key={city} value={city}>
+														{city}
+													</option>
+												))}
+											</select>
+										</div>
+										<div>
+											<label htmlFor="mallName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+												Centro comercial
+											</label>
+											<select
+												name="mallName"
+												id="mallName"
+												className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+												required
+												onChange={(e) => setInvoiceForm({ ...invoiceForm, mallName: e.target.value })}
+												value={invoiceForm.mallName}
+											>
+												<option value="">Selecciona un centro comercial</option>
+												{malls[invoiceForm.city] &&
+													malls[invoiceForm.city].map((mall: any) => (
+														<option key={mall} value={mall}>
+															{mall}
+														</option>
+													))}
+											</select>
+										</div>
+										<button
+											type="button"
+											className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+										>
+											Confirmar datos
+										</button>
+									</form>
 								</div>
 							</div>
 						</div>
