@@ -93,6 +93,16 @@ export default function ReceiptTable({ receiptsData }: Props) {
 		}
 	};
 
+	function formatCurrency(amount: any) {
+		const amountNumber = Number(amount.replace(/\./g, '').replace(/[^0-9.-]+/g, ''));
+		const formatter = new Intl.NumberFormat('es-CO', {
+			style: 'currency',
+			currency: 'COP',
+			minimumFractionDigits: 0,
+		});
+		return formatter.format(amountNumber);
+	}
+
 	return (
 		<>
 			{!receiptsData?.empty ? (
@@ -125,7 +135,7 @@ export default function ReceiptTable({ receiptsData }: Props) {
 									<tr key={rec.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
 										<td className="px-6 py-4">{shortenString(rec.id)}</td>
 										<td className="px-6 py-4">{getDateFromString(rec.fecha)}</td>
-										<td className="px-6 py-4">{rec.valor}</td>
+										<td className="px-6 py-4">{formatCurrency(rec.valor)}</td>
 										<td className="px-6 py-4">
 											<label className={`text-sm ${bg} font-bold`}>{rec.estado}</label>
 											<a href={rec.url} className="ml-4 font-medium underline hover:underline">

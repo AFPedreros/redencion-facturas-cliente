@@ -114,7 +114,10 @@ export default function page() {
 			const docRef = await setDoc(doc(db, 'users', user?.email, 'facturas', id), {
 				id: id,
 				fechaRegistro: snapshot.metadata.timeCreated,
-				valorTotal: '$0',
+				valorTotal: invoiceForm.totalValue,
+				numeroFactura: invoiceForm.invoiceNumber,
+				ciudad: invoiceForm.city,
+				centroComercial: invoiceForm.mallName,
 				estado: 'Por revisión',
 				url: url,
 			});
@@ -124,9 +127,6 @@ export default function page() {
 		// Se establece el estado de la variable fileUpload como verdadero para indicar que el archivo ha sido subido con éxito.
 		setFileUpload(true);
 		setIsLoading((prev) => !prev);
-	}
-
-	async function submitForm() {
 		setInvoiceForm({
 			totalValue: '',
 			mallName: '',
@@ -334,7 +334,7 @@ export default function page() {
 										<button
 											type="button"
 											className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-											onClick={submitForm}
+											onClick={toggleModal}
 										>
 											Confirmar datos
 										</button>
@@ -343,7 +343,7 @@ export default function page() {
 							</div>
 						</div>
 					)}
-					{!file ? (
+					{!file || invoiceForm.city === '' || invoiceForm.invoiceNumber === '' || invoiceForm.mallName === '' || invoiceForm.totalValue === '' ? (
 						<button type="button" className="text-white mb-6 bg-gray-200 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center" disabled>
 							Subir factura
 						</button>
