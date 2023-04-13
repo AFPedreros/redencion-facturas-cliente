@@ -142,6 +142,28 @@ export default function page() {
 
 	console.log(invoiceForm);
 
+	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+	const handleDropdownClick = () => {
+		setIsDropdownOpen(!isDropdownOpen);
+	};
+
+	const handleOptionClick = (e: any) => {
+		setInvoiceForm({ ...invoiceForm, city: e.target.value });
+		setIsDropdownOpen(false);
+	};
+
+	const [isDropdown2Open, setIsDropdown2Open] = useState(false);
+
+	const handleDropdown2Click = () => {
+		setIsDropdown2Open(!isDropdown2Open);
+	};
+
+	const handleOptionClick2 = (e: any) => {
+		setInvoiceForm({ ...invoiceForm, mallName: e.target.value });
+		setIsDropdown2Open(false);
+	};
+
 	return (
 		<div className="bg-white md:flex">
 			<div className="flex flex-col items-center justify-center p-8 pt-20 md:pt-0 md:h-screen md:border-r md:border-black md:w-1/3">
@@ -294,42 +316,75 @@ export default function page() {
 											<label htmlFor="city" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 												Ciudad
 											</label>
-											<select
-												name="city"
-												id="city"
-												className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-												required
-												onChange={(e) => setInvoiceForm({ ...invoiceForm, city: e.target.value })}
-												value={invoiceForm.city}
-											>
-												<option value="">Selecciona una ciudad</option>
-												{cities.map((city) => (
-													<option key={city} value={city}>
-														{city}
-													</option>
-												))}
-											</select>
+											<div className="relative">
+												<button
+													id="cityDropdownButton"
+													data-dropdown-toggle="dropdown"
+													className="flex items-center justify-between bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+													type="button"
+													onClick={handleDropdownClick}
+												>
+													<span>{invoiceForm.city ? invoiceForm.city : 'Selecciona una ciudad'}</span>
+													<svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+														<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+													</svg>
+												</button>
+
+												{isDropdownOpen && (
+													<div id="cityDropdown" className="absolute z-10 w-full mt-1 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700">
+														<ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
+															{cities.map((city) => (
+																<li key={city}>
+																	<button
+																		className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+																		value={city}
+																		onClick={handleOptionClick}
+																	>
+																		{city}
+																	</button>
+																</li>
+															))}
+														</ul>
+													</div>
+												)}
+											</div>
 										</div>
 										<div>
 											<label htmlFor="mallName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 												Centro comercial
 											</label>
-											<select
-												name="mallName"
-												id="mallName"
-												className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-												required
-												onChange={(e) => setInvoiceForm({ ...invoiceForm, mallName: e.target.value })}
-												value={invoiceForm.mallName}
-											>
-												<option value="">Selecciona un centro comercial</option>
-												{malls[invoiceForm.city] &&
-													malls[invoiceForm.city].map((mall: any) => (
-														<option key={mall} value={mall}>
-															{mall}
-														</option>
-													))}
-											</select>
+											<div className="relative">
+												<button
+													id="mallDropdownButton"
+													data-dropdown-toggle="dropdown"
+													className="flex items-center justify-between bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+													type="button"
+													onClick={handleDropdown2Click}
+												>
+													<span>{invoiceForm.mallName ? invoiceForm.mallName : 'Selecciona un centro comercial'}</span>
+													<svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+														<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+													</svg>
+												</button>
+												{isDropdown2Open && (
+													<div id="mallDropdown" className="absolute z-10 w-full mt-1 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700">
+														<ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
+															{malls[invoiceForm.city] &&
+																malls[invoiceForm.city].map((mall: any) => (
+																	<li key={mall}>
+																		<button
+																			className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+																			value={mall}
+																			onClick={handleOptionClick2}
+																		>
+																			{mall}
+																		</button>
+																	</li>
+																))}
+														</ul>
+													</div>
+												)}
+											</div>
 										</div>
 										<button
 											type="button"
