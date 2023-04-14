@@ -138,58 +138,60 @@ export default function ReceiptTable({ receiptsData }: Props) {
 										<td className="px-6 py-4">{formatCurrency(rec.valor)}</td>
 										<td className="px-6 py-4">
 											<label className={`text-sm ${bg} font-bold`}>{rec.estado}</label>
-											<a href={rec.url} className="ml-4 font-medium underline hover:underline">
+											<a target="_blank" href={rec.url} className="ml-4 font-medium underline hover:underline">
 												Ver
 											</a>
 										</td>
-										<td className="flex items-center px-6 py-4">
-											<button onClick={() => toggleModal(rec.id)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-												Editar
-											</button>
-											{modalReceiptId === rec.id && (
-												<div
-													data-modal-backdrop="static"
-													tabIndex={-1}
-													aria-hidden="true"
-													className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center w-full h-full p-4 m-0 overflow-hidden"
-												>
-													<div className="w-full max-w-2xl bg-white rounded-lg shadow-md">
-														<div className="flex items-start justify-between p-4 border-b">
-															<h3 className="text-lg font-semibold text-gray-900">Agrega tu factura</h3>
-															<button type="button" className="text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700" onClick={toggleModal}>
-																<span className="sr-only">Close</span>
-																<svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-																	<path
-																		fillRule="evenodd"
-																		d="M4.293 4.293a1 1 0 011.414 0L12 10.586l6.293-6.293a1 1 0 111.414 1.414L13.414 12l6.293 6.293a1 1 0 01-1.414 1.414L12 13.414l-6.293 6.293a1 1 0 01-1.414-1.414L10.586 12 4.293 5.707a1 1 0 010-1.414z"
-																		clipRule="evenodd"
-																	/>
-																</svg>
-															</button>
-														</div>
-														<div className="p-4">
-															<AddReceipt id={rec.id} toggleModal={toggleModal} />
+										<td className="px-6 py-4">
+											<div className="flex">
+												<button onClick={() => toggleModal(rec.id)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+													Editar
+												</button>
+												{modalReceiptId === rec.id && (
+													<div
+														data-modal-backdrop="static"
+														tabIndex={-1}
+														aria-hidden="true"
+														className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center w-full h-full p-4 m-0 overflow-hidden"
+													>
+														<div className="w-full max-w-2xl bg-white rounded-lg shadow-md">
+															<div className="flex items-start justify-between p-4 border-b">
+																<h3 className="text-lg font-semibold text-gray-900">Agrega tu factura</h3>
+																<button type="button" className="text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700" onClick={toggleModal}>
+																	<span className="sr-only">Close</span>
+																	<svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+																		<path
+																			fillRule="evenodd"
+																			d="M4.293 4.293a1 1 0 011.414 0L12 10.586l6.293-6.293a1 1 0 111.414 1.414L13.414 12l6.293 6.293a1 1 0 01-1.414 1.414L12 13.414l-6.293 6.293a1 1 0 01-1.414-1.414L10.586 12 4.293 5.707a1 1 0 010-1.414z"
+																			clipRule="evenodd"
+																		/>
+																	</svg>
+																</button>
+															</div>
+															<div className="p-4">
+																<AddReceipt id={rec.id} toggleModal={toggleModal} />
+															</div>
 														</div>
 													</div>
-												</div>
-											)}
-											<button
-												onClick={async () => {
-													// Se accede al almacenamiento de Firebase y se establece la referencia donde se almacenará el archivo.
-													const storage = getStorage();
-													const storageRef = ref(storage, `facturas/${user.email}/${rec.id}`);
-													try {
-														await deleteObject(storageRef);
-														await deleteDoc(doc(db, 'users', user?.email, 'facturas', rec.id));
-														handleDelete(rec.id);
-													} catch (e) {
-														console.log(e);
-													}
-												}}
-												className="ml-2 font-medium text-red-600 hover:underline"
-											>
-												Borrar
-											</button>
+												)}
+												<button
+													onClick={async () => {
+														// Se accede al almacenamiento de Firebase y se establece la referencia donde se almacenará el archivo.
+														const storage = getStorage();
+														const storageRef = ref(storage, `facturas/${user.email}/${rec.id}`);
+														try {
+															await deleteObject(storageRef);
+															await deleteDoc(doc(db, 'users', user?.email, 'facturas', rec.id));
+															handleDelete(rec.id);
+														} catch (e) {
+															console.log(e);
+														}
+													}}
+													className="ml-2 font-medium text-red-600 hover:underline"
+												>
+													Borrar
+												</button>
+											</div>
 										</td>
 									</tr>
 								);
