@@ -137,10 +137,7 @@ export default function page() {
 
 	function toggleModal() {
 		setShowModal(!showModal);
-		console.log(showModal);
 	}
-
-	console.log(invoiceForm);
 
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
