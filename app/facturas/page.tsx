@@ -74,7 +74,9 @@ export default function page() {
 						Registra tu primer factura
 					</Link>
 				) : (
-					<ReceiptTable receiptsData={receipts} />
+					<div className="min-h-min">
+						<ReceiptTable receiptsData={receipts} />
+					</div>
 				)}
 			</main>
 		</div>
