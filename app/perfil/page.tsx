@@ -25,7 +25,6 @@ export default function page() {
 	// Estado inicial de la información del usuario
 	const [userData, setUserData] = useState<any>();
 
-	const [changingData, setIsChangingData] = useState(false);
 	const [isChangingName, setIsChangingName] = useState(false);
 	const [isChangingId, setIsChangingId] = useState(false);
 	const [isChangingCel, setIsChangingCel] = useState(false);
@@ -109,54 +108,36 @@ export default function page() {
 						<div className="pt-10 mb-6 text-center border-b-2 md:text-left border-slate-300">
 							<div className="justify-between w-full text-left md:flex">
 								<div className="w-full px-6 mb-6 md:px-0 md:w-2/5">
-									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre completo</label>
+									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo electrónico</label>
 									<input
 										className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										value={form.name}
-										onChange={handleChange}
-										type="text"
 										placeholder="Cargando..."
-										required
-										name="name"
 										disabled={true}
 									/>
 								</div>
 								<div className="w-full px-6 mb-6 md:px-0 md:w-2/5">
-									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cédula</label>
+									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre completo</label>
 									<input
 										className="bg-gray-50 w-full border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										value={form.id}
-										onChange={handleChange}
-										type="text"
 										placeholder="Cargando..."
-										required
-										name="id"
 										disabled={true}
 									/>
 								</div>
 							</div>
 							<div className="justify-between w-full text-left md:flex">
 								<div className="w-full px-6 mb-6 md:px-0 md:w-2/5">
-									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Celular</label>
+									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cédula</label>
 									<input
 										className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										value={form.tel}
-										onChange={handleChange}
-										type="phone"
 										placeholder="Cargando..."
-										required
-										name="cel"
 										disabled={true}
 									/>
 								</div>
 								<div className="w-full px-6 mb-6 md:px-0 md:w-2/5">
-									<label className="block mb-2 text-sm font-medium text-gray-900">Correo electrónico</label>
+									<label className="block mb-2 text-sm font-medium text-gray-900">Celular</label>
 									<input
 										className="bg-gray-50 w-full border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										type="email"
 										placeholder="Cargando..."
-										required
-										name="email"
 										disabled={true}
 									/>
 								</div>
@@ -291,23 +272,6 @@ export default function page() {
 									</div>
 								</div>
 							</div>
-							{/* {!isChangingData ? (
-								<button
-									type="button"
-									onClick={() => setIsChangingData((prev) => !prev)}
-									className="focus:outline-none mb-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-700 font-medium rounded-lg text-sm px-12 py-2.5"
-								>
-									Editar datos
-								</button>
-							) : (
-								<button
-									type="button"
-									onClick={handleClick}
-									className="focus:outline-none mb-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-700 font-medium rounded-lg text-sm px-12 py-2.5"
-								>
-									Guardar cambios
-								</button>
-							)} */}
 						</div>
 					</main>
 				</div>
