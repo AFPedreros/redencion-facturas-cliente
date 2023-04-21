@@ -1,11 +1,26 @@
 'use client';
 import { getStorage, ref, deleteObject } from 'firebase/storage';
-import { doc, deleteDoc } from 'firebase/firestore';
+import { doc, deleteDoc, collection } from 'firebase/firestore';
 import { db } from '../firebase';
 // Importa el hook personalizado useAuth
 import { useAuth } from '../context/AuthContext';
 import { useEffect, useState } from 'react';
 import AddReceipt from './AddReceipt';
+
+import { useCollection } from 'react-firebase-hooks/firestore';
+
+import { buttonVariants } from '@/components/ui/button';
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 // Crea un tipo Receipt para los objetos de factura.
 type Props = { receiptsData: any };
@@ -17,11 +32,17 @@ export default function ReceiptTable({ receiptsData }: Props) {
 	const { user } = useAuth();
 
 	const [modalReceiptId, setModalReceiptId] = useState(null);
+	const [receiptsState, setReceiptsState] = useState<any[]>([]);
+
+	const [value, loading, error] = useCollection(collection(db, 'users', user?.email, 'facturas'), {
+		snapshotListenOptions: { includeMetadataChanges: true },
+	});
 
 	useEffect(() => {
-		// Si hay facturas, crear un array de objetos factura a partir de los datos obtenidos de Firebase.
+		//Si hay facturas, crear un array de objetos factura a partir de los datos obtenidos de Firebase.
 		if (receiptsData) {
 			const receiptsArray: { id: any; fecha: any; estado: any; valor: any; url: any }[] = [];
+			const receiptsStateArray: any[] = [];
 			receiptsData.forEach((doc: any) => {
 				const receipt = {
 					id: doc.data().id,
@@ -31,13 +52,15 @@ export default function ReceiptTable({ receiptsData }: Props) {
 					url: doc.data().url,
 				};
 				receiptsArray.push(receipt);
+				receiptsStateArray.push(receipt.estado);
 			});
-
 			// Ordena el array de facturas por fecha de registro y asigna el array ordenado a la variable facturas.
 			const sortedReceipt = sortByRegistrationDate(receiptsArray);
 			setReceipts(sortedReceipt);
 		}
 	}, [receiptsData]);
+
+	useEffect(() => {}, [receipts]);
 
 	// Función para convertir una fecha en formato de cadena a una fecha con formato 'dd-mm-yyyy' y devolver la cadena resultante.
 	function getDateFromString(dateString: string) {
@@ -103,6 +126,8 @@ export default function ReceiptTable({ receiptsData }: Props) {
 		return formatter.format(amountNumber);
 	}
 
+	console.log(value?.docs);
+
 	return (
 		<>
 			{!receiptsData?.empty ? (
@@ -130,6 +155,12 @@ export default function ReceiptTable({ receiptsData }: Props) {
 						<tbody>
 							{receipts.map((rec) => {
 								const bg = rec.estado === 'Rechazada' ? 'text-black' : rec.estado === 'Aprobada' ? 'text-blue-700' : 'text-gray-500';
+								// let bg = 'text-gray-500';
+								// if (rec.estado === 'Rechazada') {
+								// 	bg = 'text-black';
+								// } else if (rec.estado === 'Aprobada') {
+								// 	bg = 'text-blue-700';
+								// }
 
 								return (
 									<tr key={rec.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
@@ -144,7 +175,7 @@ export default function ReceiptTable({ receiptsData }: Props) {
 										</td>
 										<td className="px-6 py-4">
 											<div className="flex">
-												<button onClick={() => toggleModal(rec.id)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+												<button onClick={() => toggleModal(rec.id)} className="mr-2 font-medium text-blue-600 dark:text-blue-500 hover:underline">
 													Editar
 												</button>
 												{modalReceiptId === rec.id && (
@@ -174,23 +205,37 @@ export default function ReceiptTable({ receiptsData }: Props) {
 														</div>
 													</div>
 												)}
-												<button
-													onClick={async () => {
-														// Se accede al almacenamiento de Firebase y se establece la referencia donde se almacenará el archivo.
-														const storage = getStorage();
-														const storageRef = ref(storage, `facturas/${user.email}/${rec.id}`);
-														try {
-															await deleteObject(storageRef);
-															await deleteDoc(doc(db, 'users', user?.email, 'facturas', rec.id));
-															handleDelete(rec.id);
-														} catch (e) {
-															console.log(e);
-														}
-													}}
-													className="ml-2 font-medium text-red-600 hover:underline"
-												>
-													Borrar
-												</button>
+												<AlertDialog>
+													<AlertDialogTrigger className="text-sm font-medium text-destructive">Borrar</AlertDialogTrigger>
+													<AlertDialogContent className="bg-white">
+														<AlertDialogHeader>
+															<AlertDialogTitle>¿Estás seguro, completamente seguro?</AlertDialogTitle>
+															<AlertDialogDescription>
+																Esta acción no se puede deshacer. Eliminará permanentemente tu cuenta y eliminará tus datos de nuestros servidores.
+															</AlertDialogDescription>
+														</AlertDialogHeader>
+														<AlertDialogFooter>
+															<AlertDialogCancel>Cancelar</AlertDialogCancel>
+															<AlertDialogAction
+																onClick={async () => {
+																	// Se accede al almacenamiento de Firebase y se establece la referencia donde se almacenará el archivo.
+																	const storage = getStorage();
+																	const storageRef = ref(storage, `facturas/${user.email}/${rec.id}`);
+																	try {
+																		await deleteObject(storageRef);
+																		await deleteDoc(doc(db, 'users', user?.email, 'facturas', rec.id));
+																		handleDelete(rec.id);
+																	} catch (e) {
+																		console.log(e);
+																	}
+																}}
+																className={buttonVariants({ variant: 'destructive' })}
+															>
+																Continuar
+															</AlertDialogAction>
+														</AlertDialogFooter>
+													</AlertDialogContent>
+												</AlertDialog>
 											</div>
 										</td>
 									</tr>

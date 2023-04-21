@@ -15,6 +15,8 @@ import { useRouter } from 'next/navigation';
 import { db } from '../../firebase';
 // Importa el hook personalizado useAuth
 import { useAuth } from '../../context/AuthContext';
+
+import { buttonVariants } from '@/components/ui/button';
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -89,19 +91,6 @@ export default function page() {
 						<ReceiptTable receiptsData={receipts} />
 					</div>
 				)}
-				<AlertDialog>
-					<AlertDialogTrigger className="text-sm font-medium text-red-600">Borrar</AlertDialogTrigger>
-					<AlertDialogContent className="bg-white">
-						<AlertDialogHeader>
-							<AlertDialogTitle>¿Estás seguro, completamente seguro?</AlertDialogTitle>
-							<AlertDialogDescription>Esta acción no se puede deshacer. Eliminará permanentemente tu cuenta y eliminará tus datos de nuestros servidores.</AlertDialogDescription>
-						</AlertDialogHeader>
-						<AlertDialogFooter>
-							<AlertDialogCancel>Cancelar</AlertDialogCancel>
-							<AlertDialogAction>Continuar</AlertDialogAction>
-						</AlertDialogFooter>
-					</AlertDialogContent>
-				</AlertDialog>
 			</main>
 		</div>
 	);
