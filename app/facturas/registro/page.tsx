@@ -5,7 +5,7 @@ import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import { TicketIcon } from '@heroicons/react/24/outline';
 // Importa el hook useState y useEffect de React para usar el estado local y verificar siel usuario está logueado cuando se carga la página
 // Importa el hook ChangeEvent para cargar los archivos del input de archivos
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent, useRef } from 'react';
 // Importa la función para generar ids únicos para las facturas
 import { v4 } from 'uuid';
 // Importa las funciones para subir archivos a la base de datos de Firebase
@@ -18,6 +18,12 @@ import { useRouter } from 'next/navigation';
 import { db } from '../../../firebase';
 // Importa el hook personalizado useAuth
 import { useAuth } from '../../../context/AuthContext';
+
+import { Button, buttonVariants } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { FileUp, Plus, FileImage } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useToast } from '@/components/ui/use-toast';
 
 interface InvoiceForm {
 	totalValue: string;
@@ -49,16 +55,11 @@ export default function page() {
 	// Estado inicial del archivo que se va a subir
 	const [file, setFile] = useState<File>();
 
-	// Estado inicial del formulario para subir los datos de la factura
-	const [invoiceForm, setInvoiceForm] = useState<InvoiceForm>({
-		totalValue: '',
-		mallName: '',
-		city: '',
-		invoiceNumber: '',
-	});
-
 	const [isLoading, setIsLoading] = useState(false);
-	const [showModal, setShowModal] = useState(false);
+
+	const formRef = useRef<any>({ totalValue: null, invoiceNumber: null, city: null, mall: null });
+	const [selectedCity, setSelectedCity] = useState<string>('');
+	const { toast } = useToast();
 
 	// Hook que se usa para volver al estado inicial la variable 'fileUpload'
 	useEffect(() => {
@@ -68,7 +69,7 @@ export default function page() {
 	useEffect(() => {
 		// Si 'user' es nulo, redirige al usuario a la página de inicio.
 		if (user === null) {
-			router.push('/');
+			return router.push('/');
 		}
 	}, [user, router]);
 
@@ -79,15 +80,9 @@ export default function page() {
 		}
 	}
 
-	// Función para controlar los cambios de estado de los inputs del formulario para crear la cuenta
-	function handleChangeForm(e: React.ChangeEvent<HTMLInputElement>) {
-		const { value, name } = e.target;
-		setInvoiceForm((prevState) => {
-			return {
-				...prevState,
-				[name]: value,
-			};
-		});
+	function handleChangeSelectedCity() {
+		const value = formRef.current.city.textContent;
+		setSelectedCity(() => value);
 	}
 
 	// Función para subir el archivo a la base de datos
@@ -127,39 +122,30 @@ export default function page() {
 		// Se establece el estado de la variable fileUpload como verdadero para indicar que el archivo ha sido subido con éxito.
 		setFileUpload(true);
 		setIsLoading((prev) => !prev);
-		setInvoiceForm({
-			totalValue: '',
-			mallName: '',
-			city: '',
-			invoiceNumber: '',
-		});
 	}
 
-	function toggleModal() {
-		setShowModal(!showModal);
+	function handleForm(e: React.MouseEvent<HTMLButtonElement>) {
+		e.preventDefault();
+		const inputValue1 = formRef.current.invoiceNumber.value;
+		const inputValue2 = formRef.current.totalValue.value;
+		const inputValue3 = formRef.current.city.textContent;
+		const inputValue4 = formRef.current.mall.textContent;
+
+		if (!file || inputValue1 === null || inputValue2 === null || inputValue3 === 'Ciudad' || inputValue4 === 'Centro comercial') {
+			toast({
+				variant: 'destructive',
+				title: 'Campos incompletos',
+				description: 'Revisa que todos los campos estén diligenciados correctamente',
+			});
+
+			return;
+		}
+
+		console.log(inputValue1, inputValue2, inputValue3, inputValue4);
+		formRef.current.invoiceNumber.value = '';
+		formRef.current.totalValue.value = '';
+		setFile(undefined);
 	}
-
-	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-	const handleDropdownClick = () => {
-		setIsDropdownOpen(!isDropdownOpen);
-	};
-
-	const handleOptionClick = (e: any) => {
-		setInvoiceForm({ ...invoiceForm, city: e.target.value });
-		setIsDropdownOpen(false);
-	};
-
-	const [isDropdown2Open, setIsDropdown2Open] = useState(false);
-
-	const handleDropdown2Click = () => {
-		setIsDropdown2Open(!isDropdown2Open);
-	};
-
-	const handleOptionClick2 = (e: any) => {
-		setInvoiceForm({ ...invoiceForm, mallName: e.target.value });
-		setIsDropdown2Open(false);
-	};
 
 	return (
 		<div className="bg-white md:flex">
@@ -186,7 +172,7 @@ export default function page() {
 					</div>
 				</div>
 			</div>
-			{fileUpload ? (
+			{/* {fileUpload ? (
 				<div className="flex flex-col justify-center p-8 mx-auto md:h-screen md:w-1/2 xl:w-1/3">
 					<h2 className="mb-12 text-2xl font-light text-center">¡Tus facturas han sido registradas!</h2>
 					<p className="mx-auto mb-12 text-[#707070] text-sm">Una vez sean aprobadas se te notificará el código de participación generado.</p>
@@ -208,9 +194,9 @@ export default function page() {
 						Ver todas mis facturas
 					</button>
 				</div>
-			) : (
-				<div className="flex flex-col justify-center p-8 mx-auto md:h-screen md:w-1/2 xl:w-1/3">
-					{!file ? (
+			) : ( */}
+			<div className="flex flex-col justify-center px-8 mx-auto md:h-screen md:w-1/2 xl:w-1/3">
+				{/* {!file ? (
 						<div className="flex items-center justify-center w-full mb-4">
 							<label
 								htmlFor="dropzone-file"
@@ -452,9 +438,67 @@ export default function page() {
 						>
 							Ver todas mis facturas
 						</button>
-					)}
-				</div>
-			)}
+					)} */}
+				{!file ? (
+					<div className="flex gap-4 flex-col h-[300px] shrink-0 items-center border-border justify-center rounded-md border-2 border-dashed">
+						<FileUp className="w-9 h-9 text-border" />
+						<p className="text-sm font-semibold text-card-foreground dark:text-gray-400">No se ha agregado la foto de la factura</p>
+						<label className={buttonVariants({ variant: 'default' })} htmlFor="dropzone-file">
+							<Plus className="w-4 h-4 mr-2" />
+							Agregar foto
+						</label>
+						<input onChange={handleFileChange} id="dropzone-file" type="file" className="hidden" />
+					</div>
+				) : (
+					<div className="flex gap-4 flex-col h-[300px] shrink-0 items-center border-border justify-center rounded-md border-2 border-dashed">
+						<div className="flex items-center gap-2">
+							<FileImage className="w-9 h-9 text-border" />
+							<p className="text-sm font-semibold text-card-foreground">{file?.name}</p>
+						</div>
+						<p className="text-sm font-semibold text-card-foreground">Ahora agrega los datos de tu factura</p>
+						<div className="flex items-center gap-2">
+							<label className={buttonVariants({ variant: 'default' })} htmlFor="dropzone-file">
+								<Plus className="w-4 h-4 mr-2" />
+								Cambiar foto
+							</label>
+							<input onChange={handleFileChange} id="dropzone-file" type="file" className="hidden" />
+						</div>
+					</div>
+				)}
+				<form className="flex flex-col gap-4 my-4">
+					<Input id="totalValue" ref={(el) => (formRef.current.totalValue = el)} type="number" placeholder="Valor total de la factura" />
+					<Input id="invoiceNumber" ref={(el) => (formRef.current.invoiceNumber = el)} type="text" placeholder="Número de la factura" />
+					<Select onValueChange={handleChangeSelectedCity}>
+						<SelectTrigger>
+							<SelectValue id="city" ref={(el) => (formRef.current.city = el)} placeholder="Ciudad" />
+						</SelectTrigger>
+						<SelectContent>
+							{cities.map((city) => (
+								<SelectItem key={city} value={city}>
+									{city}
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
+					<Select>
+						<SelectTrigger>
+							<SelectValue id="mall" ref={(el) => (formRef.current.mall = el)} placeholder="Centro comercial" />
+						</SelectTrigger>
+						<SelectContent>
+							{malls[selectedCity] &&
+								malls[selectedCity].map((mall: any) => (
+									<SelectItem key={mall} value={mall}>
+										{mall}
+									</SelectItem>
+								))}
+						</SelectContent>
+					</Select>
+					<Button onClick={handleForm}>Subir factura</Button>
+				</form>
+				<Button onClick={() => router.push('/facturas')} variant="outline">
+					Ver todas mis facturas
+				</Button>
+			</div>
 		</div>
 	);
 }

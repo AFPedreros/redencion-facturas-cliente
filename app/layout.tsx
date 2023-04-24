@@ -2,6 +2,7 @@
 import './globals.css';
 import { AuthContextProvider } from '../context/AuthContext';
 import Header from '../components/Header';
+import { Toaster } from '@/components/ui/toaster';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
@@ -13,6 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 					<Header />
 					{children}
 				</AuthContextProvider>
+				<Toaster />
 			</body>
 		</html>
 	);

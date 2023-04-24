@@ -126,8 +126,6 @@ export default function ReceiptTable({ receiptsData }: Props) {
 		return formatter.format(amountNumber);
 	}
 
-	console.log(value?.docs);
-
 	return (
 		<>
 			{!receiptsData?.empty ? (
