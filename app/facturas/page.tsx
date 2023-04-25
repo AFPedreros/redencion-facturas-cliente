@@ -16,7 +16,7 @@ import { db } from '../../firebase';
 // Importa el hook personalizado useAuth
 import { useAuth } from '../../context/AuthContext';
 
-import { buttonVariants } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -28,6 +28,7 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import Notifications from '@/components/NotificationsCard';
 
 export default function page() {
 	// Usa el hook useAuth para obtener el usuario
@@ -58,30 +59,21 @@ export default function page() {
 	}, [user, router]);
 
 	return (
-		<div className="pt-10 bg-white">
-			<main className="flex flex-col h-screen p-4 mx-auto md:px-12 xl:px-24">
-				<div className="pt-10 mb-6 text-center border-b-2 md:text-left border-slate-300">
-					<h2 className="mb-6 text-2xl font-light">Facturas registradas</h2>
-					<div className="w-full mb-6 md:items-end md:flex md:justify-between">
-						<p className="mb-2 md:mb-0 text-[#707070] text-base">Gestiona todas tus facturas aquí.</p>
-						<button
-							type="button"
-							onClick={() => router.push('/facturas/registro')}
-							className="focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-600 font-medium rounded-lg text-sm px-12 py-2.5"
-						>
+		<div className="bg-white">
+			<main className="flex flex-col h-screen px-4 pt-10 mx-auto md:px-12 xl:px-24">
+				<div className="px-6 pt-10 text-left border-b-2 md:mb-6 md:px-0 md:text-left border-slate-300">
+					<div className="w-full mb-4 text-center md:text-left md:items-end md:flex md:justify-between">
+						<h2 className="mb-2 text-2xl font-light mb:mb-0">Facturas registradas</h2>
+						<Button variant="outline" onClick={() => router.push('/facturas/registro')}>
 							Agregar factura
-						</button>
+						</Button>
 					</div>
 				</div>
-				<div className="flex w-full mb-6 rounded-lg md:h-24 bg-slate-200">
-					<div className="flex items-center justify-center w-20 h-full p-2 bg-blue-700 rounded-l-lg">
-						<ExclamationCircleIcon className="h-10 text-white" />
-					</div>
-					<div className="text-[#707070] p-6">
-						Te recordamos que una vez registres tus facturas en la plataforma, estas entrarán en etapa de revisión, donde podrán ser aprobadas o rechazadas según los{' '}
-						<span className="font-bold text-black ">Criterios de aprobación de facturas</span> de la actividad.
-					</div>
-				</div>
+				<Notifications
+					className="my-6"
+					title="Recordatorio"
+					text="Una vez registres tus facturas en la plataforma, estas entrarán en etapa de revisión, donde podrán ser aprobadas o rechazadas según los Criterios de aprobación de facturas de la actividad."
+				/>
 				{receipts?.empty ? (
 					<Link className="font-bold border-b-2 border-black w-fit" href="/facturas/registro">
 						Registra tu primer factura
