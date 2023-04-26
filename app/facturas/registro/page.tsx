@@ -21,16 +21,9 @@ import { useAuth } from '../../../context/AuthContext';
 
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { FileUp, Plus, FileImage } from 'lucide-react';
+import { FileUp, Plus, FileImage, Loader2 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
-
-interface InvoiceForm {
-	totalValue: string;
-	mallName: string;
-	city: string;
-	invoiceNumber: string;
-}
 
 interface Mall {
 	[key: string]: string[];
@@ -86,12 +79,25 @@ export default function page() {
 	}
 
 	// Función para subir el archivo a la base de datos
-	async function handleClick() {
-		setIsLoading((prev) => !prev);
-		// Se verifica que exista un archivo seleccionado, de lo contrario la función no hace nada.
-		if (!file) {
+	async function handleForm(e: React.MouseEvent<HTMLButtonElement>) {
+		e.preventDefault();
+		const inputValue1 = formRef.current.totalValue.value;
+		const inputValue2 = formRef.current.invoiceNumber.value;
+		const inputValue3 = formRef.current.city.textContent;
+		const inputValue4 = formRef.current.mall.textContent;
+
+		if (!file || inputValue1 === null || inputValue2 === null || inputValue3 === 'Ciudad' || inputValue4 === 'Centro comercial') {
+			toast({
+				variant: 'destructive',
+				title: 'Campos incompletos',
+				description: 'Revisa que todos los campos estén diligenciados correctamente.',
+			});
+
 			return;
 		}
+
+		setIsLoading((prev) => !prev);
+
 		try {
 			// Se genera un ID único para la factura que se está subiendo.
 			const id = v4();
@@ -109,39 +115,27 @@ export default function page() {
 			const docRef = await setDoc(doc(db, 'users', user?.email, 'facturas', id), {
 				id: id,
 				fechaRegistro: snapshot.metadata.timeCreated,
-				valorTotal: invoiceForm.totalValue,
-				numeroFactura: invoiceForm.invoiceNumber,
-				ciudad: invoiceForm.city,
-				centroComercial: invoiceForm.mallName,
+				valorTotal: inputValue1,
+				numeroFactura: inputValue2,
+				ciudad: inputValue3,
+				centroComercial: inputValue4,
 				estado: 'Por revisión',
 				url: url,
 			});
+			toast({
+				description: '¡Tu factura se subió exitosamente!',
+			});
 		} catch (e) {
 			console.log(e);
-		}
-		// Se establece el estado de la variable fileUpload como verdadero para indicar que el archivo ha sido subido con éxito.
-		setFileUpload(true);
-		setIsLoading((prev) => !prev);
-	}
-
-	function handleForm(e: React.MouseEvent<HTMLButtonElement>) {
-		e.preventDefault();
-		const inputValue1 = formRef.current.invoiceNumber.value;
-		const inputValue2 = formRef.current.totalValue.value;
-		const inputValue3 = formRef.current.city.textContent;
-		const inputValue4 = formRef.current.mall.textContent;
-
-		if (!file || inputValue1 === null || inputValue2 === null || inputValue3 === 'Ciudad' || inputValue4 === 'Centro comercial') {
 			toast({
 				variant: 'destructive',
-				title: 'Campos incompletos',
-				description: 'Revisa que todos los campos estén diligenciados correctamente',
+				title: 'Algo salió mal.',
+				description: 'Error',
 			});
-
-			return;
 		}
+		// Se establece el estado de la variable fileUpload como verdadero para indicar que el archivo ha sido subido con éxito.
+		setIsLoading((prev) => !prev);
 
-		console.log(inputValue1, inputValue2, inputValue3, inputValue4);
 		formRef.current.invoiceNumber.value = '';
 		formRef.current.totalValue.value = '';
 		setFile(undefined);
@@ -172,333 +166,96 @@ export default function page() {
 					</div>
 				</div>
 			</div>
-			{/* {fileUpload ? (
-				<div className="flex flex-col justify-center p-8 mx-auto md:h-screen md:w-1/2 xl:w-1/3">
-					<h2 className="mb-12 text-2xl font-light text-center">¡Tus facturas han sido registradas!</h2>
-					<p className="mx-auto mb-12 text-[#707070] text-sm">Una vez sean aprobadas se te notificará el código de participación generado.</p>
-					<button
-						type="button"
-						onClick={() => {
-							setFileUpload(false);
-							setFile(undefined);
-						}}
-						className="md:w-full focus:outline-none mb-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-600 font-medium rounded-lg text-sm px-12 py-2.5"
-					>
-						Agregar nueva factura
-					</button>
-					<button
-						type="button"
-						onClick={() => router.push('/facturas')}
-						className="md:w-full focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-600 font-medium rounded-lg text-sm px-12 py-2.5"
-					>
+			{isLoading ? (
+				<div className="flex flex-col justify-center px-8 mx-auto md:h-screen md:w-1/2 xl:w-1/3">
+					<div className="flex p-4 gap-4 flex-col h-[150px] shrink-0 items-center border-border justify-center rounded-md border-2 border-dashed">
+						<Loader2 className="w-12 h-12 text-border animate-spin" />
+						<input onChange={handleFileChange} id="dropzone-file" type="file" className="hidden" />
+					</div>
+					<form className="flex flex-col gap-4 my-4">
+						<Input disabled id="totalValue" ref={(el) => (formRef.current.totalValue = el)} type="number" placeholder="Valor total de la factura" />
+						<Input disabled id="invoiceNumber" ref={(el) => (formRef.current.invoiceNumber = el)} type="text" placeholder="Número de la factura" />
+						<Select disabled onValueChange={handleChangeSelectedCity}>
+							<SelectTrigger>
+								<SelectValue id="city" ref={(el) => (formRef.current.city = el)} placeholder="Ciudad" />
+							</SelectTrigger>
+							<SelectContent></SelectContent>
+						</Select>
+						<Select disabled>
+							<SelectTrigger>
+								<SelectValue id="mall" ref={(el) => (formRef.current.mall = el)} placeholder="Centro comercial" />
+							</SelectTrigger>
+							<SelectContent></SelectContent>
+						</Select>
+						<Button disabled>Subir factura</Button>
+					</form>
+					<Button disabled variant="outline">
 						Ver todas mis facturas
-					</button>
+					</Button>
 				</div>
-			) : ( */}
-			<div className="flex flex-col justify-center px-8 mx-auto md:h-screen md:w-1/2 xl:w-1/3">
-				{/* {!file ? (
-						<div className="flex items-center justify-center w-full mb-4">
-							<label
-								htmlFor="dropzone-file"
-								className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-							>
-								<div className="flex flex-col items-center justify-center pt-5 pb-6">
-									<svg aria-hidden="true" className="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											strokeWidth="2"
-											d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-										></path>
-									</svg>
-									<p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-										<span className="font-semibold">Agregar factura</span>
-									</p>
-									<p className="text-xs text-gray-500 dark:text-gray-400">PNG or JPG (MAX. 2MB)</p>
-								</div>
+			) : (
+				<div className="flex flex-col justify-center px-8 mx-auto md:h-screen md:w-1/2 xl:w-1/3">
+					{!file ? (
+						<div className="flex p-4 gap-4 flex-col h-[150px] shrink-0 items-center border-border justify-center rounded-md border-2 border-dashed">
+							<FileUp className="w-9 h-9 text-border" />
+							<p className="text-sm font-semibold text-card-foreground dark:text-gray-400">No se ha agregado la foto de la factura</p>
+							<label className={buttonVariants({ variant: 'default' })} htmlFor="dropzone-file">
+								<Plus className="w-4 h-4 mr-2" />
+								Agregar foto
 							</label>
 							<input onChange={handleFileChange} id="dropzone-file" type="file" className="hidden" />
 						</div>
 					) : (
-						<div className="flex flex-col items-center justify-center pt-5 pb-6">
-							<p className="mb-2 text-sm text-gray-500">
-								<span className="font-semibold">{file.name}</span>
-							</p>
-							<button
-								onClick={() => {
-									setFile(undefined);
-								}}
-								className="font-medium underline hover:underline"
-							>
-								Cancelar
-							</button>
-						</div>
-					)}
-
-					<p className="mx-auto mb-12 text-[#707070] text-sm">
-						Agrega los datos de forma manual{' '}
-						<label onClick={toggleModal} className="font-bold text-black border-b-2 border-black cursor-pointer w-fit">
-							aquí
-						</label>
-						.
-					</p>
-					{showModal && (
-						<div
-							data-modal-backdrop="static"
-							tabIndex={-1}
-							aria-hidden="true"
-							className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center w-full h-full p-4 m-0 overflow-hidden"
-						>
-							<div className="w-full max-w-2xl bg-white rounded-lg shadow-md">
-								<div className="flex items-start justify-between p-4 border-b">
-									<h3 className="text-lg font-semibold text-gray-900">Agrega los datos de tu factura</h3>
-									<button type="button" className="text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700" onClick={toggleModal}>
-										<span className="sr-only">Close</span>
-										<svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-											<path
-												fillRule="evenodd"
-												d="M4.293 4.293a1 1 0 011.414 0L12 10.586l6.293-6.293a1 1 0 111.414 1.414L13.414 12l6.293 6.293a1 1 0 01-1.414 1.414L12 13.414l-6.293 6.293a1 1 0 01-1.414-1.414L10.586 12 4.293 5.707a1 1 0 010-1.414z"
-												clipRule="evenodd"
-											/>
-										</svg>
-									</button>
-								</div>
-								<div className="p-4">
-									<form className="space-y-6">
-										<div>
-											<label htmlFor="totalValue" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-												Valor total de la factura
-											</label>
-											<input
-												type="number"
-												name="totalValue"
-												id="totalValue"
-												className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-												placeholder="Valor total de la factura"
-												onChange={handleChangeForm}
-												value={invoiceForm.totalValue}
-												required
-											/>
-										</div>
-										<div>
-											<label htmlFor="invoiceNumber" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-												Número de la factura
-											</label>
-											<input
-												type="text"
-												name="invoiceNumber"
-												id="invoiceNumber"
-												className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-												placeholder="Número de la factura"
-												onChange={handleChangeForm}
-												value={invoiceForm.invoiceNumber}
-												required
-											/>
-										</div>
-										<div>
-											<label htmlFor="city" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-												Ciudad
-											</label>
-											<div className="relative">
-												<button
-													id="cityDropdownButton"
-													data-dropdown-toggle="dropdown"
-													className="flex items-center justify-between bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-													type="button"
-													onClick={handleDropdownClick}
-												>
-													<span>{invoiceForm.city ? invoiceForm.city : 'Selecciona una ciudad'}</span>
-													<svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-														<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-													</svg>
-												</button>
-
-												{isDropdownOpen && (
-													<div id="cityDropdown" className="absolute z-10 w-full mt-1 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700">
-														<ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
-															{cities.map((city) => (
-																<li key={city}>
-																	<button
-																		className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-																		value={city}
-																		onClick={handleOptionClick}
-																	>
-																		{city}
-																	</button>
-																</li>
-															))}
-														</ul>
-													</div>
-												)}
-											</div>
-										</div>
-										<div>
-											<label htmlFor="mallName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-												Centro comercial
-											</label>
-											<div className="relative">
-												<button
-													id="mallDropdownButton"
-													data-dropdown-toggle="dropdown"
-													className="flex items-center justify-between bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-													type="button"
-													onClick={handleDropdown2Click}
-												>
-													<span>{invoiceForm.mallName ? invoiceForm.mallName : 'Selecciona un centro comercial'}</span>
-													<svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-														<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-													</svg>
-												</button>
-												{isDropdown2Open && (
-													<div id="mallDropdown" className="absolute z-10 w-full mt-1 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700">
-														<ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
-															{malls[invoiceForm.city] &&
-																malls[invoiceForm.city].map((mall: any) => (
-																	<li key={mall}>
-																		<button
-																			className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-																			value={mall}
-																			onClick={handleOptionClick2}
-																		>
-																			{mall}
-																		</button>
-																	</li>
-																))}
-														</ul>
-													</div>
-												)}
-											</div>
-										</div>
-										<button
-											type="button"
-											className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-											onClick={toggleModal}
-										>
-											Confirmar datos
-										</button>
-									</form>
-								</div>
+						<div className="flex gap-4 flex-col h-[150px] shrink-0 items-center border-border justify-center rounded-md border-2 border-dashed">
+							<div className="flex items-center gap-2">
+								<FileImage className="w-9 h-9 text-border" />
+								<p className="text-sm font-semibold text-card-foreground">{file?.name}</p>
+							</div>
+							<p className="text-sm font-semibold text-card-foreground">Ahora agrega los datos de tu factura</p>
+							<div className="flex items-center gap-2">
+								<label className={buttonVariants({ variant: 'default' })} htmlFor="dropzone-file">
+									<Plus className="w-4 h-4 mr-2" />
+									Cambiar foto
+								</label>
+								<input onChange={handleFileChange} id="dropzone-file" type="file" className="hidden" />
 							</div>
 						</div>
 					)}
-					{!file || invoiceForm.city === '' || invoiceForm.invoiceNumber === '' || invoiceForm.mallName === '' || invoiceForm.totalValue === '' ? (
-						<button type="button" className="text-white mb-6 bg-gray-200 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center" disabled>
-							Subir factura
-						</button>
-					) : isLoading ? (
-						<button
-							type="button"
-							onClick={handleClick}
-							className="focus:outline-none mb-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-700 font-medium rounded-lg text-sm px-12 py-2.5"
-						>
-							<svg aria-hidden="true" role="status" className="inline w-4 h-4 mr-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<path
-									d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-									fill="#E5E7EB"
-								/>
-								<path
-									d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-									fill="currentColor"
-								/>
-							</svg>
-							Cargando...
-						</button>
-					) : (
-						<button
-							type="button"
-							onClick={handleClick}
-							className="md:w-full focus:outline-none mb-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-600 font-medium rounded-lg text-sm px-12 py-2.5"
-						>
-							Subir factura
-						</button>
-					)}
-					{isLoading ? (
-						<button
-							type="button"
-							onClick={handleClick}
-							className="focus:outline-none mb-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-700 font-medium rounded-lg text-sm px-12 py-2.5"
-						>
-							<svg aria-hidden="true" role="status" className="inline w-4 h-4 mr-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<path
-									d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-									fill="#E5E7EB"
-								/>
-								<path
-									d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-									fill="currentColor"
-								/>
-							</svg>
-							Cargando...
-						</button>
-					) : (
-						<button
-							type="button"
-							onClick={() => router.push('/facturas')}
-							className="md:w-full focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-600 font-medium rounded-lg text-sm px-12 py-2.5"
-						>
-							Ver todas mis facturas
-						</button>
-					)} */}
-				{!file ? (
-					<div className="flex gap-4 flex-col h-[300px] shrink-0 items-center border-border justify-center rounded-md border-2 border-dashed">
-						<FileUp className="w-9 h-9 text-border" />
-						<p className="text-sm font-semibold text-card-foreground dark:text-gray-400">No se ha agregado la foto de la factura</p>
-						<label className={buttonVariants({ variant: 'default' })} htmlFor="dropzone-file">
-							<Plus className="w-4 h-4 mr-2" />
-							Agregar foto
-						</label>
-						<input onChange={handleFileChange} id="dropzone-file" type="file" className="hidden" />
-					</div>
-				) : (
-					<div className="flex gap-4 flex-col h-[300px] shrink-0 items-center border-border justify-center rounded-md border-2 border-dashed">
-						<div className="flex items-center gap-2">
-							<FileImage className="w-9 h-9 text-border" />
-							<p className="text-sm font-semibold text-card-foreground">{file?.name}</p>
-						</div>
-						<p className="text-sm font-semibold text-card-foreground">Ahora agrega los datos de tu factura</p>
-						<div className="flex items-center gap-2">
-							<label className={buttonVariants({ variant: 'default' })} htmlFor="dropzone-file">
-								<Plus className="w-4 h-4 mr-2" />
-								Cambiar foto
-							</label>
-							<input onChange={handleFileChange} id="dropzone-file" type="file" className="hidden" />
-						</div>
-					</div>
-				)}
-				<form className="flex flex-col gap-4 my-4">
-					<Input id="totalValue" ref={(el) => (formRef.current.totalValue = el)} type="number" placeholder="Valor total de la factura" />
-					<Input id="invoiceNumber" ref={(el) => (formRef.current.invoiceNumber = el)} type="text" placeholder="Número de la factura" />
-					<Select onValueChange={handleChangeSelectedCity}>
-						<SelectTrigger>
-							<SelectValue id="city" ref={(el) => (formRef.current.city = el)} placeholder="Ciudad" />
-						</SelectTrigger>
-						<SelectContent>
-							{cities.map((city) => (
-								<SelectItem key={city} value={city}>
-									{city}
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
-					<Select>
-						<SelectTrigger>
-							<SelectValue id="mall" ref={(el) => (formRef.current.mall = el)} placeholder="Centro comercial" />
-						</SelectTrigger>
-						<SelectContent>
-							{malls[selectedCity] &&
-								malls[selectedCity].map((mall: any) => (
-									<SelectItem key={mall} value={mall}>
-										{mall}
+					<form className="flex flex-col gap-4 my-4">
+						<Input id="totalValue" ref={(el) => (formRef.current.totalValue = el)} type="number" placeholder="Valor total de la factura" />
+						<Input id="invoiceNumber" ref={(el) => (formRef.current.invoiceNumber = el)} type="text" placeholder="Número de la factura" />
+						<Select onValueChange={handleChangeSelectedCity}>
+							<SelectTrigger>
+								<SelectValue id="city" ref={(el) => (formRef.current.city = el)} placeholder="Ciudad" />
+							</SelectTrigger>
+							<SelectContent>
+								{cities.map((city) => (
+									<SelectItem key={city} value={city}>
+										{city}
 									</SelectItem>
 								))}
-						</SelectContent>
-					</Select>
-					<Button onClick={handleForm}>Subir factura</Button>
-				</form>
-				<Button onClick={() => router.push('/facturas')} variant="outline">
-					Ver todas mis facturas
-				</Button>
-			</div>
+							</SelectContent>
+						</Select>
+						<Select>
+							<SelectTrigger>
+								<SelectValue id="mall" ref={(el) => (formRef.current.mall = el)} placeholder="Centro comercial" />
+							</SelectTrigger>
+							<SelectContent>
+								{malls[selectedCity] &&
+									malls[selectedCity].map((mall: any) => (
+										<SelectItem key={mall} value={mall}>
+											{mall}
+										</SelectItem>
+									))}
+							</SelectContent>
+						</Select>
+						<Button onClick={handleForm}>Subir factura</Button>
+					</form>
+					<Button onClick={() => router.push('/facturas')} variant="outline">
+						Ver todas mis facturas
+					</Button>
+				</div>
+			)}
 		</div>
 	);
 }
