@@ -1,9 +1,8 @@
 'use client';
-
 // Importa el componente Login desde el directorio ../components
 import Login from '../components/Login';
 // Importa el hook useRouter de Next.js
-import { useRouter } from 'next/navigation';
+import { useRouter, redirect } from 'next/navigation';
 // Importa el hook personalizado useAuth
 import { useAuth } from '../context/AuthContext';
 
@@ -19,8 +18,8 @@ function page() {
 	const router = useRouter();
 
 	// Redirige al usuario a la página de facturas si ya ha iniciado sesión
-	if (user !== null) {
-		router.push(routes.receipts);
+	if (user) {
+		redirect(routes.receipts);
 	}
 
 	return <Login />;

@@ -16,7 +16,7 @@ import { db } from '../../firebase';
 // Importa el hook personalizado useAuth
 import { useAuth } from '../../context/AuthContext';
 
-import { Button, buttonVariants } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -60,22 +60,22 @@ export default function page() {
 
 	return (
 		<div className="bg-white">
-			<main className="flex flex-col h-screen px-4 pt-10 mx-auto md:px-12 xl:px-24">
-				<div className="px-6 pt-10 text-left border-b-2 md:mb-6 md:px-0 md:text-left border-slate-300">
+			<main className="flex flex-col h-screen px-4 pt-16 mx-auto md:px-12 xl:px-24">
+				<div className="px-6 pt-10 mb-6 text-left border-b-2 md:px-0 md:text-left border-slate-300">
 					<div className="w-full mb-4 text-center md:text-left md:items-end md:flex md:justify-between">
 						<h2 className="mb-2 text-2xl font-light mb:mb-0">Facturas registradas</h2>
-						<Button variant="outline" onClick={() => router.push('/facturas/registro')}>
-							Agregar factura
-						</Button>
+						<Link className={buttonVariants({ variant: 'outline' })} href="/facturas/registro">
+							Registrar factura
+						</Link>
 					</div>
 				</div>
 				<Notifications
-					className="my-6"
+					className="mb-6"
 					title="Recordatorio"
 					text="Una vez registres tus facturas en la plataforma, estas entrarán en etapa de revisión, donde podrán ser aprobadas o rechazadas según los Criterios de aprobación de facturas de la actividad."
 				/>
 				{receipts?.empty ? (
-					<Link className="font-bold border-b-2 border-black w-fit" href="/facturas/registro">
+					<Link className={`md:w-fit ${buttonVariants({ variant: 'default' })}`} href="/facturas/registro">
 						Registra tu primer factura
 					</Link>
 				) : (

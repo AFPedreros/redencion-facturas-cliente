@@ -1,8 +1,9 @@
 'use client';
-import { FileText, LogOut, PlusCircle, Settings, User } from 'lucide-react';
+import { FileText, LogOut, PlusCircle, User } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import Link from 'next/link';
 
 // Importa las funciones doc, setDoc y getDoc de Firebase Firestore
 import { doc, getDoc, collection } from 'firebase/firestore';
@@ -80,17 +81,23 @@ export default function UserNav({ email }: UserNavProps) {
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				<DropdownMenuGroup>
-					<DropdownMenuItem onClick={() => router.push('/perfil')} className="h-12 md:h-8">
-						<User className="w-4 h-4 mr-2" />
-						<span>Mi cuenta</span>
+					<DropdownMenuItem asChild className="h-12 md:h-8">
+						<Link href="/perfil" className="flex w-full h-full">
+							<User className="w-4 h-4 mr-2" />
+							<span>Mi cuenta</span>
+						</Link>
 					</DropdownMenuItem>
-					<DropdownMenuItem onClick={() => router.push('/facturas')} className="h-12 md:h-8">
-						<FileText className="w-4 h-4 mr-2" />
-						<span>Mis facturas</span>
+					<DropdownMenuItem asChild className="h-12 md:h-8">
+						<Link href="/facturas" className="flex w-full h-full">
+							<FileText className="w-4 h-4 mr-2" />
+							<span>Mis facturas</span>
+						</Link>
 					</DropdownMenuItem>
-					<DropdownMenuItem onClick={() => router.push('/facturas/registro')} className="h-12 md:h-8">
-						<PlusCircle className="w-4 h-4 mr-2" />
-						<span>Subir factura</span>
+					<DropdownMenuItem asChild className="h-12 md:h-8">
+						<Link href="/facturas/registro" className="flex w-full h-full">
+							<PlusCircle className="w-4 h-4 mr-2" />
+							<span>Subir factura</span>
+						</Link>
 					</DropdownMenuItem>
 				</DropdownMenuGroup>
 				<DropdownMenuSeparator />

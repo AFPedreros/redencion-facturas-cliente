@@ -10,8 +10,10 @@ import { db } from '../../firebase';
 // Importa el hook personalizado useAuth
 import { useAuth } from '../../context/AuthContext';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
+
+import Link from 'next/link';
 
 export default function page() {
 	// Usa el hook useAuth para obtener el usuario
@@ -82,17 +84,17 @@ export default function page() {
 
 	return (
 		<div className="bg-white">
-			<main className="flex flex-col h-screen px-4 pt-10 mx-auto md:px-12 xl:px-24">
-				<div className="px-6 pt-10 text-left border-b-2 md:mb-6 md:px-0 md:text-left border-slate-300">
+			<main className="flex flex-col h-screen px-4 pt-16 mx-auto md:px-12 xl:px-24">
+				<div className="px-6 pt-10 mb-6 text-left border-b-2 md:px-0 md:text-left border-border">
 					<div className="w-full mb-4 text-center md:text-left md:items-end md:flex md:justify-between">
 						<h2 className="mb-2 text-2xl font-light mb:mb-0">Mi cuenta</h2>
-						<Button variant="outline" onClick={() => router.push('/facturas')}>
+						<Link className={buttonVariants({ variant: 'outline' })} href="/facturas">
 							Revisa tus facturas
-						</Button>
+						</Link>
 					</div>
 				</div>
 				{!userData ? (
-					<div className="pt-6 mb-4 text-center border-b-2 md:pt-10 md:text-left border-slate-300">
+					<div className="flex flex-col items-center mb-4">
 						<div className="justify-between w-full text-left md:flex">
 							<div className="w-full px-6 mb-6 md:px-0 md:w-2/5">
 								<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo electrónico</label>
@@ -115,16 +117,18 @@ export default function page() {
 						</div>
 					</div>
 				) : (
-					<div className="pt-6 text-center border-b-2 md:pt-10 md:mb-6 md:text-left border-slate-300">
-						<div className="justify-between w-full text-left md:flex">
-							<div className="w-full px-6 mb-6 md:px-0 md:w-2/5">
-								<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo electrónico</label>
-								<Input id="email" type="email" placeholder={user?.email} disabled />
+					<div className="flex flex-col items-center mb-4">
+						<div className="justify-between w-full max-w-6xl text-left md:flex">
+							<div className="flex justify-center w-full px-6 mb-6 md:block md:px-0 md:w-2/5">
+								<div className="flex flex-col w-full max-w-md">
+									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo electrónico</label>
+									<Input id="email" type="email" placeholder={user?.email} disabled />
+								</div>
 							</div>
-							<div className="w-full px-6 mb-6 md:px-0 md:w-2/5">
-								<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre completo</label>
-								<div className="flex gap-2">
-									<div className="flex items-center w-full max-w-sm space-x-2">
+							<div className="flex justify-center w-full px-6 mb-6 md:block md:px-0 md:w-2/5">
+								<div className="flex flex-col w-full max-w-md">
+									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre completo</label>
+									<div className="flex space-x-2">
 										<Input
 											id="name"
 											ref={(el) => (formRef.current.name = el)}
@@ -145,47 +149,51 @@ export default function page() {
 								</div>
 							</div>
 						</div>
-						<div className="justify-between w-full text-left md:flex">
-							<div className="w-full px-6 mb-6 md:px-0 md:w-2/5">
-								<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cédula</label>
-								<div className="flex items-center w-full max-w-sm space-x-2">
-									<Input
-										id="id"
-										ref={(el) => (formRef.current.id = el)}
-										type="text"
-										placeholder={formChange.id ? 'Nuevo número de documento' : userData?.cedula}
-										disabled={!formChange.id}
-									/>
-									{!formChange.id ? (
-										<Button variant="default" onClick={() => handleFormChange('id')}>
-											Editar
-										</Button>
-									) : (
-										<Button variant="default" onClick={handleClick}>
-											Guardar
-										</Button>
-									)}
+						<div className="justify-between w-full max-w-6xl text-left md:flex">
+							<div className="flex justify-center w-full px-6 mb-6 md:block md:px-0 md:w-2/5">
+								<div className="flex flex-col w-full max-w-md">
+									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cédula</label>
+									<div className="flex space-x-2">
+										<Input
+											id="id"
+											ref={(el) => (formRef.current.id = el)}
+											type="text"
+											placeholder={formChange.id ? 'Nuevo número de documento' : userData?.cedula}
+											disabled={!formChange.id}
+										/>
+										{!formChange.id ? (
+											<Button variant="default" onClick={() => handleFormChange('id')}>
+												Editar
+											</Button>
+										) : (
+											<Button variant="default" onClick={handleClick}>
+												Guardar
+											</Button>
+										)}
+									</div>
 								</div>
 							</div>
-							<div className="w-full px-6 mb-6 md:px-0 md:w-2/5">
-								<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Celular</label>
-								<div className="flex items-center w-full max-w-sm space-x-2">
-									<Input
-										id="tel"
-										ref={(el) => (formRef.current.tel = el)}
-										type="tel"
-										placeholder={formChange.tel ? 'Nuevo número de celular' : userData?.celular}
-										disabled={!formChange.tel}
-									/>
-									{!formChange.tel ? (
-										<Button variant="default" onClick={() => handleFormChange('tel')}>
-											Editar
-										</Button>
-									) : (
-										<Button variant="default" onClick={handleClick}>
-											Guardar
-										</Button>
-									)}
+							<div className="flex justify-center w-full px-6 mb-6 md:block md:px-0 md:w-2/5">
+								<div className="flex flex-col w-full max-w-md">
+									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Celular</label>
+									<div className="flex space-x-2">
+										<Input
+											id="tel"
+											ref={(el) => (formRef.current.tel = el)}
+											type="tel"
+											placeholder={formChange.tel ? 'Nuevo número de celular' : userData?.celular}
+											disabled={!formChange.tel}
+										/>
+										{!formChange.tel ? (
+											<Button variant="default" onClick={() => handleFormChange('tel')}>
+												Editar
+											</Button>
+										) : (
+											<Button variant="default" onClick={handleClick}>
+												Guardar
+											</Button>
+										)}
+									</div>
 								</div>
 							</div>
 						</div>
