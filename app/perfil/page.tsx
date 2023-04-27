@@ -1,6 +1,6 @@
 'use client';
 // Importa las funciones doc, setDoc y getDoc de Firebase Firestore
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection } from 'firebase/firestore';
 // Importa el hook useState y useEffect de React para usar el estado local y verificar siel usuario está logueado cuando se carga la página
 import { useState, useEffect, useRef } from 'react';
 // Importa el hook useRouter de Next.js
@@ -12,30 +12,37 @@ import { useAuth } from '../../context/AuthContext';
 import { Input } from '@/components/ui/input';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
+import { Skeleton } from '@/components/ui/skeleton';
 
 import Link from 'next/link';
+
+import { useCollection } from 'react-firebase-hooks/firestore';
 
 export default function page() {
 	// Usa el hook useAuth para obtener el usuario
 	const { user } = useAuth();
 
+	if (user === null) {
+		redirect('/');
+	}
+
 	// Usa el hook useRouter para obtener acceso al router de Next.js
 	const router = useRouter();
 
-	const formRef = useRef<any>({ name: null, id: null, tel: null });
+	const [value, loading, error] = useCollection(collection(db, 'users'), {
+		snapshotListenOptions: { includeMetadataChanges: true },
+	});
+
+	const formRef = useRef<any>({ name: '', id: '', tel: '' });
 	const [formChange, setFormChange] = useState<any>({ name: false, id: false, tel: false });
 	const { toast } = useToast();
 
 	// Estado inicial de la información del usuario
 	const [userData, setUserData] = useState<any>();
 
-	//Este hook vuelve y renderiza la pantalla cada vez que cambia el valor de 'user' o 'router'.
+	// Estado inicial del formulario
+
 	useEffect(() => {
-		if (user === null) {
-			redirect('/');
-		}
-		//Si 'user' es nulo, redirige al usuario a la página de inicio.
-		//Si 'user' tiene un valor, obtiene los datos del usuario en Firestore y los almacena en el estado local 'userData'.
 		const docRef = doc(db, 'users', user?.email);
 		const fetchData = async () => {
 			const docSnap = await getDoc(docRef);
@@ -46,7 +53,7 @@ export default function page() {
 		} catch (err) {
 			console.log(err);
 		}
-	}, [user, formChange]);
+	}, [value]);
 
 	function handleFormChange(name: string) {
 		setFormChange((prevState: any) => {
@@ -95,24 +102,35 @@ export default function page() {
 				</div>
 				{!userData ? (
 					<div className="flex flex-col items-center mb-4">
-						<div className="justify-between w-full text-left md:flex">
+						<div className="justify-between w-full max-w-6xl text-left md:flex">
 							<div className="w-full px-6 mb-6 md:px-0 md:w-2/5">
-								<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo electrónico</label>
-								<Input id="email" type="email" placeholder="Cargando..." disabled />
+								<Skeleton className="w-[100px] mb-2 mt-1 h-4 rounded-full" />
+								<div className="flex w-full space-x-2">
+									<Skeleton className="w-full h-10" />
+								</div>
 							</div>
 							<div className="w-full px-6 mb-6 md:px-0 md:w-2/5">
-								<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre completo</label>
-								<Input id="email" type="email" placeholder="Cargando..." disabled />
+								<Skeleton className="w-[100px] mb-2 mt-1 h-4 rounded-full" />
+								<div className="flex w-full space-x-2">
+									<Skeleton className="w-full h-10" />
+									<Skeleton className="w-24 h-10" />
+								</div>
 							</div>
 						</div>
-						<div className="justify-between w-full text-left md:flex">
+						<div className="justify-between w-full max-w-6xl text-left md:flex">
 							<div className="w-full px-6 mb-6 md:px-0 md:w-2/5">
-								<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cédula</label>
-								<Input id="email" type="email" placeholder="Cargando..." disabled />
+								<Skeleton className="w-[100px] mb-2 mt-1 h-4 rounded-full" />
+								<div className="flex w-full space-x-2">
+									<Skeleton className="w-full h-10" />
+									<Skeleton className="w-24 h-10" />
+								</div>
 							</div>
 							<div className="w-full px-6 mb-6 md:px-0 md:w-2/5">
-								<label className="block mb-2 text-sm font-medium text-gray-900">Celular</label>
-								<Input id="email" type="email" placeholder="Cargando..." disabled />
+								<Skeleton className="w-[100px] mb-2 mt-1 h-4 rounded-full" />
+								<div className="flex w-full space-x-2">
+									<Skeleton className="w-full h-10" />
+									<Skeleton className="w-24 h-10" />
+								</div>
 							</div>
 						</div>
 					</div>
