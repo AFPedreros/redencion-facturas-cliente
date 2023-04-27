@@ -1,9 +1,4 @@
 'use client';
-import './globals.css';
-import { AuthContextProvider } from '../context/AuthContext';
-import Header from '../components/Header';
-import { Toaster } from '@/components/ui/toaster';
-
 import { Suspense } from 'react';
 import { Loader2 } from 'lucide-react';
 
@@ -31,27 +26,28 @@ function Loading() {
 	// 	const url = pathname;
 	// 	console.log(url);
 	// }, [pathname]);
+	console.log('loading123');
 
 	return (
 		<div className="flex items-center justify-center h-screen bg-transparent">
-			<Loader2 className="w-12 h-12 text-primary animate-spin" />
+			<Loader2 className="w-12 h-12 text-black animate-spin" />
 		</div>
 	);
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
-		<html>
-			<head />
-
-			<body className="relative bg-white">
-				<AuthContextProvider>
-					<Header />
-					{children}
-				</AuthContextProvider>
-
-				<Toaster />
-			</body>
-		</html>
+		<main className="min-h-screen">
+			<Suspense
+				fallback={
+					<div className="flex items-center justify-center h-screen bg-transparent">
+						<Loader2 className="w-12 h-12 text-black animate-spin" />
+					</div>
+				}
+			>
+				{children}
+			</Suspense>
+			{/* <Loading /> */}
+		</main>
 	);
 }

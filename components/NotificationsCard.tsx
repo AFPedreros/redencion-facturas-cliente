@@ -1,3 +1,4 @@
+'use client';
 import { AlertCircle } from 'lucide-react';
 
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
