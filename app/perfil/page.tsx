@@ -55,6 +55,14 @@ export default function page() {
 		}
 	}, [value]);
 
+	useEffect(() => {
+		if (userData !== undefined) {
+			formRef.current.name.value = userData?.nombre;
+			formRef.current.id.value = userData?.cedula;
+			formRef.current.tel.value = userData?.celular;
+		}
+	}, [userData]);
+
 	function handleFormChange(name: string) {
 		setFormChange((prevState: any) => {
 			return {
@@ -82,7 +90,7 @@ export default function page() {
 			console.error(e);
 		}
 
-		formRef.current.name.value = '';
+		// formRef.current.name.value = '';
 		formRef.current.id.value = '';
 		formRef.current.tel.value = '';
 
@@ -147,13 +155,7 @@ export default function page() {
 								<div className="flex flex-col w-full max-w-md">
 									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre completo</label>
 									<div className="flex space-x-2">
-										<Input
-											id="name"
-											ref={(el) => (formRef.current.name = el)}
-											type="text"
-											placeholder={formChange.name ? 'Nuevo nombre de usuario' : userData?.nombre}
-											disabled={!formChange.name}
-										/>
+										<Input id="name" ref={(el) => (formRef.current.name = el)} type="text" className="bg-transparent" disabled={!formChange.name} />
 										{!formChange.name ? (
 											<Button variant="default" onClick={() => handleFormChange('name')}>
 												Editar
