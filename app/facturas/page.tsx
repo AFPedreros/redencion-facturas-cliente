@@ -1,62 +1,47 @@
 'use client';
-// Importa el hook useRouter y el componente Link de Next.js
 import Link from 'next/link';
-// Importa el componente ReceiptTable desde el directorio /components
 import ReceiptTable from '../../components/ReceiptTable';
-// Importa los íconos de ExclamationCircleIcon desde la biblioteca Heroicons
-import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
-// Importa el hook useState y useEffect de React para usar el estado local y verificar siel usuario está logueado cuando se carga la página
 import { useEffect, useState } from 'react';
-// Importa las funciones collection y getDoc de Firebase Firestore
 import { collection, getDocs } from 'firebase/firestore';
-// Importa el hook useRouter de Next.js
-import { useRouter } from 'next/navigation';
-// Importa la instancia de la base de datos de Firebase
+import { redirect } from 'next/navigation';
 import { db } from '../../firebase';
-// Importa el hook personalizado useAuth
 import { useAuth } from '../../context/AuthContext';
-
 import { buttonVariants } from '@/components/ui/button';
-import {
-	AlertDialog,
-	AlertDialogAction,
-	AlertDialogCancel,
-	AlertDialogContent,
-	AlertDialogDescription,
-	AlertDialogFooter,
-	AlertDialogHeader,
-	AlertDialogTitle,
-	AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import Notifications from '@/components/NotificationsCard';
+import { useCollection } from 'react-firebase-hooks/firestore';
+import { Loader2 } from 'lucide-react';
+
+const routes = {
+	receipts: '/',
+};
 
 export default function page() {
-	// Usa el hook useAuth para obtener el usuario
 	const { user } = useAuth();
-	// Usa el hook useRouter para obtener acceso al router de Next.js
-	const router = useRouter();
 
-	// Estado inicial de las facturas del usuario
+	if (!user) {
+		redirect(routes.receipts);
+	}
+
+	const [value, loading, error] = useCollection(collection(db, 'users'), {
+		snapshotListenOptions: { includeMetadataChanges: true },
+	});
+
 	const [receipts, setReceipts] = useState<any>();
 
-	// Este hook vuelve y renderiza la pantalla cada vez que cambia el valor de 'user' o 'router'.
 	useEffect(() => {
-		// Si 'user' es nulo, redirige al usuario a la página de inicio.
-		// Si 'user' tiene un valor, obtiene los datos de las facturas en Firestore y los almacena en el estado local 'receipts'.
-		if (user === null) {
-			router.push('/');
-		} else {
-			const fetchData = async () => {
-				const querySnapshot = await getDocs(collection(db, 'users', user?.email, 'facturas'));
+		const fetchData = async () => {
+			const querySnapshot = await getDocs(collection(db, 'users', user?.email, 'facturas'));
+			setReceipts(querySnapshot);
+		};
 
-				setReceipts(querySnapshot);
-			};
-
-			try {
-				fetchData();
-			} catch (err) {}
+		try {
+			fetchData();
+		} catch (err) {
+			console.log(err);
 		}
-	}, [user, router]);
+	}, [value]);
+
+	console.log(receipts);
 
 	return (
 		<div className="bg-white">
@@ -74,14 +59,16 @@ export default function page() {
 					title="Recordatorio"
 					text="Una vez registres tus facturas en la plataforma, estas entrarán en etapa de revisión, donde podrán ser aprobadas o rechazadas según los Criterios de aprobación de facturas de la actividad."
 				/>
-				{receipts?.empty ? (
-					<Link className={`md:w-fit ${buttonVariants({ variant: 'default' })}`} href="/facturas/registro">
-						Registra tu primer factura
-					</Link>
-				) : (
+				{!receipts ? (
+					<Loader2 className="w-12 h-12 text-black animate-spin" />
+				) : receipts.docs.length < 0 ? (
 					<div className="min-h-min">
 						<ReceiptTable receiptsData={receipts} />
 					</div>
+				) : (
+					<Link className={`md:w-fit ${buttonVariants({ variant: 'default' })}`} href="/facturas/registro">
+						Registra tu primer factura
+					</Link>
 				)}
 			</main>
 		</div>

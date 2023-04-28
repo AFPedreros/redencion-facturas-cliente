@@ -1,33 +1,27 @@
 'use client';
-// Importa las funciones doc, setDoc y getDoc de Firebase Firestore
 import { doc, getDoc, setDoc, collection } from 'firebase/firestore';
-// Importa el hook useState y useEffect de React para usar el estado local y verificar siel usuario está logueado cuando se carga la página
 import { useState, useEffect, useRef } from 'react';
 // Importa el hook useRouter de Next.js
-import { useRouter, redirect } from 'next/navigation';
-// Importa la instancia de la base de datos de Firebase
+import { redirect } from 'next/navigation';
 import { db } from '../../firebase';
-// Importa el hook personalizado useAuth
 import { useAuth } from '../../context/AuthContext';
 import { Input } from '@/components/ui/input';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
-
 import Link from 'next/link';
-
 import { useCollection } from 'react-firebase-hooks/firestore';
 
+const routes = {
+	receipts: '/',
+};
+
 export default function page() {
-	// Usa el hook useAuth para obtener el usuario
 	const { user } = useAuth();
 
-	if (user === null) {
-		redirect('/');
+	if (!user) {
+		redirect(routes.receipts);
 	}
-
-	// Usa el hook useRouter para obtener acceso al router de Next.js
-	const router = useRouter();
 
 	const [value, loading, error] = useCollection(collection(db, 'users'), {
 		snapshotListenOptions: { includeMetadataChanges: true },
@@ -37,10 +31,8 @@ export default function page() {
 	const [formChange, setFormChange] = useState<any>({ name: false, id: false, tel: false });
 	const { toast } = useToast();
 
-	// Estado inicial de la información del usuario
 	const [userData, setUserData] = useState<any>();
-
-	// Estado inicial del formulario
+	const [loadingNewData, setLoadingNewData] = useState(false);
 
 	useEffect(() => {
 		const docRef = doc(db, 'users', user?.email);
@@ -72,10 +64,42 @@ export default function page() {
 		});
 	}
 
+	async function animateTyping(inputField: any, value: string) {
+		const chars = value.split('');
+
+		for (let i = 0; i < chars.length; i++) {
+			inputField.value = chars.slice(0, i + 1).join('');
+			await new Promise((resolve) => setTimeout(resolve, 50));
+		}
+	}
+
+	function findEnabledInputs(formRef: any) {
+		const enabledInputs: any[] = [];
+
+		if (!formRef.current) {
+			return enabledInputs;
+		}
+		if (!formRef.current.name.disabled) {
+			enabledInputs.push(formRef.current.name);
+		}
+		if (!formRef.current.id.disabled) {
+			enabledInputs.push(formRef.current.id);
+		}
+		if (!formRef.current.tel.disabled) {
+			enabledInputs.push(formRef.current.tel);
+		}
+
+		return enabledInputs;
+	}
+
 	async function handleClick() {
+		setLoadingNewData(true);
+
 		const name = formRef.current.name.value !== '' ? formRef.current.name.value : userData?.nombre;
 		const id = formRef.current.id.value !== '' ? formRef.current.id.value : userData?.cedula;
 		const tel = formRef.current.tel.value !== '' ? formRef.current.tel.value : userData?.celular;
+
+		const changingFields = findEnabledInputs(formRef);
 
 		try {
 			await setDoc(doc(db, 'users', user?.email), {
@@ -90,11 +114,18 @@ export default function page() {
 			console.error(e);
 		}
 
-		// formRef.current.name.value = '';
-		formRef.current.id.value = '';
-		formRef.current.tel.value = '';
+		for (const field of changingFields) {
+			field.disabled = true;
+			const value = field.id === 'name' ? name : field.id === 'id' ? id : tel;
+			await animateTyping(field, value);
+		}
+
+		formRef.current.name.value = name;
+		formRef.current.id.value = id;
+		formRef.current.tel.value = tel;
 
 		setFormChange({ name: false, id: false, tel: false });
+		setLoadingNewData(false);
 	}
 
 	return (
@@ -157,11 +188,11 @@ export default function page() {
 									<div className="flex space-x-2">
 										<Input id="name" ref={(el) => (formRef.current.name = el)} type="text" className="bg-transparent" disabled={!formChange.name} />
 										{!formChange.name ? (
-											<Button variant="default" onClick={() => handleFormChange('name')}>
+											<Button variant="default" onClick={() => handleFormChange('name')} disabled={loadingNewData}>
 												Editar
 											</Button>
 										) : (
-											<Button variant="default" onClick={handleClick}>
+											<Button variant="default" onClick={handleClick} disabled={loadingNewData}>
 												Guardar
 											</Button>
 										)}
@@ -182,11 +213,11 @@ export default function page() {
 											disabled={!formChange.id}
 										/>
 										{!formChange.id ? (
-											<Button variant="default" onClick={() => handleFormChange('id')}>
+											<Button variant="default" onClick={() => handleFormChange('id')} disabled={loadingNewData}>
 												Editar
 											</Button>
 										) : (
-											<Button variant="default" onClick={handleClick}>
+											<Button variant="default" onClick={handleClick} disabled={loadingNewData}>
 												Guardar
 											</Button>
 										)}
@@ -205,11 +236,11 @@ export default function page() {
 											disabled={!formChange.tel}
 										/>
 										{!formChange.tel ? (
-											<Button variant="default" onClick={() => handleFormChange('tel')}>
+											<Button variant="default" onClick={() => handleFormChange('tel')} disabled={loadingNewData}>
 												Editar
 											</Button>
 										) : (
-											<Button variant="default" onClick={handleClick}>
+											<Button variant="default" onClick={handleClick} disabled={loadingNewData}>
 												Guardar
 											</Button>
 										)}
