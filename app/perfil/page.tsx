@@ -101,6 +101,11 @@ export default function page() {
 
 		const changingFields = findEnabledInputs(formRef);
 
+		for (const field of changingFields) {
+			field.disabled = true;
+			const value = field.id === 'name' ? name : field.id === 'id' ? id : tel;
+			await animateTyping(field, value);
+		}
 		try {
 			await setDoc(doc(db, 'users', user?.email), {
 				nombre: name,
@@ -112,12 +117,6 @@ export default function page() {
 			});
 		} catch (e) {
 			console.log(e);
-		}
-
-		for (const field of changingFields) {
-			field.disabled = true;
-			const value = field.id === 'name' ? name : field.id === 'id' ? id : tel;
-			await animateTyping(field, value);
 		}
 
 		formRef.current.name.value = name;
