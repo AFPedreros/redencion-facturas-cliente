@@ -111,7 +111,7 @@ export default function page() {
 				description: 'Tus datos se han actualizado correctamente.',
 			});
 		} catch (e) {
-			console.error(e);
+			console.log(e);
 		}
 
 		for (const field of changingFields) {

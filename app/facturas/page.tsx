@@ -41,8 +41,6 @@ export default function page() {
 		}
 	}, [value]);
 
-	console.log(receipts);
-
 	return (
 		<div className="bg-white">
 			<main className="flex flex-col h-screen px-4 pt-16 mx-auto md:px-12 xl:px-24">
@@ -61,7 +59,7 @@ export default function page() {
 				/>
 				{!receipts ? (
 					<Loader2 className="w-12 h-12 text-black animate-spin" />
-				) : receipts.docs.length < 0 ? (
+				) : receipts.docs.length > 0 ? (
 					<div className="min-h-min">
 						<ReceiptTable receiptsData={receipts} />
 					</div>
