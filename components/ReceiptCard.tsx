@@ -17,6 +17,8 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import Image from 'next/image';
 
 type Props = { id: any; fecha: any; estado: any; valor: any; url: any; user: any; handleDelete: (id: string) => void };
 
@@ -87,18 +89,19 @@ export default function ReceiptCard({ id, fecha, estado, valor, url, user, handl
 			</CardHeader>
 			<CardContent>
 				<div className="text-2xl font-bold">{formatCurrency(valor)}</div>
-				<div className="flex justify-between items-center mt-1">
-					<p className="text-muted-foreground">{estado}</p>
+				<div className="flex items-center justify-between mt-1">
+					<p className={`${estado === 'Rechazada' ? 'text-destructive' : estado === 'Aprobada' ? 'text-primary' : 'text-muted-foreground'}`}>{estado}</p>
 					<p className="text-xs text-muted-foreground">{getDateFromString(fecha)}</p>
 				</div>
 				<AlertDialog>
-					<AlertDialogTrigger>
-						<Button className="w-full mt-2">Ver factura</Button>
-					</AlertDialogTrigger>
+					<AlertDialogTrigger className={`${buttonVariants({ variant: 'default' })} mt-2 w-full`}>Ver factura</AlertDialogTrigger>
 					<AlertDialogContent className="bg-white">
 						<AlertDialogHeader>
 							<AlertDialogTitle>{shortenString(id)}</AlertDialogTitle>
 						</AlertDialogHeader>
+						<ScrollArea className="w-full rounded-md h-72">
+							<Image src={url} alt="Image" className="object-cover rounded-md" width={500} height={500} />
+						</ScrollArea>
 						<AlertDialogFooter>
 							<AlertDialogCancel className={buttonVariants({ variant: 'destructive' })}>Cerrar</AlertDialogCancel>
 						</AlertDialogFooter>

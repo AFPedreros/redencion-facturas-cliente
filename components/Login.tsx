@@ -1,8 +1,4 @@
 'use client';
-// Importa los íconos de ReceiptPercentIcon, DocumentTextIcon y TicketIcon desde la biblioteca Heroicons
-import { ReceiptPercentIcon } from '@heroicons/react/24/outline';
-import { DocumentTextIcon } from '@heroicons/react/24/outline';
-import { TicketIcon } from '@heroicons/react/24/outline';
 // Importa el hook useRouter y el componente Link de Next.js
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -85,67 +81,42 @@ export default function Login() {
 	}
 
 	return (
-		<div className="bg-white md:flex">
-			<div className="flex flex-col items-center justify-center p-8 md:h-screen md:border-r md:border-black md:w-1/3">
-				<h1 className="mb-12 text-4xl">¡Redime tus facturas y participa en increíbles sorteos!</h1>
-				<div className="flex flex-col gap-4">
-					<div className="flex w-full gap-2 md:max-w-3xl">
-						<div className="w-12 h-12 p-2 bg-blue-700 rounded">
-							<DocumentTextIcon className="text-white" />
-						</div>
-						<p className="w-4/5">Registra tus datos personales</p>
-					</div>
-					<div className="flex w-full gap-2 md:max-w-3xl">
-						<div className="w-12 h-12 p-2 bg-blue-700 rounded">
-							<ReceiptPercentIcon className="text-white" />
-						</div>
-						<p className="w-4/5">Agrega tus facturas y espera su aprobación</p>
-					</div>
-					<div className="flex w-full gap-2 md:max-w-3xl">
-						<div className="w-12 h-12 p-2 bg-blue-700 rounded">
-							<TicketIcon className="text-white" />
-						</div>
-						<p className="w-4/5">Obtén un código y participa en los sorteos</p>
-					</div>
-				</div>
+		<form className="flex flex-col justify-center p-8 mx-auto md:h-screen md:w-1/2 xl:w-1/3">
+			<h2 className="text-2xl font-semibold text-center">Bienvenido de nuevo</h2>
+			<p className="mx-auto mb-4 text-sm text-muted-foreground">Ingresa tu correo y contraseña</p>
+			<input
+				value={form.email}
+				onChange={handleChange}
+				type="email"
+				className="bg-gray-50 md:w-full border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+				placeholder="Correo Electrónico"
+				required
+				name="email"
+			/>
+			<input
+				value={form.password}
+				onChange={handleChange}
+				type="password"
+				className="bg-gray-50 mb-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full md:w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+				placeholder="•••••••••"
+				required
+				name="password"
+				ref={passwordRef}
+				onKeyDown={handleKeyDown}
+			/>
+			<button
+				type="button"
+				onClick={handleOnSubmit}
+				className="md:w-full focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-600 font-medium rounded-lg text-sm px-12 py-2.5"
+			>
+				Ingresar
+			</button>
+			<div className="flex gap-2 mx-auto mb-4 text-sm h-fit">
+				<p>¿Aún no estas registrado?</p>
+				<Link className="font-bold border-b-2 border-black" href="/registro">
+					Regístrate aquí
+				</Link>
 			</div>
-			<form className="flex flex-col justify-center p-8 mx-auto md:h-screen md:w-1/2 xl:w-1/3">
-				<h2 className="mb-12 text-2xl font-light text-center">Iniciar sesión</h2>
-				<input
-					value={form.email}
-					onChange={handleChange}
-					type="email"
-					className="bg-gray-50 md:w-full border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-					placeholder="Correo Electrónico"
-					required
-					name="email"
-				/>
-				<input
-					value={form.password}
-					onChange={handleChange}
-					type="password"
-					className="bg-gray-50 mb-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full md:w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-					placeholder="•••••••••"
-					required
-					name="password"
-					ref={passwordRef}
-					onKeyDown={handleKeyDown}
-				/>
-				<p className="mx-auto mb-2 text-[#707070] text-sm">Olvidé mi contraseña</p>
-				<div className="flex gap-2 mx-auto mb-4 text-sm h-fit">
-					<p>¿Aún no estas registrado?</p>
-					<Link className="font-bold border-b-2 border-black" href="/registro">
-						Regístrate aquí
-					</Link>
-				</div>
-				<button
-					type="button"
-					onClick={handleOnSubmit}
-					className="md:w-full focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-600 font-medium rounded-lg text-sm px-12 py-2.5"
-				>
-					Ingresar
-				</button>
-			</form>
-		</div>
+		</form>
 	);
 }

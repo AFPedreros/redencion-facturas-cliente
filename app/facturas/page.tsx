@@ -118,6 +118,8 @@ export default function page() {
 		});
 	}
 
+	console.log('hello');
+
 	return (
 		<div className="bg-white">
 			<main className="flex flex-col h-screen px-4 pt-16 mx-auto md:px-12 xl:px-24">
@@ -136,7 +138,7 @@ export default function page() {
 				/>
 				{!receipts ? (
 					// <Loader2 className="w-12 h-12 text-black animate-spin" />
-					<div className="min-h-min justify-center pb-6">
+					<div className="justify-center pb-6 min-h-min">
 						{/* <ReceiptTable receiptsData={receipts} /> */}
 						<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
 							<Skeleton className="w-full h-44" />
@@ -150,7 +152,7 @@ export default function page() {
 						</div>
 					</div>
 				) : receipts.docs.length > 0 ? (
-					<div className="min-h-min justify-center pb-6">
+					<div className="justify-center pb-6 min-h-min">
 						{/* <ReceiptTable receiptsData={receipts} /> */}
 						<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{receiptsInfo}</div>
 					</div>
@@ -159,167 +161,6 @@ export default function page() {
 						Registra tu primer factura
 					</Link>
 				)}
-				<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-6">
-					<Card>
-						<CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-							<CardTitle className="text-sm font-medium">ID</CardTitle>
-							<div className="flex gap-1">
-								<Edit className="w-4 h-4 text-primary" />
-								<AlertDialog>
-									<AlertDialogTrigger className="text-sm font-medium text-destructive">
-										<Trash2 className="w-4 h-4 text-destructive" />
-									</AlertDialogTrigger>
-									<AlertDialogContent className="bg-white">
-										<AlertDialogHeader>
-											<AlertDialogTitle>¿Estás seguro, completamente seguro?</AlertDialogTitle>
-											<AlertDialogDescription>
-												Esta acción no se puede deshacer. Eliminará permanentemente tu cuenta y eliminará tus datos de nuestros servidores.
-											</AlertDialogDescription>
-										</AlertDialogHeader>
-										<AlertDialogFooter>
-											<AlertDialogCancel>Cancelar</AlertDialogCancel>
-											<AlertDialogAction
-												onClick={() => {
-													console.log('hello');
-												}}
-												className={buttonVariants({ variant: 'destructive' })}
-											>
-												Continuar
-											</AlertDialogAction>
-										</AlertDialogFooter>
-									</AlertDialogContent>
-								</AlertDialog>
-							</div>
-						</CardHeader>
-						<CardContent>
-							<div className="text-2xl font-bold">$100.000</div>
-							<div className="flex justify-between items-center mt-1">
-								<p className="text-muted-foreground">Por revisión</p>
-								<p className="text-xs text-muted-foreground">30/4/2023</p>
-							</div>
-							<AlertDialog>
-								<AlertDialogTrigger className={`${buttonVariants({ variant: 'default' })} mt-2 w-full`}>Ver factura</AlertDialogTrigger>
-								<AlertDialogContent className="bg-white w-full">
-									<AlertDialogHeader>
-										<AlertDialogTitle>0000</AlertDialogTitle>
-									</AlertDialogHeader>
-									<ScrollArea className="h-72 w-full rounded-md">
-										<Image src="/ffc127d-sample_receipt.jpg" alt="Image" className="rounded-md object-cover" width={500} height={500} />
-									</ScrollArea>
-									<AlertDialogFooter>
-										<AlertDialogCancel className={buttonVariants({ variant: 'destructive' })}>Cerrar</AlertDialogCancel>
-									</AlertDialogFooter>
-								</AlertDialogContent>
-							</AlertDialog>
-						</CardContent>
-					</Card>
-					<Card>
-						<CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-							<CardTitle className="text-sm font-medium">ID</CardTitle>
-							<div className="flex gap-1">
-								<Edit className="w-4 h-4 text-primary" />
-								<AlertDialog>
-									<AlertDialogTrigger className="text-sm font-medium text-destructive">
-										<Trash2 className="w-4 h-4 text-destructive" />
-									</AlertDialogTrigger>
-									<AlertDialogContent className="bg-white">
-										<AlertDialogHeader>
-											<AlertDialogTitle>¿Estás seguro, completamente seguro?</AlertDialogTitle>
-											<AlertDialogDescription>
-												Esta acción no se puede deshacer. Eliminará permanentemente tu cuenta y eliminará tus datos de nuestros servidores.
-											</AlertDialogDescription>
-										</AlertDialogHeader>
-										<AlertDialogFooter>
-											<AlertDialogCancel>Cancelar</AlertDialogCancel>
-											<AlertDialogAction
-												onClick={() => {
-													console.log('hello');
-												}}
-												className={buttonVariants({ variant: 'destructive' })}
-											>
-												Continuar
-											</AlertDialogAction>
-										</AlertDialogFooter>
-									</AlertDialogContent>
-								</AlertDialog>
-							</div>
-						</CardHeader>
-						<CardContent>
-							<div className="text-2xl font-bold">$100.000</div>
-							<div className="flex justify-between items-center mt-1">
-								<p className="text-destructive">Rechazada</p>
-								<p className="text-xs text-muted-foreground">30/4/2023</p>
-							</div>
-							<AlertDialog>
-								<AlertDialogTrigger className={`${buttonVariants({ variant: 'default' })} mt-2 w-full`}>Ver factura</AlertDialogTrigger>
-								<AlertDialogContent className="bg-white w-full">
-									<AlertDialogHeader>
-										<AlertDialogTitle>0000</AlertDialogTitle>
-									</AlertDialogHeader>
-									<ScrollArea className="h-72 w-full rounded-md">
-										<Image src="/ffc127d-sample_receipt.jpg" alt="Image" className="rounded-md object-cover" width={500} height={500} />
-									</ScrollArea>
-									<AlertDialogFooter>
-										<AlertDialogCancel className={buttonVariants({ variant: 'destructive' })}>Cerrar</AlertDialogCancel>
-									</AlertDialogFooter>
-								</AlertDialogContent>
-							</AlertDialog>
-						</CardContent>
-					</Card>
-					<Card>
-						<CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-							<CardTitle className="text-sm font-medium">ID</CardTitle>
-							<div className="flex gap-1">
-								<Edit className="w-4 h-4 text-primary" />
-								<AlertDialog>
-									<AlertDialogTrigger className="text-sm font-medium text-destructive">
-										<Trash2 className="w-4 h-4 text-destructive" />
-									</AlertDialogTrigger>
-									<AlertDialogContent className="bg-white">
-										<AlertDialogHeader>
-											<AlertDialogTitle>¿Estás seguro, completamente seguro?</AlertDialogTitle>
-											<AlertDialogDescription>
-												Esta acción no se puede deshacer. Eliminará permanentemente tu cuenta y eliminará tus datos de nuestros servidores.
-											</AlertDialogDescription>
-										</AlertDialogHeader>
-										<AlertDialogFooter>
-											<AlertDialogCancel>Cancelar</AlertDialogCancel>
-											<AlertDialogAction
-												onClick={() => {
-													console.log('hello');
-												}}
-												className={buttonVariants({ variant: 'destructive' })}
-											>
-												Continuar
-											</AlertDialogAction>
-										</AlertDialogFooter>
-									</AlertDialogContent>
-								</AlertDialog>
-							</div>
-						</CardHeader>
-						<CardContent>
-							<div className="text-2xl font-bold">$100.000</div>
-							<div className="flex justify-between items-center mt-1">
-								<p className="text-primary">Aprovada</p>
-								<p className="text-xs text-muted-foreground">30/4/2023</p>
-							</div>
-							<AlertDialog>
-								<AlertDialogTrigger className={`${buttonVariants({ variant: 'default' })} mt-2 w-full`}>Ver factura</AlertDialogTrigger>
-								<AlertDialogContent className="bg-white w-full">
-									<AlertDialogHeader>
-										<AlertDialogTitle>0000</AlertDialogTitle>
-									</AlertDialogHeader>
-									<ScrollArea className="h-72 w-full rounded-md">
-										<Image src="/ffc127d-sample_receipt.jpg" alt="Image" className="rounded-md object-cover" width={500} height={500} />
-									</ScrollArea>
-									<AlertDialogFooter>
-										<AlertDialogCancel className={buttonVariants({ variant: 'destructive' })}>Cerrar</AlertDialogCancel>
-									</AlertDialogFooter>
-								</AlertDialogContent>
-							</AlertDialog>
-						</CardContent>
-					</Card>
-				</div>
 			</main>
 		</div>
 	);

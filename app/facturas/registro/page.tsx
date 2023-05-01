@@ -1,6 +1,4 @@
 'use client';
-// Importa los íconos de ReceiptPercentIcon, DocumentTextIcon y TicketIcon desde la biblioteca Heroicons
-import { ReceiptPercentIcon } from '@heroicons/react/24/outline';
 import { Verified } from 'lucide-react';
 // Importa el hook useState y useEffect de React para usar el estado local y verificar siel usuario está logueado cuando se carga la página
 // Importa el hook ChangeEvent para cargar los archivos del input de archivos

@@ -6,5 +6,6 @@ module.exports = {
 	},
 	images: {
 		disableStaticImages: true,
+		domains: ['firebasestorage.googleapis.com'],
 	},
 };
