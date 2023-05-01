@@ -188,7 +188,7 @@ export default function page() {
 						{!file ? (
 							<div className="flex p-4 gap-4 flex-col h-[200px] shrink-0 items-center border-border justify-center rounded-md border-2 border-dashed">
 								<FileUp className="w-9 h-9 text-border" />
-								<p className="text-sm font-semibold text-card-foreground dark:text-gray-400">No se ha agregado la foto de la factura</p>
+								<p className="text-sm font-semibold text-center text-card-foreground dark:text-gray-400">No se ha agregado la foto de la factura</p>
 								<label className={buttonVariants({ variant: 'default' })} htmlFor="dropzone-file">
 									<Plus className="w-4 h-4 mr-2" />
 									Agregar foto
@@ -196,12 +196,12 @@ export default function page() {
 								<input onChange={handleFileChange} id="dropzone-file" type="file" className="hidden" />
 							</div>
 						) : (
-							<div className="flex gap-4 flex-col h-[200px] shrink-0 items-center border-border justify-center rounded-md border-2 border-dashed">
+							<div className="flex p-4 gap-4 flex-col h-[200px] shrink-0 items-center border-border justify-center rounded-md border-2 border-dashed">
 								<div className="flex items-center gap-2">
 									<FileImage className="w-9 h-9 text-border" />
 									<p className="text-sm font-semibold text-card-foreground">{file?.name}</p>
 								</div>
-								<p className="text-sm font-semibold text-card-foreground">Ahora agrega los datos de tu factura</p>
+								<p className="text-sm font-semibold text-center text-card-foreground">Ahora agrega los datos de tu factura</p>
 								<div className="flex items-center gap-2">
 									<label className={buttonVariants({ variant: 'default' })} htmlFor="dropzone-file">
 										<Plus className="w-4 h-4 mr-2" />

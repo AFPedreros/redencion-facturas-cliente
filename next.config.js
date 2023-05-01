@@ -4,4 +4,7 @@ module.exports = {
 	experimental: {
 		appDir: true,
 	},
+	images: {
+		disableStaticImages: true,
+	},
 };
