@@ -103,9 +103,9 @@ export default function UserNav({ email }: UserNavProps) {
 				<DropdownMenuSeparator />
 				<DropdownMenuItem
 					onClick={async () => {
-						router.push('/');
 						try {
 							await logout();
+							router.push('/');
 						} catch (err) {
 							console.log(err);
 						}

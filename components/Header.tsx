@@ -9,8 +9,6 @@ import { Receipt } from 'lucide-react';
 export default function Header() {
 	// Usa el hook useAuth para obtener el usuario y la función logout
 	const { user } = useAuth();
-	// Usa el hook useRouter para obtener acceso al router de Next.js
-	const router = useRouter();
 
 	return (
 		<>

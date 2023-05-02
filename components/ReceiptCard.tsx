@@ -3,7 +3,7 @@ import { getStorage, ref, deleteObject } from 'firebase/storage';
 import { doc, deleteDoc, collection } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
-import { Trash2, Edit } from 'lucide-react';
+import { Trash2, Edit, Loader2 } from 'lucide-react';
 import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
@@ -19,10 +19,18 @@ import {
 } from '@/components/ui/alert-dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import Image from 'next/image';
+import { useState } from 'react';
 
 type Props = { id: any; fecha: any; estado: any; valor: any; url: any; user: any; handleDelete: (id: string) => void };
 
 export default function ReceiptCard({ id, fecha, estado, valor, url, user, handleDelete }: Props) {
+	const [loaded, setLoaded] = useState(false);
+
+	function handleImageLoad() {
+		console.log('loaded');
+		setLoaded(true);
+	}
+
 	function getDateFromString(dateString: string) {
 		const date = new Date(dateString);
 		const year = date.getUTCFullYear();
@@ -72,7 +80,6 @@ export default function ReceiptCard({ id, fecha, estado, valor, url, user, handl
 										try {
 											await deleteObject(storageRef);
 											await deleteDoc(doc(db, 'users', user?.email, 'facturas', id));
-											console.log(valor);
 											handleDelete(id);
 										} catch (e) {
 											console.log(e);
@@ -100,7 +107,12 @@ export default function ReceiptCard({ id, fecha, estado, valor, url, user, handl
 							<AlertDialogTitle>{shortenString(id)}</AlertDialogTitle>
 						</AlertDialogHeader>
 						<ScrollArea className="w-full rounded-md h-72">
-							<Image src={url} alt="Image" className="object-cover rounded-md" width={500} height={500} />
+							{!loaded && (
+								<div className="flex items-center justify-center bg-transparent h-72">
+									<Loader2 className="w-12 h-12 text-black animate-spin" />
+								</div>
+							)}
+							<Image src={url} alt="Image" className={`object-cover rounded-md ${loaded ? '' : 'hidden'}`} width={500} height={500} onLoad={handleImageLoad} />
 						</ScrollArea>
 						<AlertDialogFooter>
 							<AlertDialogCancel className={buttonVariants({ variant: 'destructive' })}>Cerrar</AlertDialogCancel>

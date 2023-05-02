@@ -51,37 +51,30 @@ export default function page() {
 
 	useEffect(() => {
 		const fetchData = async () => {
+			// Fetch the receipts from the Firestore
 			const querySnapshot = await getDocs(collection(db, 'users', user?.email, 'facturas'));
-			setReceipts(querySnapshot);
+			// Create an array of receipt cards from the fetched receipts
+			const receiptCards = querySnapshot.docs.map((doc) => {
+				return (
+					<ReceiptCard
+						key={doc.data().id}
+						id={doc.data().id}
+						fecha={doc.data().fechaRegistro}
+						estado={doc.data().estado}
+						valor={doc.data().valorTotal}
+						url={doc.data().url}
+						user={user}
+						handleDelete={handleDelete}
+					/>
+				);
+			});
+			// Sort the receipt cards by registration date
+			const sortedReceiptCards = sortByRegistrationDate(receiptCards);
+			// Update the state to re-render the receipt cards
+			setReceiptsInfo(sortedReceiptCards);
 		};
-
-		try {
-			fetchData();
-		} catch (err) {
-			console.log(err);
-		}
-	}, [value, receiptsInfo]);
-
-	useEffect(() => {
-		const receiptCards: JSX.Element[] = [];
-		receipts?.forEach((doc: any) => {
-			receiptCards.push(
-				<ReceiptCard
-					key={doc.data().id}
-					id={doc.data().id}
-					fecha={doc.data().fechaRegistro}
-					estado={doc.data().estado}
-					valor={doc.data().valorTotal}
-					url={doc.data().url}
-					user={user}
-					handleDelete={handleDelete}
-				/>
-			);
-		});
-
-		const sortedReceiptCards = sortByRegistrationDate(receiptCards);
-		setReceiptsInfo(sortedReceiptCards);
-	}, [receipts]);
+		fetchData();
+	}, [value]);
 
 	function sortByRegistrationDate(objects: any) {
 		objects.sort(function (a: any, b: any) {
@@ -118,7 +111,7 @@ export default function page() {
 		});
 	}
 
-	console.log('hello');
+	console.log('hello', receiptsInfo);
 
 	return (
 		<div className="bg-white">
@@ -136,7 +129,7 @@ export default function page() {
 					title="Recordatorio"
 					text="Una vez registres tus facturas en la plataforma, estas entrarán en etapa de revisión, donde podrán ser aprobadas o rechazadas según los Criterios de aprobación de facturas de la actividad."
 				/>
-				{!receipts ? (
+				{!receiptsInfo ? (
 					// <Loader2 className="w-12 h-12 text-black animate-spin" />
 					<div className="justify-center pb-6 min-h-min">
 						{/* <ReceiptTable receiptsData={receipts} /> */}
@@ -151,7 +144,7 @@ export default function page() {
 							<Skeleton className="w-full h-44" />
 						</div>
 					</div>
-				) : receipts.docs.length > 0 ? (
+				) : receiptsInfo.length > 0 ? (
 					<div className="justify-center pb-6 min-h-min">
 						{/* <ReceiptTable receiptsData={receipts} /> */}
 						<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{receiptsInfo}</div>
