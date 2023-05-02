@@ -19,7 +19,8 @@ import {
 } from '@/components/ui/alert-dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useCollection } from 'react-firebase-hooks/firestore';
 
 type Props = { id: any; fecha: any; estado: any; valor: any; url: any; user: any; handleDelete: (id: string) => void };
 
@@ -101,7 +102,9 @@ export default function ReceiptCard({ id, fecha, estado, valor, url, user, handl
 					<p className="text-xs text-muted-foreground">{getDateFromString(fecha)}</p>
 				</div>
 				<AlertDialog>
-					<AlertDialogTrigger className={`${buttonVariants({ variant: 'default' })} mt-2 w-full`}>Ver factura</AlertDialogTrigger>
+					<AlertDialogTrigger onClick={() => setLoaded(false)} className={`${buttonVariants({ variant: 'default' })} mt-2 w-full`}>
+						Ver factura
+					</AlertDialogTrigger>
 					<AlertDialogContent className="bg-white">
 						<AlertDialogHeader>
 							<AlertDialogTitle>{shortenString(id)}</AlertDialogTitle>
@@ -112,7 +115,7 @@ export default function ReceiptCard({ id, fecha, estado, valor, url, user, handl
 									<Loader2 className="w-12 h-12 text-black animate-spin" />
 								</div>
 							)}
-							<Image src={url} alt="Image" className={`object-cover rounded-md ${loaded ? '' : 'hidden'}`} width={500} height={500} onLoad={handleImageLoad} />
+							<Image src={url} alt="Image" className="object-cover rounded-md" width={500} height={500} onLoad={handleImageLoad} />
 						</ScrollArea>
 						<AlertDialogFooter>
 							<AlertDialogCancel className={buttonVariants({ variant: 'destructive' })}>Cerrar</AlertDialogCancel>

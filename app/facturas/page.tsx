@@ -46,7 +46,6 @@ export default function page() {
 
 	const { toast } = useToast();
 
-	const [receipts, setReceipts] = useState<any>();
 	const [receiptsInfo, setReceiptsInfo] = useState<JSX.Element[]>();
 
 	useEffect(() => {
@@ -75,6 +74,8 @@ export default function page() {
 		};
 		fetchData();
 	}, [value]);
+
+	console.log(value);
 
 	function sortByRegistrationDate(objects: any) {
 		objects.sort(function (a: any, b: any) {
@@ -110,8 +111,6 @@ export default function page() {
 			description: 'Su factura ha sido eliminada correctamente.',
 		});
 	}
-
-	console.log('hello', receiptsInfo);
 
 	return (
 		<div className="bg-white">
