@@ -58,8 +58,11 @@ export default function page() {
 					<ReceiptCard
 						key={doc.data().id}
 						id={doc.data().id}
+						numeroFactura={doc.data().numeroFactura}
 						fecha={doc.data().fechaRegistro}
 						estado={doc.data().estado}
+						ciudad={doc.data().ciudad}
+						centroComercial={doc.data().centroComercial}
 						valor={doc.data().valorTotal}
 						url={doc.data().url}
 						user={user}

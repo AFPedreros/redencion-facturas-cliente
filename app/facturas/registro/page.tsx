@@ -1,19 +1,11 @@
 'use client';
 import { Verified } from 'lucide-react';
-// Importa el hook useState y useEffect de React para usar el estado local y verificar siel usuario está logueado cuando se carga la página
-// Importa el hook ChangeEvent para cargar los archivos del input de archivos
 import { useState, useEffect, ChangeEvent, useRef } from 'react';
-// Importa la función para generar ids únicos para las facturas
 import { v4 } from 'uuid';
-// Importa las funciones para subir archivos a la base de datos de Firebase
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-// Importa las funciones doc y getDoc de Firebase Firestore
 import { doc, setDoc } from 'firebase/firestore';
-// Importa el hook useRouter de Next.js
 import { useRouter } from 'next/navigation';
-// Importa la instancia de la base de datos de Firebase
 import { db } from '../../../firebase';
-// Importa el hook personalizado useAuth
 import { useAuth } from '../../../context/AuthContext';
 
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -37,14 +29,9 @@ const malls: Mall = {
 };
 
 export default function page() {
-	// Usa el hook useAuth para obtener el usuario
 	const { user } = useAuth();
-	// Usa el hook useRouter para obtener acceso al router de Next.js
 	const router = useRouter();
 
-	// Estado inicial que se usa para saber si ya se subió el archivo a la base de datos
-	const [fileUpload, setFileUpload] = useState(false);
-	// Estado inicial del archivo que se va a subir
 	const [file, setFile] = useState<File>();
 
 	const [isLoading, setIsLoading] = useState(false);
@@ -53,23 +40,24 @@ export default function page() {
 	const [selectedCity, setSelectedCity] = useState<string>('');
 	const { toast } = useToast();
 
-	// Hook que se usa para volver al estado inicial la variable 'fileUpload'
 	useEffect(() => {
-		setFileUpload(false);
-	}, []);
-
-	useEffect(() => {
-		// Si 'user' es nulo, redirige al usuario a la página de inicio.
 		if (user === null) {
 			return router.push('/');
 		}
 	}, [user, router]);
 
-	// Función para poner el archivo del input en la variable file
 	function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
 		if (e.target.files) {
 			setFile(e.target.files[0]);
 		}
+	}
+
+	function shortenImageName(imageName: string) {
+		const extension = imageName.split('.').pop();
+		const imageNameWithoutExtension = imageName.slice(0, imageName.lastIndexOf('.'));
+		const firstSixCharacters = imageNameWithoutExtension.slice(0, 6);
+		const lastFourCharacters = imageNameWithoutExtension.slice(-4);
+		return `${firstSixCharacters}...${lastFourCharacters}.${extension}`;
 	}
 
 	function handleChangeSelectedCity() {
@@ -77,7 +65,6 @@ export default function page() {
 		setSelectedCity(() => value);
 	}
 
-	// Función para subir el archivo a la base de datos
 	async function handleForm(e: React.MouseEvent<HTMLButtonElement>) {
 		e.preventDefault();
 		const inputValue1 = formRef.current.totalValue.value;
@@ -98,20 +85,15 @@ export default function page() {
 		setIsLoading((prev) => !prev);
 
 		try {
-			// Se genera un ID único para la factura que se está subiendo.
 			const id = v4();
 
-			// Se accede al almacenamiento de Firebase y se establece la referencia donde se almacenará el archivo.
 			const storage = getStorage();
 			const storageRef = ref(storage, `facturas/${user.email}/${id}`);
 
-			// Se carga el archivo a la referencia y se obtiene la URL de descarga del mismo.
 			const snapshot = await uploadBytes(storageRef, file);
 			const url = await getDownloadURL(storageRef);
-			console.log('Uploaded a blob or file!', snapshot, url);
 
-			// Se establece un documento en la base de datos que contiene la información de la factura.
-			const docRef = await setDoc(doc(db, 'users', user?.email, 'facturas', id), {
+			await setDoc(doc(db, 'users', user?.email, 'facturas', id), {
 				id: id,
 				fechaRegistro: snapshot.metadata.timeCreated,
 				valorTotal: inputValue1,
@@ -132,7 +114,6 @@ export default function page() {
 				description: 'Error',
 			});
 		}
-		// Se establece el estado de la variable fileUpload como verdadero para indicar que el archivo ha sido subido con éxito.
 		setIsLoading((prev) => !prev);
 
 		formRef.current.invoiceNumber.value = '';
@@ -197,7 +178,7 @@ export default function page() {
 							<div className="flex p-4 gap-4 flex-col h-[200px] shrink-0 items-center border-border justify-center rounded-md border-2 border-dashed">
 								<div className="flex items-center gap-2">
 									<FileImage className="w-9 h-9 text-border" />
-									<p className="text-sm font-semibold text-card-foreground">{file?.name}</p>
+									<p className="text-sm font-semibold text-card-foreground">{file?.name.length > 30 ? shortenImageName(file?.name) : file?.name}</p>
 								</div>
 								<p className="text-sm font-semibold text-center text-card-foreground">Ahora agrega los datos de tu factura</p>
 								<div className="flex items-center gap-2">
