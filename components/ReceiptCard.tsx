@@ -27,6 +27,12 @@ type Props = { id: any; fecha: any; estado: any; valor: any; url: any; user: any
 export default function ReceiptCard({ id, fecha, estado, valor, url, user, handleDelete }: Props) {
 	const [loaded, setLoaded] = useState(false);
 
+	const [value, loading, error] = useCollection(collection(db, 'users', user?.email, 'facturas', id), {
+		snapshotListenOptions: { includeMetadataChanges: true },
+	});
+
+	useEffect(() => {}, [value]);
+
 	function handleImageLoad() {
 		console.log('loaded');
 		setLoaded(true);

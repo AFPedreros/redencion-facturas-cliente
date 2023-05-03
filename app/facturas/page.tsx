@@ -40,7 +40,7 @@ export default function page() {
 		redirect(routes.receipts);
 	}
 
-	const [value, loading, error] = useCollection(collection(db, 'users'), {
+	const [value, loading, error] = useCollection(collection(db, 'users', user?.email, 'facturas'), {
 		snapshotListenOptions: { includeMetadataChanges: true },
 	});
 
@@ -75,11 +75,8 @@ export default function page() {
 		fetchData();
 	}, [value]);
 
-	console.log(value);
-
-	function sortByRegistrationDate(objects: any) {
+	function sortByRegistrationDate(objects: JSX.Element[]) {
 		objects.sort(function (a: any, b: any) {
-			// console.log(a.props.fecha);
 			const aDate = a.props.fecha.split('T')[0];
 			const bDate = b.props.fecha.split('T')[0];
 			if (aDate < bDate) {
