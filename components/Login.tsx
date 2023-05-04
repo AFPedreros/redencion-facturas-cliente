@@ -38,23 +38,18 @@ export default function Login() {
 		if (!formRef.current.email.value) {
 			alert('Por favor ingresa un email.');
 			return false;
-		} else if (!form.password) {
+		} else if (!formRef.current.password.value) {
 			alert('Por favor ingresa una contraseña.');
 			return false;
 		}
 
 		try {
-			await login(formRef.current.email.value, form.password);
+			await login(formRef.current.email.value, formRef.current.password.value);
 			router.push(routes.receipts);
 		} catch (e) {
 			console.log(e);
 			alert('Usuario o contraseña incorrecta.');
 		}
-
-		setForm({
-			email: '',
-			password: '',
-		});
 	}
 
 	function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -70,34 +65,9 @@ export default function Login() {
 				<h2 className="text-2xl font-semibold text-center">Bienvenido de nuevo</h2>
 				<p className="mx-auto text-sm text-center text-muted-foreground">Ingresa tu correo y contraseña</p>
 			</div>
-			<Input id="email" ref={(el) => (formRef.current.email = el)} placeholder="Correo Electrónico" type="email" required />
-			{/* <input
-				value={form.email}
-				onChange={handleChange}
-				type="email"
-				className="bg-gray-50 md:w-full border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-				placeholder="Correo Electrónico"
-				required
-				name="email"
-			/> */}
-			<input
-				value={form.password}
-				onChange={handleChange}
-				type="password"
-				className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full md:w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-				placeholder="•••••••••"
-				required
-				name="password"
-				ref={passwordRef}
-				onKeyDown={handleKeyDown}
-			/>
+			<Input id="email" ref={(el) => (formRef.current.email = el)} placeholder="Correo Electrónico" type="email" onKeyDown={handleKeyDown} required />
+			<Input id="password" ref={(el) => (formRef.current.password = el)} placeholder="•••••••••" type="password" onKeyDown={handleKeyDown} required />
 			<Button onClick={handleOnSubmit}>Ingresar</Button>
-			<div className="flex flex-col items-center">
-				<p className="mx-auto text-sm text-center text-muted-foreground">Dando click en continuar aceptas nuestros</p>
-				<Link className="mx-auto text-sm font-bold border-b-2 border-black" href="#">
-					Términos & condiciones
-				</Link>
-			</div>
 		</form>
 	);
 }

@@ -44,16 +44,16 @@ function page() {
 			</div>
 			<div className="flex items-center justify-center px-8 sm:px-0 md:w-1/2">
 				<Tabs defaultValue="login" className="w-[400px]">
-					<TabsList className="grid w-full grid-cols-2">
-						<TabsTrigger value="login">Inicia sesión</TabsTrigger>
-						<TabsTrigger value="signup">Registrate</TabsTrigger>
-					</TabsList>
 					<TabsContent value="login">
 						<Login />
 					</TabsContent>
 					<TabsContent value="signup">
 						<SignUp />
 					</TabsContent>
+					<TabsList className="grid w-full grid-cols-2">
+						<TabsTrigger value="login">Inicia sesión</TabsTrigger>
+						<TabsTrigger value="signup">Registrate</TabsTrigger>
+					</TabsList>
 				</Tabs>
 			</div>
 			{/* <Login /> */}

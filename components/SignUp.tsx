@@ -14,6 +14,7 @@ import Link from 'next/link';
 import { db } from '../firebase';
 // Importa el hook personalizado useAuth
 import { useAuth } from '../context/AuthContext';
+import { Button } from './ui/button';
 
 export default function SignUp() {
 	const { user, signup } = useAuth();
@@ -147,9 +148,9 @@ export default function SignUp() {
 	}
 
 	return (
-		<form className="flex flex-col justify-center">
+		<form className="flex flex-col justify-center gap-3">
 			<input
-				className="bg-gray-50 md:w-full border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+				className="bg-gray-50 md:w-full border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 				value={form.email}
 				onChange={handleChange}
 				type="email"
@@ -157,7 +158,7 @@ export default function SignUp() {
 				required
 				name="email"
 			/>
-			<div className="flex w-full mb-4">
+			<div className="flex w-full">
 				<input
 					value={form.password}
 					onChange={handleChange}
@@ -179,7 +180,7 @@ export default function SignUp() {
 			</div>
 
 			<input
-				className="bg-gray-50 md:w-full border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+				className="bg-gray-50 md:w-full border  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 				value={form.name}
 				onChange={handleChange}
 				type="text"
@@ -191,7 +192,7 @@ export default function SignUp() {
 				value={form.id}
 				onChange={handleChange}
 				type="text"
-				className="bg-gray-50 mb-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full md:w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+				className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full md:w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 				placeholder="Número de documento"
 				required
 				name="id"
@@ -200,45 +201,23 @@ export default function SignUp() {
 				value={form.cellphone}
 				onChange={handleChange}
 				type="tel"
-				className="bg-gray-50 mb-6 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full md:w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+				className="bg-gray-50  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full md:w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 				placeholder="Número de celular"
 				required
 				name="cellphone"
 			/>
-			<div className="flex items-start mb-6">
-				<div className="flex items-center h-5">
-					<input
-						id="remember"
-						type="checkbox"
-						checked={form.check}
-						value={form.check.toString()}
-						onClick={() => {
-							setForm((prevState) => {
-								return {
-									...prevState,
-									check: !form.check,
-								};
-							});
-						}}
-						className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-						required
-					/>
-				</div>
-				<label className="ml-2 text-sm text-gray-900 dark:text-gray-300">Acepto términos y condiciones de la actividad</label>
-			</div>
-			<div className="flex gap-2 mx-auto mb-4 text-sm h-fit">
-				<p>¿Ya estás registrado?</p>
-				<Link className="font-bold border-b-2 border-black" href="/">
-					Inicia sesión aquí
+			<div className="flex flex-col items-center">
+				<p className="mx-auto text-sm text-center text-muted-foreground">Dando click en continuar aceptas nuestros</p>
+				<Link className="mx-auto text-sm font-bold border-b-2 border-black" href="#">
+					Términos & condiciones
 				</Link>
 			</div>
-			<button
-				type="button"
+			<Button
 				onClick={handleOnSubmit}
 				className="md:w-full focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-600 font-medium rounded-lg text-sm px-12 py-2.5"
 			>
 				Continuar
-			</button>
+			</Button>
 		</form>
 	);
 }
