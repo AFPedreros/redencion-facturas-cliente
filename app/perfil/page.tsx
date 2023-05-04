@@ -103,8 +103,10 @@ export default function page() {
 
 		for (const field of changingFields) {
 			field.disabled = true;
-			const value = field.id === 'name' ? name : field.id === 'id' ? id : tel;
-			await animateTyping(field, value);
+			const valueField = field.id === 'name' ? name : field.id === 'id' ? id : tel;
+			// await animateTyping(field, value);
+			field.value = '';
+			field.value = valueField;
 		}
 		try {
 			await setDoc(doc(db, 'users', user?.email), {
@@ -204,19 +206,13 @@ export default function page() {
 								<div className="flex flex-col w-full max-w-md">
 									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cédula</label>
 									<div className="flex space-x-2">
-										<Input
-											id="id"
-											ref={(el) => (formRef.current.id = el)}
-											type="text"
-											placeholder={formChange.id ? 'Nuevo número de documento' : userData?.cedula}
-											disabled={!formChange.id}
-										/>
+										<Input id="id" ref={(el) => (formRef.current.id = el)} type="text" disabled={!formChange.id} />
 										{!formChange.id ? (
-											<Button variant="default" onClick={() => handleFormChange('id')} disabled={loadingNewData}>
+											<Button variant="default" onClick={() => handleFormChange('id')} disabled={loading}>
 												Editar
 											</Button>
 										) : (
-											<Button variant="default" onClick={handleClick} disabled={loadingNewData}>
+											<Button variant="default" onClick={handleClick} disabled={loading}>
 												Guardar
 											</Button>
 										)}
@@ -227,19 +223,13 @@ export default function page() {
 								<div className="flex flex-col w-full max-w-md">
 									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Celular</label>
 									<div className="flex space-x-2">
-										<Input
-											id="tel"
-											ref={(el) => (formRef.current.tel = el)}
-											type="tel"
-											placeholder={formChange.tel ? 'Nuevo número de celular' : userData?.celular}
-											disabled={!formChange.tel}
-										/>
+										<Input id="tel" ref={(el) => (formRef.current.tel = el)} type="tel" disabled={!formChange.tel} />
 										{!formChange.tel ? (
-											<Button variant="default" onClick={() => handleFormChange('tel')} disabled={loadingNewData}>
+											<Button variant="default" onClick={() => handleFormChange('tel')} disabled={loading}>
 												Editar
 											</Button>
 										) : (
-											<Button variant="default" onClick={handleClick} disabled={loadingNewData}>
+											<Button variant="default" onClick={handleClick} disabled={loading}>
 												Guardar
 											</Button>
 										)}

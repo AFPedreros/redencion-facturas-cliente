@@ -2,7 +2,9 @@
 import Login from '@/components/Login';
 import { redirect } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { Verified, FilePlus, UserCheck, Gift } from 'lucide-react';
+import { FilePlus, UserCheck, Gift } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import SignUp from '@/components/SignUp';
 
 const routes = {
 	receipts: '/facturas',
@@ -17,8 +19,8 @@ function page() {
 
 	return (
 		<div className="bg-white md:flex">
-			<div className="flex flex-col items-center justify-center p-8 md:h-screen md:border-r md:border-black md:w-1/3">
-				<h1 className="mb-12 text-4xl">¡Redime tus facturas y participa en increíbles sorteos!</h1>
+			<div className="flex flex-col items-center justify-center p-8 md:h-screen md:border-r md:border-black md:w-1/2">
+				<h1 className="mb-12 text-4xl text-center">¡Redime tus facturas y participa en increíbles sorteos!</h1>
 				<div className="flex flex-col gap-4">
 					<div className="flex items-center w-full">
 						<div className="w-10 h-10 p-2 m-auto mr-2 rounded-full bg-primary">
@@ -40,7 +42,21 @@ function page() {
 					</div>
 				</div>
 			</div>
-			<Login />
+			<div className="flex items-center justify-center px-8 sm:px-0 md:w-1/2">
+				<Tabs defaultValue="login" className="w-[400px]">
+					<TabsList className="grid w-full grid-cols-2">
+						<TabsTrigger value="login">Inicia sesión</TabsTrigger>
+						<TabsTrigger value="signup">Registrate</TabsTrigger>
+					</TabsList>
+					<TabsContent value="login">
+						<Login />
+					</TabsContent>
+					<TabsContent value="signup">
+						<SignUp />
+					</TabsContent>
+				</Tabs>
+			</div>
+			{/* <Login /> */}
 		</div>
 	);
 }
