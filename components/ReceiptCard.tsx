@@ -208,7 +208,7 @@ export default function ReceiptCard({ id, numeroFactura, ciudad, centroComercial
 					</AlertDialogTrigger>
 					<AlertDialogContent className="bg-white">
 						<AlertDialogHeader>
-							<AlertDialogTitle>{shortenString(id)}</AlertDialogTitle>
+							<AlertDialogTitle>{shortenString(numeroFactura)}</AlertDialogTitle>
 						</AlertDialogHeader>
 						<ScrollArea className="w-full rounded-md h-72">
 							{!loaded && (
