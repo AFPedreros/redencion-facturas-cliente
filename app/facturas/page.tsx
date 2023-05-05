@@ -122,7 +122,7 @@ export default function page() {
 						</Link>
 					</div>
 				</div>
-				<div className="px-6 sm:px-0">
+				<div className="px-6">
 					<Notifications
 						className="mb-6"
 						title="Recordatorio"

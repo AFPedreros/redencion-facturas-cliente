@@ -123,7 +123,7 @@ export default function ReceiptCard({ id, numeroFactura, ciudad, centroComercial
 				<div className="flex gap-3 md:gap-2">
 					<AlertDialog>
 						<AlertDialogTrigger className="text-sm font-medium text-primary">
-							<Edit className="w-4 h-4" />
+							<Edit onClick={() => setFile(undefined)} className="w-4 h-4" />
 						</AlertDialogTrigger>
 						<AlertDialogContent className="bg-white">
 							<AlertDialogHeader>
