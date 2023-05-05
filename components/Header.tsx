@@ -1,10 +1,12 @@
 'use client';
 // Importa el hook useRouter de Next.js
-import { useRouter } from 'next/navigation';
 // Importa el hook personalizado useAuth
 import { useAuth } from '../context/AuthContext';
 import UserNav from './UserNav';
 import { Receipt } from 'lucide-react';
+import { useRouter, redirect } from 'next/navigation';
+
+
 
 export default function Header() {
 	// Usa el hook useAuth para obtener el usuario y la función logout

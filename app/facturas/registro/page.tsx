@@ -4,7 +4,7 @@ import { useState, useEffect, ChangeEvent, useRef } from 'react';
 import { v4 } from 'uuid';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { doc, setDoc } from 'firebase/firestore';
-import { useRouter } from 'next/navigation';
+import { useRouter, redirect } from 'next/navigation';
 import { db } from '../../../firebase';
 import { useAuth } from '../../../context/AuthContext';
 
@@ -20,6 +20,10 @@ interface Mall {
 	[key: string]: string[];
 }
 
+const routes = {
+	receipts: '/',
+};
+
 const cities = ['Cali', 'Medellín', 'Bogotá'];
 
 const malls: Mall = {
@@ -30,7 +34,9 @@ const malls: Mall = {
 
 export default function page() {
 	const { user } = useAuth();
-	const router = useRouter();
+	if (!user) {
+		redirect(routes.receipts);
+	}
 
 	const [file, setFile] = useState<File>();
 
@@ -39,12 +45,6 @@ export default function page() {
 	const formRef = useRef<any>({ totalValue: null, invoiceNumber: null, city: null, mall: null });
 	const [selectedCity, setSelectedCity] = useState<string>('');
 	const { toast } = useToast();
-
-	useEffect(() => {
-		if (user === null) {
-			return router.push('/');
-		}
-	}, [user, router]);
 
 	function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
 		if (e.target.files) {

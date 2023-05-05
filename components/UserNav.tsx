@@ -8,7 +8,7 @@ import Link from 'next/link';
 // Importa las funciones doc, setDoc y getDoc de Firebase Firestore
 import { doc, getDoc, collection } from 'firebase/firestore';
 // Importa el hook useRouter de Next.js
-import { useRouter } from 'next/navigation';
+import { useRouter, redirect } from 'next/navigation';
 // Importa el hook personalizado useAuth
 import { useAuth } from '../context/AuthContext';
 // Importa la instancia de la base de datos de Firebase
@@ -24,6 +24,9 @@ interface UserNavProps {
 export default function UserNav({ email }: UserNavProps) {
 	const { user, logout } = useAuth();
 	// Usa el hook useRouter para obtener acceso al router de Next.js
+	if (!user) {
+		redirect('/');
+	}
 	const router = useRouter();
 
 	const [name, setName] = useState<string>('');
@@ -105,7 +108,6 @@ export default function UserNav({ email }: UserNavProps) {
 					onClick={async () => {
 						try {
 							await logout();
-							router.push('/');
 						} catch (err) {
 							console.log(err);
 						}

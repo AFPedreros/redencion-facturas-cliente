@@ -18,7 +18,6 @@ const routes = {
 
 export default function page() {
 	const { user } = useAuth();
-
 	if (!user) {
 		redirect(routes.receipts);
 	}
@@ -62,15 +61,6 @@ export default function page() {
 				[name]: !prevState[name],
 			};
 		});
-	}
-
-	async function animateTyping(inputField: any, value: string) {
-		const chars = value.split('');
-
-		for (let i = 0; i < chars.length; i++) {
-			inputField.value = chars.slice(0, i + 1).join('');
-			await new Promise((resolve) => setTimeout(resolve, 50));
-		}
 	}
 
 	function findEnabledInputs(formRef: any) {

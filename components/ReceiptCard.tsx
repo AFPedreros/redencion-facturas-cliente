@@ -4,7 +4,7 @@ import { doc, deleteDoc, collection, setDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { Trash2, Edit, Loader2 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { buttonVariants, Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -36,7 +36,6 @@ export default function ReceiptCard({ id, numeroFactura, ciudad, centroComercial
 	});
 
 	const formRef = useRef<any>({ totalValue: valor, invoiceNumber: null });
-	const [formChange, setFormChange] = useState<any>({ totalValue: false, invoiceNumber: false });
 
 	function handleImageLoad() {
 		setLoaded(true);
@@ -75,7 +74,6 @@ export default function ReceiptCard({ id, numeroFactura, ciudad, centroComercial
 		const newInvoiceNumber = formRef.current.invoiceNumber.value !== '' ? formRef.current.invoiceNumber.value : numeroFactura;
 		let newUrl = url;
 
-		//TODO para la imagen hay que remplazar la que hay en storage con el mismo id y luego sobreescribir el url
 		if (file) {
 			const storage = getStorage();
 			const storageRef = ref(storage, `facturas/${user.email}/${id}`);
@@ -101,7 +99,6 @@ export default function ReceiptCard({ id, numeroFactura, ciudad, centroComercial
 			console.log(e);
 		}
 
-		setFormChange({ totalValue: false, invoiceNumber: false });
 		setFile(undefined);
 	}
 

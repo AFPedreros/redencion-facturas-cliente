@@ -35,7 +35,6 @@ const routes = {
 
 export default function page() {
 	const { user } = useAuth();
-
 	if (!user) {
 		redirect(routes.receipts);
 	}
