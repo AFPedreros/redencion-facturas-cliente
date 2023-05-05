@@ -124,7 +124,7 @@ export default function SignUp() {
 		await handleOnSubmitRegistration(e);
 		await handleOnSubmitPersonalInfo(e);
 
-		router.push('/facturas');
+		// router.push('/facturas');
 	}
 
 	function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -178,7 +178,7 @@ export default function SignUp() {
 				required
 				name="email"
 			/> */}
-			<Input id="email" ref={(el) => (formRef.current.email = el)} placeholder="Correo Electrónico" type="email" onKeyDown={handleKeyDown} required />
+			<Input id="email" ref={(el) => (formRef.current.email = el)} placeholder="Correo electrónico" type="email" onKeyDown={handleKeyDown} required />
 			<div className="flex w-full gap-2">
 				{/* <input
 					value={form.password}

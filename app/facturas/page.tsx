@@ -114,7 +114,7 @@ export default function page() {
 	return (
 		<div className="bg-white">
 			<main className="flex flex-col h-screen px-4 pt-16 mx-auto md:px-12 xl:px-24">
-				<div className="px-6 pt-10 mb-6 text-left border-b-2 md:px-0 md:text-left border-slate-300">
+				<div className="pt-10 mb-6 text-left border-b-2 md:px-0 md:text-left border-slate-300">
 					<div className="w-full mb-4 text-center md:text-left md:items-end md:flex md:justify-between">
 						<h2 className="mb-2 text-2xl font-light mb:mb-0">Facturas registradas</h2>
 						<Link className={buttonVariants({ variant: 'outline' })} href="/facturas/registro">
@@ -122,36 +122,38 @@ export default function page() {
 						</Link>
 					</div>
 				</div>
-				<Notifications
-					className="mb-6"
-					title="Recordatorio"
-					text="Una vez registres tus facturas en la plataforma, estas entrarán en etapa de revisión, donde podrán ser aprobadas o rechazadas según los Criterios de aprobación de facturas de la actividad."
-				/>
-				{!receiptsInfo ? (
-					// <Loader2 className="w-12 h-12 text-black animate-spin" />
-					<div className="justify-center pb-6 min-h-min">
-						{/* <ReceiptTable receiptsData={receipts} /> */}
-						<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-							<Skeleton className="w-full h-44" />
-							<Skeleton className="w-full h-44" />
-							<Skeleton className="w-full h-44" />
-							<Skeleton className="w-full h-44" />
-							<Skeleton className="w-full h-44" />
-							<Skeleton className="w-full h-44" />
-							<Skeleton className="w-full h-44" />
-							<Skeleton className="w-full h-44" />
+				<div className="px-6 sm:px-0">
+					<Notifications
+						className="mb-6"
+						title="Recordatorio"
+						text="Una vez registres tus facturas en la plataforma, estas entrarán en etapa de revisión, donde podrán ser aprobadas o rechazadas según los Criterios de aprobación de facturas de la actividad."
+					/>
+					{!receiptsInfo ? (
+						// <Loader2 className="w-12 h-12 text-black animate-spin" />
+						<div className="justify-center pb-6 min-h-min">
+							{/* <ReceiptTable receiptsData={receipts} /> */}
+							<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+								<Skeleton className="w-full h-44" />
+								<Skeleton className="w-full h-44" />
+								<Skeleton className="w-full h-44" />
+								<Skeleton className="w-full h-44" />
+								<Skeleton className="w-full h-44" />
+								<Skeleton className="w-full h-44" />
+								<Skeleton className="w-full h-44" />
+								<Skeleton className="w-full h-44" />
+							</div>
 						</div>
-					</div>
-				) : receiptsInfo.length > 0 ? (
-					<div className="justify-center pb-6 min-h-min">
-						{/* <ReceiptTable receiptsData={receipts} /> */}
-						<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{receiptsInfo}</div>
-					</div>
-				) : (
-					<Link className={`md:w-fit ${buttonVariants({ variant: 'default' })}`} href="/facturas/registro">
-						Registra tu primer factura
-					</Link>
-				)}
+					) : receiptsInfo.length > 0 ? (
+						<div className="justify-center pb-6 min-h-min">
+							{/* <ReceiptTable receiptsData={receipts} /> */}
+							<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{receiptsInfo}</div>
+						</div>
+					) : (
+						<Link className={`md:w-fit ${buttonVariants({ variant: 'default' })}`} href="/facturas/registro">
+							Registra tu primer factura
+						</Link>
+					)}
+				</div>
 			</main>
 		</div>
 	);
