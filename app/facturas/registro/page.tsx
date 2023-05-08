@@ -72,7 +72,7 @@ export default function page() {
 		const inputValue3 = formRef.current.city.textContent;
 		const inputValue4 = formRef.current.mall.textContent;
 
-		if (!file || inputValue1 === null || inputValue2 === null || inputValue3 === 'Ciudad' || inputValue4 === 'Centro comercial') {
+		if (!file || inputValue1 === '' || inputValue2 === '' || inputValue3 === 'Ciudad' || inputValue4 === 'Centro comercial') {
 			toast({
 				variant: 'destructive',
 				title: 'Campos incompletos',
@@ -136,93 +136,97 @@ export default function page() {
 					</div>
 				</div>
 				{isLoading ? (
-					<div className="flex flex-col max-w-md px-8 pb-6 mx-auto md:h-screen md:w-1/2 xl:w-1/3">
-						<div className="flex p-4 gap-4 flex-col h-[200px] shrink-0 items-center border-border justify-center rounded-md border-2 border-dashed">
-							<Loader2 className="w-12 h-12 text-border animate-spin" />
-							<input onChange={handleFileChange} id="dropzone-file" type="file" className="hidden" />
-						</div>
-						<form className="flex flex-col gap-4 my-4">
-							<Input disabled id="totalValue" ref={(el) => (formRef.current.totalValue = el)} type="number" placeholder="Valor total de la factura" />
-							<Input disabled id="invoiceNumber" ref={(el) => (formRef.current.invoiceNumber = el)} type="text" placeholder="Número de la factura" />
-							<Select disabled onValueChange={handleChangeSelectedCity}>
-								<SelectTrigger>
-									<SelectValue id="city" ref={(el) => (formRef.current.city = el)} placeholder="Ciudad" />
-								</SelectTrigger>
-								<SelectContent></SelectContent>
-							</Select>
-							<Select disabled>
-								<SelectTrigger>
-									<SelectValue id="mall" ref={(el) => (formRef.current.mall = el)} placeholder="Centro comercial" />
-								</SelectTrigger>
-								<SelectContent></SelectContent>
-							</Select>
-							<Button disabled>Subir factura</Button>
-						</form>
-						<Button disabled variant="outline">
-							Ver todas mis facturas
-						</Button>
-					</div>
-				) : (
-					<div className="flex flex-col max-w-md px-8 pb-6 mx-auto md:h-screen md:w-1/2 xl:w-1/3">
-						{!file ? (
+					<div className="flex justify-center w-full">
+						<div className="flex flex-col w-full max-w-md px-8 pb-6 md:w-1/2 xl:w-1/3">
 							<div className="flex p-4 gap-4 flex-col h-[200px] shrink-0 items-center border-border justify-center rounded-md border-2 border-dashed">
-								<FileUp className="w-9 h-9 text-border" />
-								<p className="text-sm font-semibold text-center text-card-foreground dark:text-gray-400">No se ha agregado la foto de la factura</p>
-								<label className={buttonVariants({ variant: 'default' })} htmlFor="dropzone-file">
-									<Plus className="w-4 h-4 mr-2" />
-									Agregar foto
-								</label>
+								<Loader2 className="w-12 h-12 text-border animate-spin" />
 								<input onChange={handleFileChange} id="dropzone-file" type="file" className="hidden" />
 							</div>
-						) : (
-							<div className="flex p-4 gap-4 flex-col h-[200px] shrink-0 items-center border-border justify-center rounded-md border-2 border-dashed">
-								<div className="flex items-center gap-2">
-									<FileImage className="w-9 h-9 text-border" />
-									<p className="text-sm font-semibold text-card-foreground">{file?.name.length > 30 ? shortenImageName(file?.name) : file?.name}</p>
-								</div>
-								<p className="text-sm font-semibold text-center text-card-foreground">Ahora agrega los datos de tu factura</p>
-								<div className="flex items-center gap-2">
+							<form className="flex flex-col gap-4 my-4">
+								<Input disabled id="totalValue" ref={(el) => (formRef.current.totalValue = el)} type="number" placeholder="Valor total de la factura" />
+								<Input disabled id="invoiceNumber" ref={(el) => (formRef.current.invoiceNumber = el)} type="text" placeholder="Número de la factura" />
+								<Select disabled onValueChange={handleChangeSelectedCity}>
+									<SelectTrigger>
+										<SelectValue id="city" ref={(el) => (formRef.current.city = el)} placeholder="Ciudad" />
+									</SelectTrigger>
+									<SelectContent></SelectContent>
+								</Select>
+								<Select disabled>
+									<SelectTrigger>
+										<SelectValue id="mall" ref={(el) => (formRef.current.mall = el)} placeholder="Centro comercial" />
+									</SelectTrigger>
+									<SelectContent></SelectContent>
+								</Select>
+								<Button disabled>Subir factura</Button>
+							</form>
+							<Button disabled variant="outline">
+								Ver todas mis facturas
+							</Button>
+						</div>
+					</div>
+				) : (
+					<div className="flex justify-center w-full">
+						<div className="flex flex-col w-full max-w-md px-8 pb-6 md:w-1/2 xl:w-1/3">
+							{!file ? (
+								<div className="flex p-4 gap-4 flex-col h-[200px] shrink-0 items-center border-border justify-center rounded-md border-2 border-dashed">
+									<FileUp className="w-9 h-9 text-border" />
+									<p className="text-sm font-semibold text-center text-card-foreground dark:text-gray-400">No se ha agregado la foto de la factura</p>
 									<label className={buttonVariants({ variant: 'default' })} htmlFor="dropzone-file">
 										<Plus className="w-4 h-4 mr-2" />
-										Cambiar foto
+										Agregar foto
 									</label>
 									<input onChange={handleFileChange} id="dropzone-file" type="file" className="hidden" />
 								</div>
-							</div>
-						)}
-						<form className="flex flex-col gap-4 my-4">
-							<Input id="totalValue" ref={(el) => (formRef.current.totalValue = el)} type="number" placeholder="Valor total de la factura" />
-							<Input id="invoiceNumber" ref={(el) => (formRef.current.invoiceNumber = el)} type="text" placeholder="Número de la factura" />
-							<Select onValueChange={handleChangeSelectedCity}>
-								<SelectTrigger>
-									<SelectValue id="city" ref={(el) => (formRef.current.city = el)} placeholder="Ciudad" />
-								</SelectTrigger>
-								<SelectContent>
-									{cities.map((city) => (
-										<SelectItem key={city} value={city}>
-											{city}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-							<Select>
-								<SelectTrigger>
-									<SelectValue id="mall" ref={(el) => (formRef.current.mall = el)} placeholder="Centro comercial" />
-								</SelectTrigger>
-								<SelectContent>
-									{malls[selectedCity] &&
-										malls[selectedCity].map((mall: any) => (
-											<SelectItem key={mall} value={mall}>
-												{mall}
+							) : (
+								<div className="flex p-4 gap-4 flex-col h-[200px] shrink-0 items-center border-border justify-center rounded-md border-2 border-dashed">
+									<div className="flex items-center gap-2">
+										<FileImage className="w-9 h-9 text-border" />
+										<p className="text-sm font-semibold text-card-foreground">{file?.name.length > 30 ? shortenImageName(file?.name) : file?.name}</p>
+									</div>
+									<p className="text-sm font-semibold text-center text-card-foreground">Ahora agrega los datos de tu factura</p>
+									<div className="flex items-center gap-2">
+										<label className={buttonVariants({ variant: 'default' })} htmlFor="dropzone-file">
+											<Plus className="w-4 h-4 mr-2" />
+											Cambiar foto
+										</label>
+										<input onChange={handleFileChange} id="dropzone-file" type="file" className="hidden" />
+									</div>
+								</div>
+							)}
+							<form className="flex flex-col gap-4 my-4">
+								<Input id="totalValue" ref={(el) => (formRef.current.totalValue = el)} type="number" placeholder="Valor total de la factura" />
+								<Input id="invoiceNumber" ref={(el) => (formRef.current.invoiceNumber = el)} type="text" placeholder="Número de la factura" />
+								<Select onValueChange={handleChangeSelectedCity}>
+									<SelectTrigger>
+										<SelectValue id="city" ref={(el) => (formRef.current.city = el)} placeholder="Ciudad" />
+									</SelectTrigger>
+									<SelectContent>
+										{cities.map((city) => (
+											<SelectItem key={city} value={city}>
+												{city}
 											</SelectItem>
 										))}
-								</SelectContent>
-							</Select>
-							<Button onClick={handleForm}>Subir factura</Button>
-						</form>
-						<Link className={buttonVariants({ variant: 'outline' })} href="/facturas">
-							Ver todas mis facturas
-						</Link>
+									</SelectContent>
+								</Select>
+								<Select>
+									<SelectTrigger>
+										<SelectValue id="mall" ref={(el) => (formRef.current.mall = el)} placeholder="Centro comercial" />
+									</SelectTrigger>
+									<SelectContent>
+										{malls[selectedCity] &&
+											malls[selectedCity].map((mall: any) => (
+												<SelectItem key={mall} value={mall}>
+													{mall}
+												</SelectItem>
+											))}
+									</SelectContent>
+								</Select>
+								<Button onClick={handleForm}>Subir factura</Button>
+							</form>
+							<Link className={buttonVariants({ variant: 'outline' })} href="/facturas">
+								Ver todas mis facturas
+							</Link>
+						</div>
 					</div>
 				)}
 			</main>

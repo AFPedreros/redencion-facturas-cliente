@@ -39,7 +39,7 @@ export default function UserNav({ email }: UserNavProps) {
 		const docRef = doc(db, 'users', user?.email);
 		const fetchData = async () => {
 			const docSnap = await getDoc(docRef);
-			setName(docSnap?.data()?.nombre);
+			setName(`${docSnap?.data()?.nombre} ${docSnap?.data()?.apellido}`);
 		};
 		try {
 			fetchData();
@@ -64,6 +64,7 @@ export default function UserNav({ email }: UserNavProps) {
 
 		return initials;
 	}
+
 
 	return (
 		<DropdownMenu>

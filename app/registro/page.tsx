@@ -25,12 +25,12 @@ function page() {
 	}, [user]);
 
 	return (
-		<div className="container grid h-screen w-screen flex-col items-center justify-center lg:max-w-none lg:grid-cols-2 lg:px-0">
+		<div className="container grid flex-col items-center justify-center w-screen h-screen lg:max-w-none lg:grid-cols-2 lg:px-0">
 			<Link href="/" className={`${buttonVariants({ variant: 'ghost' })} absolute right-4 top-4 md:right-8 md:top-8`}>
 				Inicia sesión
 			</Link>
 			<div className="flex flex-col items-center justify-center p-8 md:h-screen md:border-r md:border-black">
-				<h1 className="mb-8 mt-8 md:mt-0 text-3xl md:text-4xl text-center">¡Redime tus facturas y participa en increíbles sorteos!</h1>
+				<h1 className="mt-8 mb-8 text-3xl text-center md:mt-0 md:text-4xl">¡Redime tus facturas y participa en increíbles sorteos!</h1>
 				<div className="flex flex-col gap-4">
 					<div className="flex items-center w-full">
 						<div className="w-10 h-10 p-2 m-auto mr-2 rounded-full bg-primary">
@@ -52,7 +52,7 @@ function page() {
 					</div>
 				</div>
 			</div>
-			<div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+			<div className="mx-auto pb-6 md:pb-0 flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
 				<SignUp />
 			</div>
 		</div>

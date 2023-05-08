@@ -101,9 +101,6 @@ export default function page() {
 	}
 
 	function handleDelete(id: string) {
-		// delete the document from Firebase...
-		const updatedReceipts = receiptsInfo?.filter((rec) => rec.props.id !== id);
-		setReceiptsInfo(updatedReceipts);
 		toast({
 			variant: 'destructive',
 			title: 'Factura eliminada',
@@ -129,9 +126,7 @@ export default function page() {
 						text="Una vez registres tus facturas en la plataforma, estas entrarán en etapa de revisión, donde podrán ser aprobadas o rechazadas según los Criterios de aprobación de facturas de la actividad."
 					/>
 					{!receiptsInfo ? (
-						// <Loader2 className="w-12 h-12 text-black animate-spin" />
 						<div className="justify-center pb-6 min-h-min">
-							{/* <ReceiptTable receiptsData={receipts} /> */}
 							<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
 								<Skeleton className="w-full h-44" />
 								<Skeleton className="w-full h-44" />
@@ -145,7 +140,6 @@ export default function page() {
 						</div>
 					) : receiptsInfo.length > 0 ? (
 						<div className="justify-center pb-6 min-h-min">
-							{/* <ReceiptTable receiptsData={receipts} /> */}
 							<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{receiptsInfo}</div>
 						</div>
 					) : (
