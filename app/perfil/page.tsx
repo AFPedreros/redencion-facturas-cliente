@@ -16,6 +16,13 @@ const routes = {
 	receipts: '/',
 };
 
+interface FormChange {
+	name: boolean;
+	lastName: false;
+	id: boolean;
+	tel: boolean;
+}
+
 export default function page() {
 	const { user } = useAuth();
 	if (!user) {
@@ -26,8 +33,8 @@ export default function page() {
 		snapshotListenOptions: { includeMetadataChanges: true },
 	});
 
-	const formRef = useRef<any>({ name: '', id: '', tel: '' });
-	const [formChange, setFormChange] = useState<any>({ name: false, id: false, tel: false });
+	const formRef = useRef<any>({ name: '', lastName: '', id: '', tel: '' });
+	const [formChange, setFormChange] = useState<FormChange>({ name: false, lastName: false, id: false, tel: false });
 	const { toast } = useToast();
 
 	const [userData, setUserData] = useState<any>();
@@ -49,6 +56,7 @@ export default function page() {
 	useEffect(() => {
 		if (userData !== undefined) {
 			formRef.current.name.value = userData?.nombre;
+			formRef.current.lastName.value = userData?.apellido;
 			formRef.current.id.value = userData?.cedula;
 			formRef.current.tel.value = userData?.celular;
 		}
@@ -72,6 +80,9 @@ export default function page() {
 		if (!formRef.current.name.disabled) {
 			enabledInputs.push(formRef.current.name);
 		}
+		if (!formRef.current.lastName.disabled) {
+			enabledInputs.push(formRef.current.lastName);
+		}
 		if (!formRef.current.id.disabled) {
 			enabledInputs.push(formRef.current.id);
 		}
@@ -85,37 +96,44 @@ export default function page() {
 	async function handleClick() {
 		setLoadingNewData(true);
 
-		const name = formRef.current.name.value !== '' ? formRef.current.name.value : userData?.nombre;
-		const id = formRef.current.id.value !== '' ? formRef.current.id.value : userData?.cedula;
-		const tel = formRef.current.tel.value !== '' ? formRef.current.tel.value : userData?.celular;
+		const name = formRef.current.name.value || userData?.nombre;
+		const lastName = formRef.current.lastName.value || userData?.apellido;
+		const id = formRef.current.id.value || userData?.cedula;
+		const tel = formRef.current.tel.value || userData?.celular;
+		const selectedId = userData?.tipoIdentificacion;
 
 		const changingFields = findEnabledInputs(formRef);
 
 		for (const field of changingFields) {
 			field.disabled = true;
-			const valueField = field.id === 'name' ? name : field.id === 'id' ? id : tel;
-			// await animateTyping(field, value);
+			const valueField = field.id === 'name' ? name : field.id === 'id' ? id : field.id === 'lastName' ? lastName : tel;
 			field.value = '';
 			field.value = valueField;
 		}
+
+		console.log(name, lastName, id, tel, selectedId);
+
 		try {
 			await setDoc(doc(db, 'users', user?.email), {
 				nombre: name,
+				apellido: lastName,
+				tipoIdentificacion: selectedId,
 				cedula: id,
 				celular: tel,
 			});
+
 			toast({
 				description: 'Tus datos se han actualizado correctamente.',
 			});
-		} catch (e) {
-			console.log(e);
+		} catch (error) {
+			console.log(error);
 		}
 
 		formRef.current.name.value = name;
 		formRef.current.id.value = id;
 		formRef.current.tel.value = tel;
 
-		setFormChange({ name: false, id: false, tel: false });
+		setFormChange({ name: false, lastName: false, id: false, tel: false });
 		setLoadingNewData(false);
 	}
 
@@ -170,12 +188,20 @@ export default function page() {
 							<div className="flex justify-center w-full px-6 mb-6 md:block md:px-0 md:w-2/5">
 								<div className="flex flex-col w-full max-w-md">
 									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo electrónico</label>
-									<Input id="email" type="email" placeholder={user?.email} disabled />
+									<Input id="email" value={user.email} type="email" disabled />
 								</div>
 							</div>
 							<div className="flex justify-center w-full px-6 mb-6 md:block md:px-0 md:w-2/5">
 								<div className="flex flex-col w-full max-w-md">
-									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre completo</label>
+									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cédula</label>
+									<Input id="id" ref={(el) => (formRef.current.id = el)} type="text" disabled />
+								</div>
+							</div>
+						</div>
+						<div className="justify-between w-full max-w-6xl text-left md:flex">
+							<div className="flex justify-center w-full px-6 mb-6 md:block md:px-0 md:w-2/5">
+								<div className="flex flex-col w-full max-w-md">
+									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
 									<div className="flex space-x-2">
 										<Input id="name" ref={(el) => (formRef.current.name = el)} type="text" className="bg-transparent" disabled={!formChange.name} />
 										{!formChange.name ? (
@@ -190,25 +216,25 @@ export default function page() {
 									</div>
 								</div>
 							</div>
-						</div>
-						<div className="justify-between w-full max-w-6xl text-left md:flex">
 							<div className="flex justify-center w-full px-6 mb-6 md:block md:px-0 md:w-2/5">
 								<div className="flex flex-col w-full max-w-md">
-									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cédula</label>
+									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellido</label>
 									<div className="flex space-x-2">
-										<Input id="id" ref={(el) => (formRef.current.id = el)} type="text" disabled={!formChange.id} />
-										{!formChange.id ? (
-											<Button variant="default" onClick={() => handleFormChange('id')} disabled={loading}>
+										<Input id="lastName" ref={(el) => (formRef.current.lastName = el)} type="text" className="bg-transparent" disabled={!formChange.lastName} />
+										{!formChange.lastName ? (
+											<Button variant="default" onClick={() => handleFormChange('lastName')} disabled={loadingNewData}>
 												Editar
 											</Button>
 										) : (
-											<Button variant="default" onClick={handleClick} disabled={loading}>
+											<Button variant="default" onClick={handleClick} disabled={loadingNewData}>
 												Guardar
 											</Button>
 										)}
 									</div>
 								</div>
 							</div>
+						</div>
+						<div className="justify-between w-full max-w-6xl text-left md:flex">
 							<div className="flex justify-center w-full px-6 mb-6 md:block md:px-0 md:w-2/5">
 								<div className="flex flex-col w-full max-w-md">
 									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Celular</label>
