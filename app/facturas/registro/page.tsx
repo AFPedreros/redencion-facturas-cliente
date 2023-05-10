@@ -143,8 +143,6 @@ export default function page() {
 								<input onChange={handleFileChange} id="dropzone-file" type="file" className="hidden" />
 							</div>
 							<form className="flex flex-col gap-4 my-4">
-								<Input disabled id="totalValue" ref={(el) => (formRef.current.totalValue = el)} type="number" placeholder="Valor total de la factura" />
-								<Input disabled id="invoiceNumber" ref={(el) => (formRef.current.invoiceNumber = el)} type="text" placeholder="Número de la factura" />
 								<Select disabled onValueChange={handleChangeSelectedCity}>
 									<SelectTrigger>
 										<SelectValue id="city" ref={(el) => (formRef.current.city = el)} placeholder="Ciudad" />
@@ -157,6 +155,8 @@ export default function page() {
 									</SelectTrigger>
 									<SelectContent></SelectContent>
 								</Select>
+								<Input disabled id="totalValue" ref={(el) => (formRef.current.totalValue = el)} type="number" placeholder="Valor total de la factura" />
+								<Input disabled id="invoiceNumber" ref={(el) => (formRef.current.invoiceNumber = el)} type="text" placeholder="Número de la factura" />
 								<Button disabled>Subir factura</Button>
 							</form>
 							<Button disabled variant="outline">
@@ -194,8 +194,6 @@ export default function page() {
 								</div>
 							)}
 							<form className="flex flex-col gap-4 my-4">
-								<Input id="totalValue" ref={(el) => (formRef.current.totalValue = el)} type="number" placeholder="Valor total de la factura" />
-								<Input id="invoiceNumber" ref={(el) => (formRef.current.invoiceNumber = el)} type="text" placeholder="Número de la factura" />
 								<Select onValueChange={handleChangeSelectedCity}>
 									<SelectTrigger>
 										<SelectValue id="city" ref={(el) => (formRef.current.city = el)} placeholder="Ciudad" />
@@ -221,6 +219,8 @@ export default function page() {
 											))}
 									</SelectContent>
 								</Select>
+								<Input id="totalValue" ref={(el) => (formRef.current.totalValue = el)} type="number" placeholder="Valor total de la factura" />
+								<Input id="invoiceNumber" ref={(el) => (formRef.current.invoiceNumber = el)} type="text" placeholder="Número de la factura" />
 								<Button onClick={handleForm}>Subir factura</Button>
 							</form>
 							<Link className={buttonVariants({ variant: 'outline' })} href="/facturas">
