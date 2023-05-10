@@ -216,7 +216,7 @@ export default function ReceiptCard({ id, numeroFactura, ciudad, centroComercial
 							<Image src={url} alt="Image" className="object-cover rounded-md" width={500} height={500} onLoad={handleImageLoad} />
 						</ScrollArea>
 						<AlertDialogFooter>
-							<AlertDialogCancel className={buttonVariants({ variant: 'primary' })}>Cerrar</AlertDialogCancel>
+							<AlertDialogCancel className={buttonVariants({ variant: 'default' })}>Cerrar</AlertDialogCancel>
 						</AlertDialogFooter>
 					</AlertDialogContent>
 				</AlertDialog>
