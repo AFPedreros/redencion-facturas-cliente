@@ -1,22 +1,29 @@
-'use client';
-import './globals.css';
-import { AuthContextProvider } from '../context/AuthContext';
-import Header from '../components/Header';
-import { Toaster } from '@/components/ui/toaster';
+"use client";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-	return (
-		<html>
-			<head />
+import "./globals.css";
 
-			<body className="relative bg-white">
-				<AuthContextProvider>
-					<Header />
-					{children}
-				</AuthContextProvider>
+import { Toaster } from "@/components/ui/toaster";
 
-				<Toaster />
-			</body>
-		</html>
-	);
+import Header from "../components/Header";
+import { AuthContextProvider } from "../context/AuthContext";
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html>
+      <head />
+
+      <body className="relative bg-white">
+        <AuthContextProvider>
+          <Header />
+          {children}
+        </AuthContextProvider>
+
+        <Toaster />
+      </body>
+    </html>
+  );
 }
