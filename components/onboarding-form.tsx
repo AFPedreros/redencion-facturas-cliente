@@ -50,7 +50,6 @@ export function OnboardingForm() {
 
   async function onSubmit(data: Inputs) {
     setIsLoading(true);
-    console.log("hello");
     try {
       //   await signUp(data.email, data.password);
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -173,7 +172,7 @@ export function OnboardingForm() {
         <Button disabled={isLoading}>
           {isLoading && (
             <Icons.spinner
-              className="mr-2 h-4 w-4 animate-spin"
+              className="w-4 h-4 mr-2 animate-spin"
               aria-hidden="true"
             />
           )}

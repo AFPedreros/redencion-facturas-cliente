@@ -18,9 +18,9 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
   const { user } = useAuth();
   const pathname = usePathname();
 
-  if (user) {
-    redirect("/");
-  }
+  // if (user) {
+  //   redirect("/");
+  // }
 
   return (
     <main className="grid min-h-screen grid-cols-1 overflow-hidden lg:grid-cols-2">
@@ -40,12 +40,12 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
             )}
             href="/"
           >
-            <Icons.arrowLeft className="mr-2 h-4 w-4" aria-hidden="true" />
+            <Icons.arrowLeft className="w-4 h-4 mr-2" aria-hidden="true" />
             <p className="font-semibold tracking-wide">Regresar al incio</p>
           </Link>
         ) : null}
       </AspectRatio>
-      <div className="absolute top-1/2 col-span-1 flex w-full -translate-y-1/2 items-center justify-center lg:static lg:top-0 lg:col-span-1 lg:translate-y-0">
+      <div className="absolute flex items-center justify-center w-full col-span-1 -translate-y-1/2 top-1/2 lg:static lg:top-0 lg:col-span-1 lg:translate-y-0">
         {children}
       </div>
     </main>

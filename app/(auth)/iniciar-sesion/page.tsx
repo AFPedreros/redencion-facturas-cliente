@@ -12,10 +12,10 @@ import { SignInForm } from "@/components/signin-form";
 
 export default function SignInPage() {
   return (
-    <Shell layout="auth" className="mx-auto max-w-md">
+    <Shell className="max-w-md mx-auto">
       <Card>
         <CardHeader className="space-y-1">
-          <CardTitle className="text-center text-2xl">Inicia sesión</CardTitle>
+          <CardTitle className="text-2xl text-center">Inicia sesión</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="relative">
