@@ -2,12 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
-import { signInSchema } from "@/lib/auth";
+import { errorReportSchema } from "@/lib/schemas";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,48 +18,42 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Icons } from "@/components/icons";
-import { PasswordInput } from "@/components/password-input";
 
-type Inputs = z.infer<typeof signInSchema>;
+type Inputs = z.infer<typeof errorReportSchema>;
 
-export function SignInForm() {
+export function ErrorReportForm() {
   const { toast } = useToast();
-  const { signIn } = useAuth();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<Inputs>({
-    resolver: zodResolver(signInSchema),
+    resolver: zodResolver(errorReportSchema),
     defaultValues: {
+      name: "",
       email: "",
-      password: "",
+      message: "",
     },
   });
 
   async function onSubmit(data: Inputs) {
     setIsLoading(true);
     try {
-      // await signIn(data.email, data.password);
-      await new Promise((resolve) => setTimeout(resolve, 250));
+      //   await signUp(data.email, data.password);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       console.log(data);
       form.reset();
-      // router.push("/facturas");
+      //   router.push("/agregar-datos");
     } catch (error) {
       const firebaseError = error as { code?: string };
+
       switch (firebaseError.code) {
-        case "auth/wrong-password":
+        case "auth/email-already-in-use":
           toast({
             variant: "destructive",
             title: "Error",
-            description: "Contraseña incorrecta",
-          });
-          break;
-        case "auth/user-not-found":
-          toast({
-            variant: "destructive",
-            title: "Error",
-            description: "No se encontró un usuario con ese correo electrónico",
+            description: "Este correo ya está registrado",
           });
           break;
         default:
@@ -83,6 +76,19 @@ export function SignInForm() {
       >
         <FormField
           control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Nombre</FormLabel>
+              <FormControl>
+                <Input placeholder="Pedro" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
@@ -96,26 +102,31 @@ export function SignInForm() {
         />
         <FormField
           control={form.control}
-          name="password"
+          name="message"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Contraseña</FormLabel>
+              <FormLabel>Descripción del error</FormLabel>
               <FormControl>
-                <PasswordInput placeholder="**********" {...field} />
+                <Textarea
+                  placeholder="Escribe tu comentario"
+                  className="h-40 resize-none"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button disabled={isLoading}>
+        <Button className="w-fit" disabled={isLoading}>
           {isLoading && (
             <Icons.spinner
               className="mr-2 h-4 w-4 animate-spin"
               aria-hidden="true"
             />
           )}
-          Iniciar sesión
-          <span className="sr-only">Iniciar sesión</span>
+          <Icons.send className="mr-2 h-4 w-4" />
+          Enviar formulario
+          <span className="sr-only">Enviar mensaje con un error</span>
         </Button>
       </form>
     </Form>

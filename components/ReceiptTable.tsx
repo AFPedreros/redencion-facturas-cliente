@@ -132,8 +132,8 @@ export default function ReceiptTable({ receiptsData }: Props) {
     <>
       {!receiptsData?.empty ? (
         <div className="overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
+            <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" className="px-6 py-3">
                   ID Factura
@@ -164,7 +164,7 @@ export default function ReceiptTable({ receiptsData }: Props) {
                 return (
                   <tr
                     key={rec.id}
-                    className="bg-white border-b hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
+                    className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                   >
                     <td className="px-6 py-4">{shortenString(rec.id)}</td>
                     <td className="px-6 py-4">
@@ -196,10 +196,10 @@ export default function ReceiptTable({ receiptsData }: Props) {
                             data-modal-backdrop="static"
                             tabIndex={-1}
                             aria-hidden="true"
-                            className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center w-full h-full p-4 m-0 overflow-hidden"
+                            className="fixed top-0 left-0 right-0 z-50 m-0 flex h-full w-full items-center justify-center overflow-hidden p-4"
                           >
-                            <div className="w-full max-w-2xl bg-white rounded-lg shadow-md">
-                              <div className="flex items-start justify-between p-4 border-b">
+                            <div className="w-full max-w-2xl rounded-lg bg-white shadow-md">
+                              <div className="flex items-start justify-between border-b p-4">
                                 <h3 className="text-lg font-semibold text-gray-900">
                                   Agrega tu factura
                                 </h3>
@@ -210,7 +210,7 @@ export default function ReceiptTable({ receiptsData }: Props) {
                                 >
                                   <span className="sr-only">Close</span>
                                   <svg
-                                    className="w-6 h-6 fill-current"
+                                    className="h-6 w-6 fill-current"
                                     viewBox="0 0 24 24"
                                     xmlns="http://www.w3.org/2000/svg"
                                   >
@@ -290,8 +290,8 @@ export default function ReceiptTable({ receiptsData }: Props) {
         </div>
       ) : (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
+            <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" className="px-6 py-3">
                   ID Factura
@@ -311,13 +311,13 @@ export default function ReceiptTable({ receiptsData }: Props) {
               </tr>
             </thead>
             <tbody>
-              <tr className="bg-white border-b hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
+              <tr className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
                 <td className="px-6 py-4">
                   <div>
                     <svg
                       aria-hidden="true"
                       role="status"
-                      className="inline w-4 h-4 mr-3 text-gray-200 animate-spin dark:text-gray-600"
+                      className="mr-3 inline h-4 w-4 animate-spin text-gray-200 dark:text-gray-600"
                       viewBox="0 0 100 101"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -338,7 +338,7 @@ export default function ReceiptTable({ receiptsData }: Props) {
                     <svg
                       aria-hidden="true"
                       role="status"
-                      className="inline w-4 h-4 mr-3 text-gray-200 animate-spin dark:text-gray-600"
+                      className="mr-3 inline h-4 w-4 animate-spin text-gray-200 dark:text-gray-600"
                       viewBox="0 0 100 101"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -359,7 +359,7 @@ export default function ReceiptTable({ receiptsData }: Props) {
                     <svg
                       aria-hidden="true"
                       role="status"
-                      className="inline w-4 h-4 mr-3 text-gray-200 animate-spin dark:text-gray-600"
+                      className="mr-3 inline h-4 w-4 animate-spin text-gray-200 dark:text-gray-600"
                       viewBox="0 0 100 101"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -380,7 +380,7 @@ export default function ReceiptTable({ receiptsData }: Props) {
                     <svg
                       aria-hidden="true"
                       role="status"
-                      className="inline w-4 h-4 mr-3 text-gray-200 animate-spin dark:text-gray-600"
+                      className="mr-3 inline h-4 w-4 animate-spin text-gray-200 dark:text-gray-600"
                       viewBox="0 0 100 101"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -401,7 +401,7 @@ export default function ReceiptTable({ receiptsData }: Props) {
                     <svg
                       aria-hidden="true"
                       role="status"
-                      className="inline w-4 h-4 mr-3 text-gray-200 animate-spin dark:text-gray-600"
+                      className="mr-3 inline h-4 w-4 animate-spin text-gray-200 dark:text-gray-600"
                       viewBox="0 0 100 101"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"

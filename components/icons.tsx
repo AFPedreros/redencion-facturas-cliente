@@ -1,9 +1,20 @@
 import {
+  Camera,
   ChevronLeft,
+  ChevronRight,
   Eye,
   EyeOffIcon,
+  FileText,
   Loader2,
+  MailWarning,
+  MoreHorizontal,
+  PenLine,
+  PlusSquare,
   Receipt,
+  Send,
+  Trash,
+  Upload,
+  User,
   type LucideIcon,
   type LucideProps,
 } from "lucide-react";
@@ -13,9 +24,20 @@ export type Icon = LucideIcon;
 export const Icons = {
   receipt: Receipt,
   spinner: Loader2,
+  plusSquare: PlusSquare,
   eye: Eye,
   eyeClose: EyeOffIcon,
   arrowLeft: ChevronLeft,
+  arrowRight: ChevronRight,
+  fileText: FileText,
+  mailWarning: MailWarning,
+  user: User,
+  send: Send,
+  edit: PenLine,
+  trash: Trash,
+  camera: Camera,
+  upload: Upload,
+  dotsHorizontal: MoreHorizontal,
   facebook: ({ ...props }: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" {...props}>
       <path

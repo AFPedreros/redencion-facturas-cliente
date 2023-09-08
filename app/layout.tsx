@@ -2,10 +2,10 @@
 
 import "./globals.css";
 
-import { Toaster } from "@/components/ui/toaster";
+import { AuthContextProvider } from "@/context/AuthContext";
 
-import Header from "../components/Header";
-import { AuthContextProvider } from "../context/AuthContext";
+import { Toaster } from "@/components/ui/toaster";
+import SiteHeader from "@/components/site-header";
 
 export default function RootLayout({
   children,
@@ -16,9 +16,9 @@ export default function RootLayout({
     <html>
       <head />
 
-      <body className="relative bg-white">
+      <body className="relative bg-background">
         <AuthContextProvider>
-          <Header />
+          <SiteHeader />
           {children}
         </AuthContextProvider>
 

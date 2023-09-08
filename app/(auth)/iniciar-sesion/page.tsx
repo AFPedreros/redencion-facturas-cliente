@@ -7,15 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { SignInForm } from "@/components/forms/signin-form";
 import { Shell } from "@/components/shell";
-import { SignInForm } from "@/components/signin-form";
 
 export default function SignInPage() {
   return (
-    <Shell className="max-w-md mx-auto">
+    <Shell className="mx-auto max-w-md">
       <Card>
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl text-center">Inicia sesión</CardTitle>
+          <CardTitle className="text-center text-2xl">Inicia sesión</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="relative">

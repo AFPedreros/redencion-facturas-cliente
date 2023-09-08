@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 import { doc, setDoc } from "firebase/firestore";
 
 import { useToast } from "@/hooks/use-toast";
@@ -15,7 +16,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { useAuth } from "@/context/AuthContext";
 import { db } from "../lib/firebase";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -164,8 +164,8 @@ export default function SignUp() {
   return (
     <form className="flex flex-col justify-center gap-3">
       <div className="mb-2">
-        <h2 className="text-2xl font-semibold text-center">Crea una cuenta</h2>
-        <p className="mx-auto text-sm text-center text-muted-foreground">
+        <h2 className="text-center text-2xl font-semibold">Crea una cuenta</h2>
+        <p className="mx-auto text-center text-sm text-muted-foreground">
           Ingresa tus datos para crear una cuenta
         </p>
       </div>
@@ -260,12 +260,12 @@ export default function SignUp() {
         />
       </div>
       <Button onClick={handleOnSubmit}>Continuar</Button>
-      <div className="flex flex-col items-center mt-2">
-        <p className="mx-auto text-sm text-center text-muted-foreground">
+      <div className="mt-2 flex flex-col items-center">
+        <p className="mx-auto text-center text-sm text-muted-foreground">
           Dando click en continuar aceptas nuestros
         </p>
         <Link
-          className="mx-auto text-sm font-bold border-b-2 border-black"
+          className="mx-auto border-b-2 border-black text-sm font-bold"
           href="#"
         >
           Términos & condiciones

@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
-import { onboardingSchema } from "@/lib/auth";
+import { onboardingSchema } from "@/lib/schemas";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,7 +31,7 @@ import { Icons } from "@/components/icons";
 
 type Inputs = z.infer<typeof onboardingSchema>;
 
-export function OnboardingForm() {
+export function UpdateProfileForm() {
   const { toast } = useToast();
   const { signUp } = useAuth();
   const router = useRouter();
@@ -40,11 +40,11 @@ export function OnboardingForm() {
   const form = useForm<Inputs>({
     resolver: zodResolver(onboardingSchema),
     defaultValues: {
-      name: "",
-      lastName: "",
+      name: "Pedro",
+      lastName: "Duarte",
       documentType: "Cédula de ciudadanía",
-      id: "",
-      phone: "",
+      id: "1234567890",
+      phone: "3001234455",
     },
   });
 
@@ -54,7 +54,7 @@ export function OnboardingForm() {
       //   await signUp(data.email, data.password);
       await new Promise((resolve) => setTimeout(resolve, 1000));
       console.log(data);
-      form.reset();
+      // form.reset();
       //   router.push("/agregar-datos");
     } catch (error) {
       const firebaseError = error as { code?: string };
@@ -133,6 +133,10 @@ export function OnboardingForm() {
                       <SelectItem value="Cédula de ciudadanía">
                         Cédula de ciudadanía
                       </SelectItem>
+                      <SelectItem value="Pasaporte">Pasaporte</SelectItem>
+                      <SelectItem value="Cédula extranjera">
+                        Cédula extranjera
+                      </SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>
@@ -169,17 +173,15 @@ export function OnboardingForm() {
           )}
         />
 
-        <Button disabled={isLoading}>
+        <Button className="w-fit" disabled={isLoading}>
           {isLoading && (
             <Icons.spinner
-              className="w-4 h-4 mr-2 animate-spin"
+              className="mr-2 h-4 w-4 animate-spin"
               aria-hidden="true"
             />
           )}
-          Continuar
-          <span className="sr-only">
-            Continúa para la página de verificación de correo
-          </span>
+          Guardar cambios
+          <span className="sr-only">Guardar los cambios del perfil</span>
         </Button>
       </form>
     </Form>

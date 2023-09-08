@@ -10,8 +10,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { SignUpForm } from "@/components/forms/signup-form";
 import { Shell } from "@/components/shell";
-import { SignUpForm } from "@/components/signup-form";
 
 const routes = {
   receipts: "/facturas",
@@ -19,9 +19,9 @@ const routes = {
 
 export default function SignUpPage() {
   return (
-    <Shell className="max-w-md mx-auto">
-      <div className="flex items-center justify-center w-full">
-        <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary">
+    <Shell className="mx-auto max-w-md">
+      <div className="flex w-full items-center justify-center">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary">
           <p className="text-primary-foreground">1</p>
         </div>
         <Separator className="mx-4 w-10 bg-[#B8B8B8]" />
@@ -31,7 +31,7 @@ export default function SignUpPage() {
       </div>
       <Card>
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl text-center">Regístrate</CardTitle>
+          <CardTitle className="text-center text-2xl">Regístrate</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="relative">

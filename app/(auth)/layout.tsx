@@ -23,7 +23,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
   // }
 
   return (
-    <main className="grid min-h-screen grid-cols-1 overflow-hidden lg:grid-cols-2">
+    <main className="grid h-screen overflow-hidden">
       <AspectRatio ratio={16 / 9} className="md:bg-background">
         <Image
           src="/stacked-steps.svg"
@@ -35,17 +35,17 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
         {pathname !== "/datos-personales" ? (
           <Link
             className={cn(
-              "absolute left-8 top-8 z-20 flex items-center backdrop-blur-md",
-              buttonVariants({ variant: "ghost" })
+              "absolute left-8 top-20 z-20 flex items-center backdrop-blur-md",
+              buttonVariants({ variant: "link" })
             )}
             href="/"
           >
-            <Icons.arrowLeft className="w-4 h-4 mr-2" aria-hidden="true" />
+            <Icons.arrowLeft className="mr-2 h-4 w-4" aria-hidden="true" />
             <p className="font-semibold tracking-wide">Regresar al incio</p>
           </Link>
         ) : null}
       </AspectRatio>
-      <div className="absolute flex items-center justify-center w-full col-span-1 -translate-y-1/2 top-1/2 lg:static lg:top-0 lg:col-span-1 lg:translate-y-0">
+      <div className="absolute top-1/2 col-span-1 flex w-full -translate-y-1/2 items-center justify-center">
         {children}
       </div>
     </main>

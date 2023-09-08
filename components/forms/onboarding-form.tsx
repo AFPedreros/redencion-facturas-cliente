@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
-import { signUpSchema } from "@/lib/auth";
+import { onboardingSchema } from "@/lib/schemas";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,34 +19,43 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Icons } from "@/components/icons";
-import { PasswordInput } from "@/components/password-input";
 
-type Inputs = z.infer<typeof signUpSchema>;
+type Inputs = z.infer<typeof onboardingSchema>;
 
-export function SignUpForm() {
+export function OnboardingForm() {
   const { toast } = useToast();
   const { signUp } = useAuth();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<Inputs>({
-    resolver: zodResolver(signUpSchema),
+    resolver: zodResolver(onboardingSchema),
     defaultValues: {
-      email: "",
-      password: "",
-      confirmPassword: "",
+      name: "",
+      lastName: "",
+      documentType: "Cédula de ciudadanía",
+      id: "",
+      phone: "",
     },
   });
 
   async function onSubmit(data: Inputs) {
     setIsLoading(true);
     try {
-      // await signUp(data.email, data.password);
+      //   await signUp(data.email, data.password);
       await new Promise((resolve) => setTimeout(resolve, 1000));
       console.log(data);
       form.reset();
-      // router.push("/agregar-datos");
+      //   router.push("/agregar-datos");
     } catch (error) {
       const firebaseError = error as { code?: string };
 
@@ -78,12 +87,12 @@ export function SignUpForm() {
       >
         <FormField
           control={form.control}
-          name="email"
+          name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Correo</FormLabel>
+              <FormLabel>Nombre</FormLabel>
               <FormControl>
-                <Input placeholder="correo@gmail.com" {...field} />
+                <Input placeholder="Pedro" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -91,12 +100,60 @@ export function SignUpForm() {
         />
         <FormField
           control={form.control}
-          name="password"
+          name="lastName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Contraseña</FormLabel>
+              <FormLabel>Apellidos</FormLabel>
               <FormControl>
-                <PasswordInput placeholder="**********" {...field} />
+                <Input placeholder="Duarte" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="documentType"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Selecciona el tipo de documento</FormLabel>
+              <FormControl>
+                <Select
+                  value={field.value}
+                  onValueChange={(value: typeof field.value) =>
+                    field.onChange(value)
+                  }
+                >
+                  <SelectTrigger className="w-full shadow-none">
+                    <SelectValue placeholder={field.value} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="Cédula de ciudadanía">
+                        Cédula de ciudadanía
+                      </SelectItem>
+                      <SelectItem value="Pasaporte">Pasaporte</SelectItem>
+                      <SelectItem value="Cédula extranjera">
+                        Cédula extranjera
+                      </SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="id"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Número de documento</FormLabel>
+              <FormControl>
+                <Input placeholder="1234567890" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -104,17 +161,18 @@ export function SignUpForm() {
         />
         <FormField
           control={form.control}
-          name="confirmPassword"
+          name="phone"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Confirmar contraseña</FormLabel>
+              <FormLabel>Número de celular</FormLabel>
               <FormControl>
-                <PasswordInput placeholder="**********" {...field} />
+                <Input placeholder="3001234455" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+
         <Button disabled={isLoading}>
           {isLoading && (
             <Icons.spinner
